@@ -1,0 +1,57 @@
+/* Service additions */
+
+.sherif_home_main-box-right_bar-interest {
+		margin-top: 20px;
+		margin-bottom: 10px;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		width: 100%;
+		height: 50px;
+		align-items: center;
+		background: #213951;
+		border: 1px solid #213951;
+		border-radius: 4px;
+	}
+		.sherif_home_main-box-right_bar-interest h4 {
+			color: #fff;
+			font-size: 17px;
+		}
+
+	.sherif-product-info_service {
+		font-size: 12px;
+		line-height: 20px;
+		margin: 10px;
+		margin-top: -5px;
+	}
+
+		.sherif-product-info_service span {
+			margin-right: 12px;
+		}
+
+		.sherif-product-info_service svg {
+			margin-right: 5px;
+		}
+/* Footer Service */
+	.sherif_home_footer-navigation_service {
+	    display: flex;
+	    width: 100%;
+	    justify-content: flex-start;
+	}
+
+		.sherif_home_footer-navigation_service span {
+		    margin-right: 3%;
+		}
+
+		.footer-service-icon {
+			margin-right: 0.5%;
+		}
+
+		.toggle-bg.footer-service-icon{
+			margin-right: 0.5%;
+		}
+
+		.footer-service-info {
+			width: 76%;
+		}
+

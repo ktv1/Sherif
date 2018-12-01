@@ -1,0 +1,68 @@
+/*New goods start*/
+
+	/*Sherif main content*/
+
+	.sherif_home_main-new_goods-navigation {
+		display: flex;
+		flex-direction: row;
+	}
+		.sherif_home_main-new_goods-navigation a {
+			color: #213951;
+			padding: 0 5px;
+		}
+			.sherif_home_main-new_goods-navigation p {
+				color: #8f9ba7;
+			}
+				.sherif_home_main-new_goods-navigation p>span {
+					color: #213951;
+			}
+			.goods_main {
+				text-decoration: underline;
+			}
+	.sherif_home_main-new_goods-content-table>.table>tbody>tr>td {
+		text-transform: uppercase;
+		color: #213951;
+	}
+		.sherif_home_main-new_goods-content-table>.table>tbody>tr>td>span {
+			text-transform: none;
+			color: #213951;
+	}
+		.sherif_home_main-new_goods-content-table>.table>tbody>tr>td>span>strong {
+			text-transform: none;
+			color: red;
+		}
+		.content-table {
+			float: right;
+			text-decoration: underline;
+			font-weight: bold;
+			padding:1px 7px;
+		}
+			.sherif_home_main-new_goods-content-table>.table>tbody>tr>td>a {
+				text-transform: none;
+				color: #213951;
+				font-family: "OpenSansBold","OpenSansRegular", sans-serif;
+			}
+	.table>thead:first-child>tr:first-child>th {
+		color: #213951;
+		font-weight: 900;
+		font-size: 25px;
+	}
+
+	/*Sherif main pagination*/
+
+	.pagination>li>a, .pagination>li>span {
+		text-decoration: underline;
+		border:none;
+		padding: 6px 4px;
+	}
+		.pagination>.disabled>a {
+			text-decoration: none;
+		}	
+
+	.sherif_home_main-new_goods-content-table thead {
+		font-family: "OpenSansBold", "OpenSansRegular", sans-serif;
+	}
+
+	.sherif_home_main-box-right_bar-pick_up {
+		display: none;
+	}

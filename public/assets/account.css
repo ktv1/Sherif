@@ -1,0 +1,269 @@
+/*Sherif cabinet profile*/
+/*tabs*/
+.sherif_main-box_cabinet .tab-content{
+    background-color: #fff;
+}
+.sherif_main-box_cabinet .nav-tabs > li >a{
+    font-family: "OpenSansBold";
+    font-size: 19px;
+    padding: 10px 35px;
+}
+.sherif_main-box_cabinet .nav-tabs > li.active > a, .sherif_main-box_cabinet .nav-tabs > li.active > a:focus, .sherif_main-box_cabinet .nav-tabs > li.active > a:hover{
+    background-color: #fff;
+}
+.sherif_main-box_cabinet .nav-tabs > li{
+    margin-bottom: -3px;
+}
+
+.sherif_main-box_cabinet{
+    margin-bottom: 20px;
+}
+.sherif_main-box_cabinet a{
+    color: #213951;
+    font-size: 14px;
+}
+
+.sherif_main-box_cabinet_profile{
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    padding: 40px 0;
+    color: #213951;
+    font-size: 20px;
+    font-family: "OpenSansRegular";
+
+}
+.cabinet_profile_user{
+    flex: 33.333333%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    box-sizing: border-box;
+}
+.cabinet_profile_user_img{
+    width: 250px;
+    height: auto;
+    border-radius: 50%;
+    margin-bottom: 30px;
+}
+.cabinet_profile_user_data{
+    line-height: 1.2;
+}
+.cabinet_profile_info{
+    flex: 66.666666%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    box-sizing: border-box;
+}
+/*-----social*/
+.social-cabinet{
+    margin: 10px 0;
+}
+.social-cabinet img{
+    width: 53px;
+    height: 53px;
+    margin-right: 30px;
+    filter: opacity(40%);
+}
+.social-cabinet img:hover{
+    filter: opacity(100%);
+}
+.cabinet_profile_info_data{
+
+}
+.cabinet_profile_info_data_val{
+    color: #e00000;
+    margin-right: 10px;
+}
+.cabinet_profile_info_data_adress{
+    margin-left: 31px;
+}
+.cabinet_profile_info_data_birth{
+    border: 1px solid #213951;
+    padding: 5px 5px;
+}
+/*Buttons*/
+.cabinet_profile_btn{
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    margin-bottom: 30px;
+    margin-top: 20px;
+}
+.cabinet_profile_btn a{
+    background-color: #213951;
+    margin-right: 20px;
+    color: #fff;
+    padding: 15px 35px;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-family: "OpenSansBold";
+    border-radius: 3px;
+}
+.cabinet_profile_info_data_change-password{
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+.cabinet_profile_info_data_change-password input[type=password]{
+    width: 350px;
+    border: 1px solid;
+    margin-bottom: 7px;
+    height: 50px;
+}
+/*Sherif cabinet profile end*/
+/*Sherif cabinet orders*/
+.cabinet_orders{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    box-sizing: border-box;
+    line-height: 1.2;
+}
+.cabinet_orders_title{
+
+}
+.cabinet_orders_par{
+    font-family: "OpenSansBold";
+    font-size: 19px;
+}
+a.cabinet_orders_link{
+    font-size: 11px;
+}
+.cabinet_orders_title_number{
+
+}
+.cabinet_orders_date{
+    font-size: 10px;
+}
+.cabinet_orders_content{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    box-sizing: border-box;
+}
+
+.cabinet_orders_content_data{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-basis: 28vw;
+}
+.cabinet_orders_content_data_img{
+
+    width: auto;
+    height: 100px;
+    margin-right: 20px;
+}
+.cabinet_orders_content_data_itm{
+
+}
+.cabinet_orders_content_data_itm_description{
+    line-height: 1.1;
+}
+.cabinet_orders_content_data_itm_rate{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+    font-size: 10px;
+}
+.itm_rate_par{
+    padding: 0 20px;
+}
+.cabinet_orders_content_status{
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+.cabinet_orders_content_review{
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+.cabinet_orders_content_open{
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.cabinet_orders_content_open a{
+    font-size: 18px;
+    border: 1px solid #213951;
+    border-radius: 50%;
+    padding: 15px 17px;
+}
+
+.cabinet_orders_content_open a:focus{
+    outline: none;
+}
+.cabinet_orders_content_open .glyphicon-menu-down:before {
+    content: "\e260";
+}
+.cabinet_orders_content_open .collapsed .glyphicon-menu-down:before {
+    content: "\e259";
+}
+/*complex*/
+.cabinet_orders_content_data_complex_img{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100px;
+}
+.cabinet_orders_content_data_img_complex{
+    width: auto;
+    height: 40px;
+    margin-right: 10px;
+}
+.cabinet_orders_content_data_itm_complex{
+    margin-left: 20px;
+}
+.cabinet_orders_content_data_complex{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-basis: 28vw;
+}
+.cabinet_orders_content_data_itm_description_complex{
+    line-height: 2.5;
+}
+
+.cabinet_orders_status{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    box-sizing: border-box;
+}
+.cabinet_orders_status_itm{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+.cabinet_orders_status_itm_fa{
+    color: #e00000;
+    font-size: 1.7em;
+}
+.panel-group .panel-heading + .panel-collapse > .list-group, .panel-group .panel-heading + .panel-collapse > .panel-body {
+    border-bottom: 1px solid #213951;
+    border-top: none;
+
+}
+.panel-group .panel-heading{
+    border-bottom: 1px solid #213951;
+}
+.cabinet_orders_content_data_complex_itm{
+    border-bottom: 1px solid #ddd;
+}
+/*Sherif cabinet orders end*/

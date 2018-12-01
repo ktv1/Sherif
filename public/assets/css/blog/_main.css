@@ -1,0 +1,125 @@
+
+/*Sherif blog*/
+.sherif_blog{
+		color: #213951;
+	}
+		.sherif_blog_link{
+			color: #213951;
+			text-decoration: underline;
+			padding-right: 5px;
+		}
+		.sherif_blog_content_tabs_link{
+			color: #213951;
+		}
+		.sherif_blog_content_tabs_content_link{
+			color: #213951;
+			text-decoration: underline;
+		}
+
+		.sherif_blog_breadcrumb{
+			list-style: none;
+			font-size: 20px;
+			font-family: "OpenSansRegular";
+			display: flex;
+			flex-direction: row;
+			align-items: baseline;
+			margin-top: 10px;
+			padding-left: 0px;
+		}
+			.urhere{
+				color: #8f9ba7;
+				font-size: 16px;
+			}
+		.sherif_blog_title{
+			font-weight: 700;
+		    font-size: 1.9em;
+		    font-family: "OpenSansBold","OpenSansRegular", sans-serif;
+		
+		}
+		.sherif_blog_tab_content {
+			margin: 2% 0;
+		}
+		.sherif_blog_content_tabs_content_title{
+			font-family: "OpenSansBold", "OpenSansRegular", sans-serif;
+		    font-size: 18px;
+		    color: #e0000f;
+		}
+		
+		
+		.sherif_blog_content_tabs_content_stats{
+			margin-left: 5px;
+			margin-right: 10px;
+		}     
+				.nav-tabs{
+			border-bottom: 1px solid #213951;
+			display: flex;
+			justify-content: center;
+			flex: auto;
+		}
+			.nav>li>a{
+				padding: 10px 35px;
+			}
+			.sherif_blog_content_tabs_link{
+				
+			}
+			.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
+				border: 1px solid #213951;
+				border-bottom-color: transparent;
+			}
+				.sherif_blog_content_tabs_itm{
+					font-size: 18px;
+					color: #8f9ba7;
+				}
+					.sherif_blog_content_tabs_img{
+						width: 16vw;
+						margin-top: 20px;
+						margin-right: 1.7vw;
+					}
+
+		.borders{
+			border-bottom: 1px solid #213951;
+		}
+		.pagination-sherif {
+		    display: inline-block;
+		    padding-left: 0px;
+		}
+			.pagination-sherif li {
+			    float: left;
+			    padding: 8px 3px;
+			    list-style: none;
+			}
+			.pagination-sherif a{
+				color: #213951;
+				text-decoration: underline;
+				font-size: 14px;
+			}
+			.pagination-sherif a.active-sherif, .pagination-sherif a.active-sherif-dots {
+			    color: #e2e0e1;
+			    text-decoration: none;
+			}
+				.pagination-sherif a.active-sherif:before, .pagination-sherif a.active-sherif:after, .pagination-sherif a.active-sherif-dots:after {
+				    content: " ... ";
+				}
+
+			div.row.borders {
+				display: flex;
+				justify-content: flex-start;
+			}
+
+			.nav-tabs>li {
+			    float: left;
+			    width: 19%;
+			    text-align: center;
+			    font-family: "OpenSansBold", "OpenSansRegular", sans-serif;
+			    margin-bottom: -1px;
+			}
+
+			.sherif_blog_content_tabs_content_text {
+				font-size: 1.1em;
+			}
+
+			.nav>li>a {
+			    position: relative;
+			    display: block;
+			    padding: 10px 15px;
+			}

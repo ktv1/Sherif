@@ -1,0 +1,137 @@
+
+/* Sherif Income Sevices */
+			
+	/*.sherif_home_main-new_goods-navigation {
+		margin-top: -20px;
+		margin-bottom: -15px;
+	}*/
+			
+	ul.sherif_home_main-new_goods-navigation {
+	    padding: 8px 16px;
+	    list-style: none;
+	    color: #172c41;
+	    font-family: "OpenSansRegular";
+		font-size: 1.5em;
+		display: flex;
+		flex-direction: row;
+		align-items: baseline;
+		padding-left: 0px;
+	}
+		ul.sherif_home_main-new_goods-navigation li {
+			
+		}
+			ul.sherif_home_main-new_goods-navigation li+li:before {
+			    padding: 8px;
+			    color: #172c41;
+			    content: "/\00a0";
+			}
+			ul.sherif_home_main-new_goods-navigation li span{
+				color: #8f9ba7;
+				font-size: 0.8em;
+			}
+		ul.sherif_home_main-new_goods-navigation li a {
+			color: #172c41;
+			text-decoration: underline;
+		}
+
+	.sherif_home_main-new_goods-content-table>.table>tbody>tr>td {
+		text-transform: uppercase;
+		color: #213951;
+
+	}
+		.sherif_home_main-new_goods-content-table>.table>tbody>tr>td>span {
+			text-transform: none;
+			color: #213951;
+	}
+		.sherif_home_main-new_goods-content-table>.table>tbody>tr>td>span>strong {
+			text-transform: none;
+			color: red;
+		}
+		.content-table {
+			float: right;
+			border: 2px solid #213951;
+			border-radius: 5px;
+			padding:1px 7px;
+		}
+		.content-table-scroll {
+			float: right;
+			margin-left: 15px;
+		}
+			.sherif_home_main-new_goods-content-table>.new_goods-table>tbody>tr>td>a {
+				text-transform: none;
+				color: #213951;
+				font-weight: 900;
+			}
+	.new_goods-table>thead:first-child>tr:first-child>th {
+		color: #213951;
+		font-family: "OpenSansBold";
+		font-size: 2.1em;
+	}
+	.new_goods-table>tbody>tr>td, .new_goods-table>tbody>tr>th, .new_goods-table>tfoot>tr>td, .new_goods-table>tfoot>tr>th, .new_goods-table>thead>tr>td, .new_goods-table>thead>tr>th {
+		padding-left: 0;
+	}
+
+	.new_goods_pagination>li>a, .new_goods_pagination>li>span {
+		text-decoration: underline;
+		border:none;
+		padding: 6px 4px;
+		color: #213951;
+	}
+		.new_goods_pagination>.disabled>a {
+			text-decoration: none;
+		}	
+	
+	  	.open {
+		    border: 1px solid #213951;
+		    width: 100px;
+		    height: 30px;
+		    padding: 3px 5px;
+		    border-radius: 7px;
+		}
+	  .sherif_home_main-new_goods-content .panel-title{
+	  	display: flex;
+	  	flex-direction: row;
+	  	justify-content: space-between;
+		font-size: 18px;
+		color: #172c41;
+	  }
+	  .sherif_home_main-new_goods-content .panel-heading{
+			padding: 10px 0px 0px;
+			margin: 5px 0px;
+	  }
+	.sherif_home_main-new_goods-content .panel-title a{
+		color: inherit;
+		font-family: "OpenSansBold", "OpenSansRegular", sans-serif;
+		font-size: 0.95em;
+	}
+	.sherif_home_main-new_goods-content .panel-title span{
+		margin-left: 6px;
+	}
+	.sherif_home_main-new_goods-content .panel-body{
+		padding-left: 0px;
+		padding-top: 0px;
+		
+	}
+	.sherif_home_main-new_goods-content .panel-body span{
+		color: #213951;
+		font-size: 17px;
+		line-height: 1.5;
+	}
+	.sherif_home_main-new_goods-content .panel-body .link_box{
+		display: flex;
+		flex-direction:column;
+		margin-left: 0.7%;
+	}
+	.sherif_home_main-new_goods-content .panel-body .link_box strong{
+		color: #e00000;
+	}
+	.new_goods-table_title{
+	  	font-family: "OpenSansBold", "OpenSansRegular", sans-serif;
+		font-size: 1.7em;
+	}	
+	.panel-group .panel-heading + .panel-collapse > .panel-body{
+		border-top: 0px;
+	}
+	.panel-group.new_goods-table_title {
+		margin-bottom: 10px;
+	}

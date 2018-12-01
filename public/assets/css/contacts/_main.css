@@ -1,0 +1,190 @@
+
+/*Contacts Bar Start */
+
+	.contacts-button {
+	border: 1.5px solid #213951;
+	font-size: 1.2em;
+	padding: 8px 40px;
+	border-radius: 3px;
+	color: #213951;
+	}
+
+	.collective-button {
+		background-color:#fff;
+		width: 250px; 
+		font-weight: 800;
+
+	}
+
+	.sherif_home_main-contacts-navigation {
+			display: flex;
+			flex-direction: row;
+		}
+			.sherif_home_main-contacts-navigation a {
+				color: #213951;
+				padding: 0 5px;
+			}
+				.sherif_home_main-contacts-navigation p {
+					color: #8f9ba7;
+				}
+					.sherif_home_main-contacts-navigation p>span {
+						color: #213951;
+				}
+				.goods_main {
+					text-decoration: underline;
+				}
+	.sherif_home_main-contacts-left-info-block {
+		padding-top: 15px;
+	}
+	.sherif_home_main-contacts-title {
+		display: flex;
+		justify-content: center;
+		color: #213951;
+		font-weight: 800;
+	}
+		
+	.sherif_home_main-contacts-box {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+
+	}
+		.sherif_home_main-contacts-left {
+			width: 330px;
+			color: #213951;
+		}
+			.sherif_home_main-contacts-left-write_us {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				background-color: #dedcdd;
+				color: #213951;
+				font-weight: 800;
+				margin-top: 40px;
+			}
+				.sherif_home_main-contacts-title h3, .sherif_home_main-contacts-left-write_us h3 {
+					font-weight: 800;
+				}
+					.form-group 
+					::-webkit-input-placeholder {color:#213951;}
+					.form-group 
+					::-moz-placeholder          {color:#213951;}/* Firefox 19+ */
+					.form-group 
+					:-moz-placeholder           {color:#213951;}/* Firefox 18- */
+					.form-group 
+					:-ms-input-placeholder      {color:#213951;}
+
+					.form-group, .form-group img  {
+						width: 250px;
+						display: flex;
+						justify-content: center;
+					}
+	.sherif_home_main-contacts-right {
+		padding-left: 20px;
+	}
+		.sherif_home_main-contacts-right-info {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			width: 600px;
+		}
+			.sherif_home_main-contacts-right-info-block {
+				display: flex;
+				flex-direction: column;	
+				margin-top: 20px;	
+			}
+				.sherif_home_main-contacts-right-info-block-button {
+					display: flex;
+					justify-content: center;
+					margin-top: 20px;
+				}
+		/*Danil стили для shrif-contactis*/
+
+		.responsive-img img  {
+			width: auto;
+			height: auto;
+			max-width: 100%;
+			max-height: 100%;
+		}
+		.sherif_home_main-contacts-navigation {
+			font-size: 14px;
+			line-height: 14px;
+		}
+
+
+		.sherif_home_main-contacts-navigation-inner {
+			font-size: 10px;
+			margin: 0;
+			padding-left: 5px;
+		}
+
+		.sherif_home_main-contacts-box {
+			flex-wrap: wrap;
+		}
+
+		.sherif_home_main-contacts-left {
+			width: 35%;
+		}
+
+		.sherif_home_main-contacts-right {
+			width: 65%;
+		}
+
+		.sherif_home_main-contacts-right-info {
+			width: auto;
+		}
+
+		.sherif_home_main-contacts-right-info-block h5 {
+			font-size: 16px;
+			line-height: 16px;
+			font-weight: bold;
+		}
+
+		.contacts-button {
+			width: 180px;
+			padding: 12px;
+			font-size: 14px;
+			line-height: 14px;
+		}
+
+		.sherif_home_main-contacts-left-info-block {
+			padding-top: 20px;	 
+		}
+
+		.sherif_home_main-contacts-left-info-block h4 {
+			margin-bottom: 3px;
+			font-size: 16px;
+			line-height: 19px;
+			font-weight: bold;
+		}
+
+		.sherif_home_main-contacts-left-info-block p {
+			font-size: 16px;
+			line-height: 19px;
+		}
+
+		.sherif_home_main-contacts-left-write_us {
+			padding: 0 30px;
+		}
+		.sherif_home_main-contacts-left-write_us form {
+			width: 100%;
+		}
+		.sherif_home_main-contacts-left-write_us h3 {
+			font-size: 21px;
+			line-height: 21px;
+			margin: 20px 0;
+		}
+
+		.sherif_home_main-contacts-left-write_us .contacts-button {
+			margin: 10px 0;
+		}
+
+		.form-group {
+			width: auto;
+		}
+
+
+	.form-group img {
+	    display: block;
+	}
+
