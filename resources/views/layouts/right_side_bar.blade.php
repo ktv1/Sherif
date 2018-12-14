@@ -9,9 +9,48 @@
                 </a>
             </div>
             <!-- Already viewed -->
-            <div class="sherif_home_main-right_bar-viewed">
+            @php
+                $viewedproducts = session('viewed_products');
+                 if(!is_array($viewedproducts)) {
+                     $viewedproducts = array();
+                 }
+
+                $ipsession = \App\Session::where('ip_address',request()->getClientIp())->first();
+                $ipsessionproducts = unserialize($ipsession->payload);
+                foreach ($ipsessionproducts as $ipsessionproduct) {
+                    if(!in_array($ipsessionproduct, $viewedproducts))  {
+                        array_push($viewedproducts,$ipsessionproduct);
+                    }
+                }
+                $viewedproducts = array_reverse($viewedproducts);
+            @endphp
+            @if(count($viewedproducts) > 0)
+                <div class="sherif_home_main-right_bar-viewed">
                 <h3>Вы просматривали</h3>
                 <button class="sherif_home_main-right_bar-viewed-button button_top"></button>
+                    @foreach($viewedproducts as $viewedproduct)
+                        @php
+                            $product = \App\Product::where('id',$viewedproduct)->first();
+                        @endphp
+                        <div class="sherif_home_main-right_bar-viewed-trade_item">
+                            <div class="sherif_home_main-right_bar-viewed-trade_item-pic">
+                                <img src="/storage/{{get_download_image_cache($product->mainimage,62,82)}}" alt="{{$product->name}}">
+                            </div>
+                            <div class="sherif_home_main-right_bar-viewed-trade_item-description">
+                                <div class="sherif_home_main-right_bar-viewed-trade_item-description-top">
+                                    <h5>{{$product->name}}</h5>
+                                    <p>Артикул: {{$product->code}}</p>
+                                </div>
+                                <div class="sherif_home_main-right_bar-viewed-trade_item-description_bot">
+                                    <h5>Цена: {{$product->price_final}}</h5>
+                                    @if($product->sale_price != 0)
+                                        <h4><strong>Цена: {{$product->price_final}} грн</strong></h4>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                <!--
                 <div class="sherif_home_main-right_bar-viewed-trade_item">
                     <div class="sherif_home_main-right_bar-viewed-trade_item-pic">
                         <img src="{{asset('/assets/img/recommended/icon2.png')}}" alt="" >
@@ -57,8 +96,10 @@
                         </div>
                     </div>
                 </div>
+                -->
                 <button class="sherif_home_main-right_bar-viewed-button button_bot"></button>
             </div>
+            @endif
             <!-- Pick up goods -->
             <div class="sherif_home_main-box-right_bar-pick_up">
                 <a href="" style="background-image: url({{asset('/assets/img/pic/pick_up.jpg')}});" class="sherif_home_main-box-right_bar-pick_up-pic">

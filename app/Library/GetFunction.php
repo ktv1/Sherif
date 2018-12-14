@@ -87,9 +87,11 @@ class GetFunction
                         $h,
                         function (Constraint $constraint) {
                             $constraint->aspectRatio();
-                            $constraint->upsize();
+                            //$constraint->upsize();
                         }
                     )
+
+                    ->resizeCanvas($w, $h, 'center', false, '#ffffff')
                     ->encode($extension, 95);
                 //->save(platformSlashes(public_path($new_image)));
                 Storage::disk(config('voyager.storage.disk'))->put($new_image, (string)$image, 'public');

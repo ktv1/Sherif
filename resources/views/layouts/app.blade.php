@@ -96,7 +96,8 @@
     loadCSS("{{asset('assets/_fonts.css')}}");
     @yield("css_files")
 </script>
-
+<script type="text/javascript" src="{{asset('assets/libs/jquery/jquery-1.11.2.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('assets/libs/jquery/jquery-migrate.min.js')}}"></script>
 <!-- Load CSS compiled without Bootstrap & Header styles (after release) -->
 <script>var ms=document.createElement("link");ms.rel="stylesheet";
     // ms.href="compiled.min.css";document.getElementsByTagName("head")[0].appendChild(ms);
@@ -105,7 +106,7 @@
 <!-- Load Scripts -->
 <script>var scr = {"scripts":[
         {"src" : "{{asset('assets/libs/modernizr/modernizr.js')}}", "async" : false},
-        {"src" : "{{asset('assets/libs/jquery/jquery-1.11.2.min.js')}}", "async" : false},
+        //{"src" : "{{asset('assets/libs/jquery/jquery-1.11.2.min.js')}}", "async" : false},
         {"src" : "{{asset('assets/libs/bootstrap/js/Pooper.js')}}", "async" : false},
         {"src" : "{{asset('assets/libs/bootstrap/js/bootstrap.min.js')}}", "async" : false},
         {"src" : "{{asset('assets/libs/waypoints/waypoints.min.js')}}", "async" : false},
@@ -119,6 +120,6 @@
         {"src" : "{{asset('assets/js/Clients-scripts/Basket.js')}}", "async" : false},
     ]};!function(t,n,r){"use strict";var c=function(t){if("[object Array]"!==Object.prototype.toString.call(t))return!1;for(var r=0;r<t.length;r++){var c=n.createElement("script"),e=t[r];c.src=e.src,c.async=e.async,n.body.appendChild(c)}return!0};t.addEventListener?t.addEventListener("load",function(){c(r.scripts);},!1):t.attachEvent?t.attachEvent("onload",function(){c(r.scripts)}):t.onload=function(){c(r.scripts)}}(window,document,scr);
 </script>
-
+@yield('bottom_scripts')
 </body>
 </html>

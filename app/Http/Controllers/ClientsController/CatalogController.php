@@ -1,7 +1,14 @@
 <?php
 
 namespace App\Http\Controllers\ClientsController;
-
+set_time_limit(0);
+use App\Characteristic;
+use App\CharacteristicOption;
+use App\JoomlaProducts;
+use App\ProductCharacteristicPivot;
+use App\ProductImages;
+use App\ProductsExtraFields;
+use App\ProductsExtraFieldsValues;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
@@ -12,8 +19,24 @@ use App\Category;
 use App\Product;
 
 class CatalogController extends Controller
-{	
-	/**/
+{
+
+    public function getSlug($slug,$subslug = null, $product = null)
+    {
+        try {
+            //dd(ProductController::i()->getProduct($slug, $subslug, $product));
+            return ProductController::i()->getProduct($slug, $subslug, $product);
+        } catch (\Exception $e) {
+            try {
+                return $this->getSubCatalog($slug,$subslug);
+            } catch (\Exception $e) {
+                //dd(ProductController::i()->getProduct($slug, $subslug, $product));
+                return $this->getCatalog($slug);
+            }
+        }
+
+    }
+    /**/
    	public function getCatalog($slug){
    		$CurrentCategory = Category::where('slug', $slug)->first();
 
@@ -50,7 +73,21 @@ class CatalogController extends Controller
    			}
    		}
         $productsCategory = CategoryPivot::join('products as p','p.id','product_categories_pivot.product_id')
-                            ->where('category_id',$CurrentSubCategory->id)->get();
+                            ->where('category_id',$CurrentSubCategory->id);//->get();
+
+         if((Request()->get('sortby') == 'name') && (Request()->get('orderby') == 'ASC')) {
+             $productsCategory = $productsCategory->orderBy('name', 'ASC');
+         } elseif((Request()->get('sortby') == 'name') && (Request()->get('orderby') == 'DESC')) {
+             $productsCategory = $productsCategory->orderBy('name', 'DESC');
+         } elseif((Request()->get('sortby') == 'default') && (Request()->get('orderby') == 'ASC')) {
+             $productsCategory = $productsCategory->orderBy('ordering', 'ASC');
+         } elseif((Request()->get('sortby') == 'default') && (Request()->get('orderby') == 'DESC')) {
+             $productsCategory = $productsCategory->orderBy('ordering', 'DESC');
+         } elseif((Request()->get('sortby') == 'name') && (Request()->get('orderby') == 'DESC')) {
+             $productsCategory = $productsCategory->orderBy('name', 'DESC');
+         };
+        $productsCategory = $productsCategory->get();
+
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
         $col = new Collection($productsCategory);
         $perPage = 15;
@@ -69,5 +106,88 @@ class CatalogController extends Controller
             'CurrentCategory' => $CurrentCategory,
             'CurrentSubCategory' => $CurrentSubCategory,
         ]);
+    }
+
+
+
+    public function ImportProductsExtraFields() {
+        $pef = ProductsExtraFields::all();
+        foreach ($pef as $result) {
+            $char = Characteristic::firstOrNew(['id' =>$result->id]);
+            $char->id = $result->id;
+            $char->name = $result->name_ru_RU;
+            $ct = '';
+            foreach (unserialize($result->cats) as $res) {
+                $ct .= $res . ',';
+            }
+            $ct = substr($ct, 0, -1);
+            $char->categories = $ct;
+            if ($result->allcats === 0) {
+                $char->choose = 1;
+            } elseif ($result->allcats === 1) {
+                $char->choose = 0;
+            }
+            $char->save();
+
+            if (CharacteristicOption::where('id_characteristic',$result->id)->count() > 0) {
+                CharacteristicOption::where('id_characteristic',$result->id)->delete();
+            }
+
+            foreach (ProductsExtraFieldsValues::where('field_id', $result->id)->get() as $pfv) {
+                CharacteristicOption::insert([
+                    'id' => $pfv->id,
+                    'id_characteristic' => $result->id,
+                    'value' => $pfv->name_ru_RU,
+                    'ordering' => $pfv->ordering
+                ]);
+            }
+        }
+    }
+
+    public function ImportProductsCharacteristic() {
+        $pc = JoomlaProducts::all();
+        foreach ($pc as $item) {
+            $fields = explode(';-;',$item->extra_fields);
+            foreach ($fields as $field) {
+                $fieldvalues = explode(':=:', $field);
+                if (isset($fieldvalues[1])) {
+                    $fieldparams = explode(',', $fieldvalues[1]);
+                    foreach ($fieldparams as $fieldparam) {
+                        //dd($fieldparam);
+                        ProductCharacteristicPivot::insert([
+                            'product_id' => $item->product_id,
+                            'characteristic_id' => $fieldvalues[0],
+                            'option_id' => $fieldparam
+                        ]);
+                    }
+                } else {
+                    ProductCharacteristicPivot::insert([
+                        'product_id' => $item->product_id,
+                        'characteristic_id' => (int)$fieldvalues[0],
+                        'option_id' => ''
+                    ]);
+                }
+            }
+        }
+
+    }
+
+    public function ImportProductsImages() {
+        $pc = Product::all();
+        foreach ($pc as $result) {
+            $prImages = ProductImages::where('product_id',$result->id)->get()->toArray();
+            if(count($prImages > 0) && $result->addimage != '') {
+                $img = [];
+                foreach ($prImages as $prImage) {
+                    $img[$prImage['ordering']] = $prImage['image_full'];
+                }
+                ksort($img);
+                $imgstr = json_encode(array_values($img));
+                //dd($imgstr);
+                $product_img = Product::find($result->id);
+                $product_img->addimage = $imgstr;
+                $product_img->save();
+            }
+        }
     }
 }

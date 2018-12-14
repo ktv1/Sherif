@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 /*For Left Sidebar*/
 use App\Category;
+use App\Ip;
 use App\Product;
 use App\Session;
 
@@ -14,6 +15,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use View;
 
 
 class Controller extends BaseController
@@ -22,6 +24,7 @@ class Controller extends BaseController
 
     //variable to show admin's part
     public $is_admin = true;
+    public $isadm = 0;
 
     //exchange rate
     public $uah_to_usd = 0;
@@ -31,6 +34,8 @@ class Controller extends BaseController
         if($this->is_admin){
             // $this->getExchange();
         }
+        $this->isadm = Ip::isadmin()->count();
+        View::share('isadm',$this->isadm);
     }
 
 
@@ -50,11 +55,13 @@ class Controller extends BaseController
             $params = [
                 'is_admin'=>$this->is_admin,
                 'uah_to_eur'=>$this->uah_to_eur,
-                'uah_to_usd'=>$this->uah_to_usd
+                'uah_to_usd'=>$this->uah_to_usd,
+                'isadm' => $this->isadm
             ];
         }else{
             $params = [
-                'is_admin'=>$this->is_admin
+                'is_admin'=>$this->is_admin,
+                'isadm' => $this->isadm
             ];
         }
         $links = session()->has('links') ? session('links') : [];
@@ -151,7 +158,7 @@ class Controller extends BaseController
             $session = Session::all();
             //dd($session);
             if(count($session) != 0){
-                if($is_auth == true && count($session->where('user_id', Auth::user()->id)->get()) != 0){
+                if($is_auth == true && count($session->where('user_id', Auth::user()->id)) != 0){
                     $session = $session->where('user_id', Auth::user()->id);
                 }else{
                     $session = $session->where('ip_address', $ip_user);

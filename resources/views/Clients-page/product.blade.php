@@ -70,9 +70,28 @@
             </div>
             <?php  $img_cropped = explode('.', $product->mainimage)?>
             <div class="sherif_home_main-product-good_block">
+                @if ($product->addimage != '')
+                    @php
+                        $images = json_decode($product->addimage);
+                    @endphp
+                    <div class="slider-nav">
+                        @foreach($images as $key => $image)
+                            <div class="slider-nav__item"><img src="/storage/{{get_download_image_cache($image,80,80)}}" alt="Фото {{$key}}"></div>
+                        @endforeach
+                    </div>
+                @endif
                 <div class="sherif_home_main-product-good_block-view">
-                    <img src="{{asset('storage/'. $img_cropped[0] . '-medium.' . $img_cropped[1])}}" alt="">
+                    <div class="slider-item"> <img src="/storage/{{get_download_image_cache($product->mainimage,300,450)}}" data-src="/storage/{{$product->mainimage}}" alt=""></div>
+                    @if ($product->addimage != '')
+                        @php
+                            $images = json_decode($product->addimage);
+                        @endphp
+                        @foreach($images as $key => $image)
+                            <div class="slider-item"><img src="/storage/{{get_download_image_cache($image,300,450)}}" data-src="/storage/{{$image}}" alt="Фото {{$key}}"></div>
+                        @endforeach
+                    @endif
                 </div>
+
                 <div class="sherif_home_main-product-good_block-info">
                     <div class="sherif_home_main-product-good_block-info-description">
                         <div class="sherif_home_main-product-good_block-info-description-size_block">
@@ -192,7 +211,7 @@
                     </div>
                     <div class="sherif_home_main-product-tabs"> 
                         <ul class="nav nav-tabs">
-                            <li> 
+                            <li>
                                 <a data-toggle="tab" href="#description">Описание</a>
                             </li>
                             <li class="active">
@@ -206,9 +225,11 @@
                             </li>
                         </ul>
                         <!-- characteristics tab content -->
-                        <div class="sherif_home_main-product-tabs-tab-content">
-                            <div id="#description" class="tabe-pane active"></div>
-                            <div id="#characteristics" class="tabe-pane">
+                        <div class="sherif_home_main-product-tabs-tab-content ">
+                            <div id="description" class="tabe-pane">
+                                {!! $product->description!!}
+                            </div>
+                            <div id="characteristics" class="tabe-pane active">
                                 <div class="sherif_home_main-product-tabs-tab-content-block">
                                     <div class="sherif_home_main-product-tabs-tab-content-left">
                                         <ul class="tab-content-characteristics">
@@ -422,12 +443,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="#video_review" class="tabe-pane"></div>
-                            <div id="#reviews" class="tabe-pane"></div>
+                            <div id="video_review" class="tabe-pane"></div>
+                            <div id="reviews" class="tabe-pane"></div>
                         </div>
                     </div>
             </div>
 	   </div>
 
+
 @endsection
-		
+@section('bottom_scripts')
+    <script src="{{asset('/assets/libs/zoom/jquery.zoom.min.js')}}"></script>
+    <script src="{{asset('/assets/libs/slick/slick.min.js')}}"></script>
+@endsection

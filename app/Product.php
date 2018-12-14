@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 class Product extends Model
 {
     public static $_instance = null;
+    public $timestamps = false;
     public static function i()
     {
         $class = get_called_class();
@@ -35,5 +36,22 @@ class Product extends Model
                ->where(
            'subcategory_id', '=', $id
         )->get();
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
+    }
+    public function scopeInStock($query)
+    {
+        return $query->where('in_stock', 1);
+    }
+    public function scopeSearch($query, $str)
+    {
+        $str = '%' . $str . '%';
+
+        return $query->where('title', 'like', $str)
+            ->orWhere('excerpt', 'like', $str)
+            ->orWhere('content', 'like', $str);
     }
 }

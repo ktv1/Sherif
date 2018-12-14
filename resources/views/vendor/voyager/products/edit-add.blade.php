@@ -324,6 +324,7 @@
                                     </div>
                                     @php
                                         $imagesjson = json_decode($dataTypeContent->addimage);
+                                        //dd($dataTypeContent->addimage);
                                         $images = array();
                                         if(isset($imagesjson)) {
                                             foreach ($imagesjson as $key => $image) {
@@ -553,17 +554,28 @@
                                                         <td>
 
                                                                 @php
-                                                                    $char_options = DB::table('products_characteristics_pivot')->where('characteristic_id', $char->id)->pluck('option_id')->toArray();//list of related options
-                                                                    $all_char_options = DB::table('characteristic_options')->where('id_characteristic', $char->id)->get()->toArray();//list of all options of current characteristic   
+                                                                    $char_options = DB::table('products_characteristics_pivot')->where([
+                                                                        'product_id' => $dataTypeContent->id,
+                                                                        'characteristic_id' => $char->id])
+                                                                        ->pluck('option_id')
+                                                                        ->toArray();//list of related options
+                                                                    $all_char_options = DB::table('characteristic_options as co')
+                                                                        ->where('id_characteristic', $char->id)
+                                                                        ->get()
+                                                                        ->toArray();//list of all options of current characteristic
                                                                 @endphp
+                                                                @if ($char->choose == 1)
+                                                                    <select multiple class="form-control" name="characteristics_options[]">
 
-                                                                <select multiple class="form-control" name="characteristics_options[]">    
-                                                                @foreach($all_char_options as $char_opt)
-                                                                    <option value="{{$char_opt->id}}" {{ in_array($char_opt->id, $char_options) ? 'selected' : ''}}>
-                                                                    {{$char_opt->value}}
-                                                                    </option>
-                                                                @endforeach
-                                                                </select>
+                                                                    @foreach($all_char_options as $char_opt)
+                                                                        <option value="{{(int)$char_opt->id}}" {{ in_array((int)$char_opt->id, $char_options) ? 'selected' : ''}}>
+                                                                        {{$char_opt->value}}
+                                                                        </option>
+                                                                    @endforeach
+                                                                    </select>
+                                                                @else
+                                                                    <input class="form-control" type="text" name="characteristics_options[]" value="{{isset($char_options[0]) ? $char_options[0] : ''}}">
+                                                                @endif
                                                         </td>
                                                         <td>
                                                             <button type="button" class="btn btn-danger" id="dltRow"><span class="glyphicon glyphicon-remove"></span></button>
@@ -699,10 +711,9 @@
                             <div id="tab6" class="tab-pane fade">
                                 <div class="panel panel-default col-lg-12">
 
-                                    @if (isset($dataTypeRows[27])) {{-- similar --}}
+                                    @if (isset($dataTypeRows[28])) {{-- similar --}}
                                     @php
-
-                                        $row = $dataTypeRows[27];
+                                        $row = $dataTypeRows[28];
 
                                         $options = json_decode($row->details);
                                         $display_options = isset($options->display) ? $options->display : NULL;
@@ -716,7 +727,6 @@
                                         //$relationshipOptions = app('App\Product')->all();
                                         $relationshipData = (isset($data)) ? $data : $dataTypeContent;
                                         //$selected_values = isset($relationshipData) ? $relationshipData->belongsToMany($options->model, $options->pivot_table)->withPivot('value')->get() : array();
-                                       // dd($dataTypeContent->belongsToMany($options->model, $options->pivot_table)->get());
                                     @endphp
 
                                     <div id="tablesimilar" class="table-editable">
@@ -807,7 +817,8 @@
                                     @endif
                                 </div>
                         </div>
-                        @if($dataTypeContent->exists)
+
+                        @if($dataTypeContent->exists && isset($edit_info))
                         <div id="tab7" class="tab-pane fade">
                     <div class="col-lg-6">
                         <div class="panel panel-bordered" style="padding-bottom:5px;">

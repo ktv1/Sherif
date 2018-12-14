@@ -3,6 +3,16 @@
         <div class="sherif_sidebar_catalog-title">
             <h2>Каталог:</h2>
         </div>
+
+        @if ($isadm > 0)
+            <div class="sherif_sidebar_catalog_info">
+                <ul>
+                    <li><small><span>Всего товаров: </span><strong>{{\App\Product::all()->count()}}</strong></small></li>
+                    <li><small><span>Всего актуальных товаров: </span><strong>{{\App\Product::active()->count()}}</strong></small></li>
+                    <li><small><span>Всего в наличии: </span><strong>{{\App\Product::instock()->count()}}</strong></small></li>
+                </ul>
+            </div>
+        @endif
         <div class="sherif_sidebar_catalog-content">
             <!-- <div id="accordion" class="panel-group promotion">
                 <div class="panel">
