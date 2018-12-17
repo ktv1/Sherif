@@ -232,8 +232,41 @@
                             <div id="characteristics" class="tabe-pane active">
                                 <div class="sherif_home_main-product-tabs-tab-content-block">
                                     <div class="sherif_home_main-product-tabs-tab-content-left">
+
+                                        @php
+                                            $productCharacteristics = app('App\ProductCharacteristicPivot')->where('product_id',$product->id)
+                                            ->join('characteristics as c','c.id','products_characteristics_pivot.characteristic_id')
+                                            ->selectRAW('*, count(`option_id`) as countopt')
+                                            ->groupBy('characteristic_id')
+                                            ->get()
+                                            ->toArray();
+                                            $pc = array();
+
+                                            foreach ($productCharacteristics as $value){
+                                                if($value['countopt'] > 1) {
+                                                    for ($i = 0; $i <= $value['countopt'] - 1; $i++) {
+                                                        $pc[$value['characteristic_id']][] = $value;
+                                                    }
+                                                } else {
+                                                    $pc[$value['characteristic_id']][] = $value;
+                                                }
+                                            }
+                                       //dd($pc);
+                                        @endphp
+
                                         <ul class="tab-content-characteristics">
-                                            <li>
+                                            @foreach($pc as $key => $charact)
+                                                @if (count($charact) == 1)
+                                                    <li>
+                                                        <span class="text">{!!$charact[0]['name'] !!}</span>
+                                                    </li>
+                                                @else
+                                                    <li>
+                                                        <span class="text">{!!$charact[0]['name'] !!}</span>
+                                                    </li>
+                                                @endif
+                                            @endforeach
+                                            <!--<li>
                                                 <span class="text">Максимальная ширина печати</span>
                                             </li>
                                             <li>
@@ -333,7 +366,7 @@
                                             </li>
                                             <li>
                                                 <span class="text">Гарантия</span>
-                                            </li>
+                                            </li>-->
                                         </ul>
                                     </div>
                                     <div class="sherif_home_main-product-tabs-tab-content-right">

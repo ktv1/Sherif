@@ -434,11 +434,31 @@
                                 <a href="#" class="sherif-product-buttons_click-btn"><span></span><i class="far fa-hand-point-up fa-2x"></i><strong>купить в один клик</strong></a>
                             </div>
                             <div class="hiden">
-                                <p>Максимальная кратность: <span>8-10 х</span></p>
-                                <p>По типу: <span>Призменный</span></p>
+                                @php
+                                    $productCharacteristics = app('App\ProductCharacteristicPivot')->where('product_id',$product->id)
+                                    //->join('characteristics as c','c.id','products_characteristics_pivot.characteristic_id')
+                                    ->selectRAW('*, count(`option_id`) as countopt')
+                                    ->groupBy('characteristic_id')
+                                    ->get();
+                                    $pc = array();
+                                    foreach ($productCharacteristics as $value){
+                                        if($value->countopt > 1) {
+                                            for ($i = 0; $i <= $value->countopt - 1; $i++) {
+                                                $pc[$value->characteristic_id][] = $value;
+                                            }
+                                        } else {
+                                            $pc[$value->characteristic_id] = $value;
+                                        }
+                                    }
+                                dd($pc);
+                                @endphp
+                                @foreach($productCharacteristics as $productCharacteristic)
+                                    <p>{{$productCharacteristic->name}}: <span>{{$productCharacteristic->option_id}}</span></p>
+                                <!--<p>По типу: <span>Призменный</span></p>
                                 <p>Диаметр линзы: <span></span></p>
                                 <p>Цвет: <span>Серебро</span></p>
-                                <p>АКЦИИ и СКИДКИ:<span></span></p>
+                                <p>АКЦИИ и СКИДКИ:<span></span></p>-->
+                                    @endforeach
                             </div>
                         </div>
                     @endforeach

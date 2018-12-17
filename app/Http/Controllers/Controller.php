@@ -56,12 +56,12 @@ class Controller extends BaseController
                 'is_admin'=>$this->is_admin,
                 'uah_to_eur'=>$this->uah_to_eur,
                 'uah_to_usd'=>$this->uah_to_usd,
-                'isadm' => $this->isadm
+                'isadm' => $this->isadm,
             ];
         }else{
             $params = [
                 'is_admin'=>$this->is_admin,
-                'isadm' => $this->isadm
+                'isadm' => $this->isadm,
             ];
         }
         $links = session()->has('links') ? session('links') : [];

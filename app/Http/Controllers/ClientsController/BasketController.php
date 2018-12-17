@@ -41,6 +41,7 @@ class BasketController extends Controller
 			$session = new Session;
 			$session->id_product = $id;
 			$session->id = $sli;
+            $session->session_id = request()->session()->getId();
 			if($is_auth == true){
 				$session->user_id = Auth::user()->id;
 			}else{

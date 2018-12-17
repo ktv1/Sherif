@@ -23,41 +23,56 @@ class CatalogController extends Controller
 
     public function getSlug($slug,$subslug = null, $product = null)
     {
+        ///dd(ProductController::i()->getProduct($slug, $subslug, $product));
         try {
-            //dd(ProductController::i()->getProduct($slug, $subslug, $product));
             return ProductController::i()->getProduct($slug, $subslug, $product);
         } catch (\Exception $e) {
             try {
                 return $this->getSubCatalog($slug,$subslug);
             } catch (\Exception $e) {
-                //dd(ProductController::i()->getProduct($slug, $subslug, $product));
-                return $this->getCatalog($slug);
+                try {
+                    return $this->getCatalog($slug, $subslug);
+                } catch (\Exception $e) {
+                    return $this->viewMaker('errors.404')->with(['header' => $this->header(), 'left_side_bar' =>$this->left_sidebar($slug)]);
+                }
             }
         }
-
     }
     /**/
-   	public function getCatalog($slug){
+   	public function getCatalog($slug,$subslug){
    		$CurrentCategory = Category::where('slug', $slug)->first();
-
+        $CurrentSubCategory = Category::where('slug', $subslug)->first();
+        //dd($subslug);
+        if (($subslug != null) && (!$CurrentSubCategory)) {
+            return abort(404)->with(['header' => $this->header(), 'left_side_bar' =>$this->left_sidebar($slug)]);
+        }
    		$SubCategory = [];
    		foreach (Category::all() as $key => $value) {
    			if($value->parent_id == $CurrentCategory->id){
    				array_push($SubCategory, $value);
    			}
    		}
-        return $this->viewMaker('Clients-page.catalog')->with([
-            'header' => $this->header(),
-            'left_side_bar' => $this->left_sidebar($slug),
-            'data' => $SubCategory,
-            'CurrentCategory' => $CurrentCategory
-        ]);
+   		if (!$CurrentCategory) {
+   		    return $this->viewMaker('errors.404')->with(['header' => $this->header(), 'left_side_bar' =>$this->left_sidebar($slug)]);
+        } else {
+            return $this->viewMaker('Clients-page.catalog')->with([
+                'header' => $this->header(),
+                'left_side_bar' => $this->left_sidebar($slug),
+                'data' => $SubCategory,
+                'CurrentCategory' => $CurrentCategory
+            ]);
+        }
     }
 
 
-    public function getSubCatalog($slug, $subslug){
+    public function  getSubCatalog($slug, $subslug){
    		$CurrentCategory = Category::where('slug', $slug)->first();
    		$CurrentSubCategory = Category::where('slug', $subslug)->first();
+        //dd($subslug);
+        if (($CurrentSubCategory == null) &&($subslug != null)) {
+            return $this->viewMaker('errors.404')->with(['header' => $this->header(), 'left_side_bar' =>$this->left_sidebar($slug)]);
+
+        }
    		$SubSubCategory = Category::where('parent_id',$CurrentSubCategory->id)->get();
    		$Products = [];
    		$DataCategories = [];
@@ -65,10 +80,11 @@ class CatalogController extends Controller
             array_push($DataCategories, $value);
         }
       // Cache::put('name', $CurrentSubCategory, 1);
+        //dd($CurrentSubCategory);
 
    		foreach (CategoryPivot::all() as $value) {
    			if($value->category_id == $CurrentSubCategory->id){
-   				$product = Product::find($value->product_id);
+   				$product = Product::find($value->product_id)->with('characteristics');//()->withPivot(['option_id'])->get();
    				array_push($Products, $product);
    			}
    		}
@@ -109,7 +125,7 @@ class CatalogController extends Controller
     }
 
 
-
+    /* IMPORT FROM JOMMLA TABLES
     public function ImportProductsExtraFields() {
         $pef = ProductsExtraFields::all();
         foreach ($pef as $result) {
@@ -190,4 +206,5 @@ class CatalogController extends Controller
             }
         }
     }
+    */
 }

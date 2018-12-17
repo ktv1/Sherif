@@ -16,13 +16,16 @@
                  }
 
                 $ipsession = \App\Session::where('ip_address',request()->getClientIp())->first();
-                $ipsessionproducts = unserialize($ipsession->payload);
-                foreach ($ipsessionproducts as $ipsessionproduct) {
-                    if(!in_array($ipsessionproduct, $viewedproducts))  {
-                        array_push($viewedproducts,$ipsessionproduct);
+                if ($ipsession) {
+                    $ipsessionproducts = unserialize($ipsession->payload);
+                    foreach ($ipsessionproducts as $ipsessionproduct) {
+                        if(!in_array($ipsessionproduct, $viewedproducts))  {
+                            array_push($viewedproducts,$ipsessionproduct);
+                        }
                     }
-                }
+                 }
                 $viewedproducts = array_reverse($viewedproducts);
+
             @endphp
             @if(count($viewedproducts) > 0)
                 <div class="sherif_home_main-right_bar-viewed">
@@ -34,7 +37,9 @@
                         @endphp
                         <div class="sherif_home_main-right_bar-viewed-trade_item">
                             <div class="sherif_home_main-right_bar-viewed-trade_item-pic">
-                                <img src="/storage/{{get_download_image_cache($product->mainimage,62,82)}}" alt="{{$product->name}}">
+                                <img src="/storage/{{get_download_image_cache($product->mainimage,62,82)}}" alt="{{$product->name}}"
+                                     data-src="/storage/{{get_download_image_cache($product->mainimage,200,300)}}">
+                                <img class="hidden-large" style="">
                             </div>
                             <div class="sherif_home_main-right_bar-viewed-trade_item-description">
                                 <div class="sherif_home_main-right_bar-viewed-trade_item-description-top">

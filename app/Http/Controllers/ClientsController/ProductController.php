@@ -33,7 +33,11 @@ class ProductController extends Controller
      public function getProduct($slug, $subslug, $product){
      	$CurrentCategory = Category::where('slug', $slug)->first();
    		$CurrentSubCategory = Category::where('slug', $subslug)->first();
-   		$product = Product::where('slug', $product)->first();
+   		//dd($product);
+   		$product = Product::where('slug', $product)->with('characteristics')->first();
+         if (($subslug != null) && (!$CurrentSubCategory)) {
+             return $this->viewMaker('errors.404')->with(['header' => $this->header(), 'left_side_bar' =>$this->left_sidebar($slug)]);
+         }
    		// $label = ProductLabel::where('id', $product->label)->first();
         //$viewed = [];
 
@@ -49,18 +53,25 @@ class ProductController extends Controller
 
          $ipsession = Session::firstOrNew(['ip_address' =>request()->getClientIp()]);
 
-         $ipsessionProducts = unserialize($ipsession->payload);
+
+         if (isset($ipsession->payload)) {
+             $ipsessionProducts = unserialize($ipsession->payload);
+         } else {
+             $ipsessionProducts = array();
+         }
 
          if(!in_array($product->id,$ipsessionProducts)) {
              array_push($ipsessionProducts,$product->id);
          }
          $ipsession->payload = serialize($ipsessionProducts);
-         //dd(session('viewed_products'));
+
          $ipsession->ip_address = request()->getClientIp();
          $ipsession->created_at = \Carbon\Carbon::now()->toDateTimeString();
          $ipsession->updated_at = \Carbon\Carbon::now()->toDateTimeString();
-         $ipsession->session_id = session()->getId();
-         $ipsession->session_id = Auth::user()->id;
+         $ipsession->session_id = request()->session()->getId();
+         $ipsession->user_id = Auth::user()->id;
+         //dd(Auth::user()->id);
+
          $ipsession->save();
 
         return $this->viewMaker('Clients-page.product')->with([
@@ -81,7 +92,7 @@ class ProductController extends Controller
     	}else{
     		$subcategory_id = PCC::where('product_id', $id)->first();
     		if(!empty($subcategory_id)){
-	    		$subcategory = Category::where('id', $subcategory_id)->first();
+	    		$subcategory = Category::where('id', $subcategory_id->category_id)->first();
 	    		if(!empty($subcategory)){
 	    			if($subcategory->parent_id != null || $subcategory->parent_id != 0){
 	    				$category = Category::where('id', $subcategory->parent_id)->first();
