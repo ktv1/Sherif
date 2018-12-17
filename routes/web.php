@@ -11,6 +11,9 @@
 |
 */
 
+Route::get('/autocomplete', 'AutocompleteController@index');
+Route::post('/autocomplete/fetch', 'AutocompleteController@fetch')->name('autocomplete.fetch');
+
 Route::get('/', 'ClientsController\IndexController@getIndex')->name('index');
 
 /*Catalog Routes*/
@@ -19,7 +22,7 @@ Route::get('catalog/{slug}/{subslug}', 'ClientsController\CatalogController@getS
 
 
 /*Product Routes*/
-Route::get('get/product/{id}', 'ClientsController\ProductController@getProductNoURL')->name('productNoURL');
+Route::get('get/product/{id}', 'ClientsController\ProductController@getProductNoURL');
 Route::get('catalog/{slug}/{subslug}/{product}', 'ClientsController\ProductController@getProduct')->name('product');
 
 
@@ -105,6 +108,9 @@ Route::get('/account', 'Account\AccountController@index')->name('account');
 
 Route::post('/account/savepersonal','Account\AccountController@store')->name('saveUserPersonal');
 Route::post('/account/saveuserpassword','Account\AccountController@storePassword')->name('saveUserPassword');
+
+
+Route::get('search/autocomplete', 'SearchController@autocomplete');
 
 
 
