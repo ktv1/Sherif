@@ -148,14 +148,14 @@
             <div class="sherif_home_header-toolbar_arrange">
                 <div class="sherif_home_header-toolbar_searcher_block_arrange">
                     <div class="form-group">
-                        <form class="sherif_home_header-toolbar_searcher_block" action="" method="">
-                            <input type="text" name="toolbar_searcher" id="product_name" class="toolbar_searcher" placeholder="Поиск">
-                            <select class="toolbar_selector" name="toolbar_selector">
+                        <form class="sherif_home_header-toolbar_searcher_block" action="{{route('search')}}" method="GET">
+                            <input type="text" id="product_name" class="toolbar_searcher" name="q" value="{{ old('q') }}" placeholder="Поиск">
+                            <!--<select class="toolbar_selector" name="toolbar_selector">
                                 <option>Категория</option>
                                 <option>Lorem ipsum</option>
                                 <option>Lorem ipsum</option>
-                            </select>
-                            <button class="toolbar_button"><i class="fas fa-search"></i></button>
+                            </select>-->
+                            <button type="submit" class="toolbar_button"><i class="fas fa-search"></i></button>
                         </form>
                         <div id="productList">
                         </div>

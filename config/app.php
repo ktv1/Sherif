@@ -165,10 +165,12 @@ return [
         'Illuminate\Html\HtmlServiceProvider',
 
 
+
         /*
          * Package Service Providers...
          */
         Laravel\Tinker\TinkerServiceProvider::class,
+        Laravel\Scout\ScoutServiceProvider::class,
         //Scalia\SphinxSearch\SphinxSearchServiceProvider::class,
         Way\Generators\GeneratorsServiceProvider::class,
         Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider::class,

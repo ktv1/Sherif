@@ -23,7 +23,7 @@ class AutocompleteController extends Controller
                 /*->orWhere('id', 'LIKE',"{$query}%")
                 ->orWhere('code', 'LIKE',"{$query}%")
                 ->orWhere('description', 'LIKE',"%{$query}%")*/
-                ->get();
+                ->take(10)->get();
             $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
             foreach($data as $row)
             {
