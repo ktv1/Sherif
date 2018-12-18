@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="{{ config('app.locale') }}" @if (config('voyager.multilingual.rtl')) dir="rtl" @endif>
 <head>
     <title>@yield('page_title', setting('admin.title') . " - " . setting('admin.description'))</title>
@@ -45,8 +44,6 @@
     @endif
 
     @yield('head')
-    <script type="text/javascript" src="{{ voyager_asset('js/app.js') }}"></script>
-    <script type="text/javascript" src="{{asset('/assets/libs/bootstrap-file-input/js/fileinput.min.js')}}"></script>
 </head>
 
 <body class="voyager @if(isset($dataType) && isset($dataType->slug)){{ $dataType->slug }}@endif">
@@ -114,7 +111,7 @@ if (starts_with(Auth::user()->avatar, 'http://') || starts_with(Auth::user()->av
 <!-- Javascript Libs -->
 
 
-
+<script type="text/javascript" src="{{ voyager_asset('js/app.js') }}"></script>
 
 
 <script>
@@ -143,6 +140,6 @@ if (starts_with(Auth::user()->avatar, 'http://') || starts_with(Auth::user()->av
 @if(!empty(config('voyager.additional_js')))<!-- Additional Javascript -->
     @foreach(config('voyager.additional_js') as $js)<script type="text/javascript" src="{{ asset($js) }}"></script>@endforeach
 @endif
-<script type="text/javascript" src="{{asset('/assets/libs/bootstrap-file-input/js/fileinput.min.js')}}"></script>
+
 </body>
 </html>

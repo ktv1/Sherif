@@ -162,13 +162,14 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        'Illuminate\Html\HtmlServiceProvider',
+
 
         /*
          * Package Service Providers...
          */
         Laravel\Tinker\TinkerServiceProvider::class,
-
-        
+        //Scalia\SphinxSearch\SphinxSearchServiceProvider::class,
         Way\Generators\GeneratorsServiceProvider::class,
         Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider::class,
 
@@ -183,6 +184,7 @@ return [
         TCG\Voyager\VoyagerServiceProvider::class,
 
         Intervention\Image\ImageServiceProvider::class,
+
 
     ],
 
@@ -233,6 +235,9 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Image'     => Intervention\Image\Facades\Image::class,
+        'Form' => 'Illuminate\Html\FormFacade',
+        'Html '=> 'Illuminate\Html\HtmlFacade',
+        //'SphinxSearch' => Scalia\SphinxSearch\SphinxSearchFacade::class,
 
     ],
 

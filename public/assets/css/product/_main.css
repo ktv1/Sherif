@@ -1018,7 +1018,6 @@ body textarea:required:valid {
 						.sherif-product:last-child{
 							margin-right: 0!important;
 						}
-					}
 						/*Maket for product in stock*/
 							.sherif-product-in-stock{
 
@@ -1105,7 +1104,7 @@ body textarea:required:valid {
 										width: 100%;
 										border: solid 1px #213951;
 										border-radius: 7px;
-										margin: 5px 0_content;
+										//margin: 5px 0 content;
 										padding: 3px 15px;
 										display: flex;
 										justify-content: center; 

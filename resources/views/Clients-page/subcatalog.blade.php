@@ -340,46 +340,19 @@
 
             <div class="sherif-catalog_sort">
                 <div class="sorting">
-                    <form id="sort_count" class="sherif-catalog_sort_date">
+                    <form class="sherif-catalog_sort_date">
                         <div class="">
                             <label for="date-catalog">сортировка</label>
                         </div>
                         <div class="form-group sort">
-                                <select id="date-catalog" name="sortby" onchange="submitListProductFilters()">
-                                    <option value="default" {{ request()->get('sortby') === "default" ? "selected" : "" }}>предустановленная</option>
-                                    <option value="name" {{ request()->get('sortby') === "name" ? "selected" : "" }}>название</option>
-                                    <option value="price" {{ request()->get('sortby') === "price" ? "selected" : "" }}>цена</option>
-                                    <option value="dateadd" {{ request()->get('sortby') === "dateadd" ? "selected" : "" }}>дата поступления</option>
-                                    <option value="article" {{ request()->get('sortby') === "article" ? "selected" : "" }}>артикул</option>
-                                    <option value="vendor" {{ request()->get('sortby') === "vendor" ? "selected" : "" }}>производитель</option>
-                                    <option value="sale" {{ request()->get('sortby') === "sale" ? "selected" : "" }}>акция</option>
-
+                                <select id="date-catalog" name="date">
+                                    <option value="day">дата поступления</option>
+                                    <option value="week">название</option>
+                                    <option value="month">цена</option>
                                 </select>
-                                @if ((request()->get('orderby') == 'ASC'))
-                                    <button name="orderby" value="DESC" onclick="submitListProductFilterSortDirection()"><i class="fas fa-sort-numeric-down"></i></button>
-                                @elseif((request()->get('orderby') == "DESC"))
-                                    <button name="orderby" value="ASC" onclick="submitListProductFilterSortDirection()"><i class="fas fa-sort-numeric-up"></i></button>
-                                @else
-                                    <button name="orderby" value="DESC" onclick="submitListProductFilterSortDirection()"><i class="fas fa-sort-numeric-down"></i></button>
-                                @endif
+                                <button><i class="fas fa-sort-numeric-down"></i></button>
                         </div>
                     </form>
-                    <script type="text/javascript">
-                        function submitListProductFilterSortDirection(){
-                            $('orderby').value = $('orderby').value ^ 1;
-                            submitListProductFilters();
-                            //jQuery('.jshop_list_product form#sort_count').submit();
-                            //submitListProductFilters();
-                        }
-
-                        function submitListProductFilters(){
-                            jQuery('form#sort_count').submit();
-                            // $_('sort_count').submit();
-                            //alert(jQuery('orderby'));
-                            //jQuery('orderby').value = jQuery('orderby').value ^ 1;
-                            //submitListProductFilters();
-                        }
-                    </script>
                     <form class="sherif-catalog_sort_amount">
                         <div class="">
                             <label for="amount-catalog">товаров на странице</label>
@@ -413,8 +386,7 @@
                                     <?php  
                                         $img_cropped = explode('.', $product->mainimage)
                                     ?>
-                                        <img class="sherif-product_content_img" src="/storage/{{get_download_image_cache($product->mainimage,140,200)}}" alt="" data-src="/storage/{{get_download_image_cache($product->mainimage,300,450)}}">
-                                        <img class="hidden-large" style="">
+                                        <img class="sherif-product_content_img" src="/storage/{{get_download_image_cache($product->mainimage,140,200)}}" alt="">
                                     <!--<img class="sherif-product_content_img" src="{{asset('storage/'. $img_cropped[0] . '-cropped.' . $img_cropped[1])}}" alt="">-->
                                 </div>
                                 <a href="{{route('product', ['slug'=>$CurrentCategory->slug, 'subslug'=>$CurrentSubCategory->slug, 'product'=>$product->slug])}}" class="sherif-product_content_link">{{$product->name}}</a><br />
@@ -434,31 +406,11 @@
                                 <a href="#" class="sherif-product-buttons_click-btn"><span></span><i class="far fa-hand-point-up fa-2x"></i><strong>купить в один клик</strong></a>
                             </div>
                             <div class="hiden">
-                                @php
-                                    $productCharacteristics = app('App\ProductCharacteristicPivot')->where('product_id',$product->id)
-                                    //->join('characteristics as c','c.id','products_characteristics_pivot.characteristic_id')
-                                    ->selectRAW('*, count(`option_id`) as countopt')
-                                    ->groupBy('characteristic_id')
-                                    ->get();
-                                    $pc = array();
-                                    foreach ($productCharacteristics as $value){
-                                        if($value->countopt > 1) {
-                                            for ($i = 0; $i <= $value->countopt - 1; $i++) {
-                                                $pc[$value->characteristic_id][] = $value;
-                                            }
-                                        } else {
-                                            $pc[$value->characteristic_id] = $value;
-                                        }
-                                    }
-                                dd($pc);
-                                @endphp
-                                @foreach($productCharacteristics as $productCharacteristic)
-                                    <p>{{$productCharacteristic->name}}: <span>{{$productCharacteristic->option_id}}</span></p>
-                                <!--<p>По типу: <span>Призменный</span></p>
+                                <p>Максимальная кратность: <span>8-10 х</span></p>
+                                <p>По типу: <span>Призменный</span></p>
                                 <p>Диаметр линзы: <span></span></p>
                                 <p>Цвет: <span>Серебро</span></p>
-                                <p>АКЦИИ и СКИДКИ:<span></span></p>-->
-                                    @endforeach
+                                <p>АКЦИИ и СКИДКИ:<span></span></p>
                             </div>
                         </div>
                     @endforeach
@@ -1529,7 +1481,4 @@
                 </div>
         </div>
     </div>
-@endsection
-@section('bottom_scripts')
-    <script src="{{asset('/assets/libs/zoom/jquery.zoom.min.js')}}"></script>
 @endsection

@@ -9,6 +9,7 @@
         loadCSS("assets/css/_header_admin.css");              //Header Styles (compress & paste to header after release)
     @endif
     loadCSS("assets/_main.css");                //User Styles: Main
+    loadCSS("{{asset('assets/css/catalog/_main.css')}}");                   //User Styles: Main
     @if($is_admin)
         loadCSS("assets/css/_main_admin.css");                //User Styles: Main
     @endif

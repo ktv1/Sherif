@@ -6,9 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use TCG\Voyager\Facades\Voyager;
 
-use App\Category;
-use App\Product;
-
 class VoyagerSettingsController extends Controller
 {
     public function index()
@@ -83,38 +80,6 @@ class VoyagerSettingsController extends Controller
 
     public function update(Request $request)
     {
-        $products = Product::get();
-
-        if($request->site_site_url == 'radio1') {//full url
-            foreach($products as $product) {
-                //generate URL from main category
-                $last_category_parent = Category::where('id', '=', $product->maincategory)->first();//first closest category
-                $category[] = $last_category_parent;
-                $i = 1;
-                while(end($category)->parent_id != NULL) {
-                    
-                    $last_category_parent = Category::where('id', '=', $last_category_parent->parent_id)->first();//second closest category and so on...
-                    $category[$i] = $last_category_parent;
-                    $i++;
-                }
-                $category = array_reverse($category);//reverse array for url generating
-                $url = $request->root() .'/';
-                foreach($category as $item) {
-                    $url .= $item->slug . '/';
-                }
-                $url .= $product->slug; //this is full URL
-
-                Product::where('id', $product->id)
-                    ->update(['URL' => $url]);
-            }
-        } else {//short url
-            foreach($products as $product) {
-                $url = $request->root() . '/' . $product->slug;
-                Product::where('id', $product->id)
-                        ->update(['URL' => $url]);
-            }
-        }
-
         // Check permission
         $this->authorize('edit', Voyager::model('Setting'));
 
