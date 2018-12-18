@@ -30,8 +30,14 @@ class Product extends Model
     }
     public function characteristics()
     {
-        return $this->belongsToMany('App\Characteristic', 'products_characteristics_pivot');
+        return $this->belongsToMany('App\Characteristic', 'products_characteristics_pivot')->withPivot('option_id');
     }
+
+    public function characteristicsopt()
+    {
+        return $this->hasManyThrough('App\CharacteristicOption', 'App\ProductCharacteristicPivot', 'option_id','id_characteristic' );
+    }
+
     public function SubcategoryAttributes($id) {
        return DB::table('category_attributes_pivot as cap')
            ->join('attribute_value_pivot as avp','avp.attribute_id','cap.attribute_id')

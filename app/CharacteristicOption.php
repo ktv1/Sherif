@@ -10,4 +10,9 @@ class CharacteristicOption extends Model
     protected $primaryKey = 'id';
     protected $fillable = ['*'];
     public $timestamps = false;
+
+    public function characteristics()
+    {
+        return $this->belongsToOne('App\Characteristic');
+    }
 }

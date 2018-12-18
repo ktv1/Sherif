@@ -375,6 +375,7 @@
             </div>
                         
                 <div class="sherif_catalog_content">
+
                     @foreach($data as $product)
                         <div class="sherif-product">
                             <div class="sherif-product_content">

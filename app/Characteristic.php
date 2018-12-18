@@ -15,4 +15,8 @@ class Characteristic extends Model
     {
         return $this->belongsToMany('App\Product')->withPivot('products_characteristics_pivot');
     }
+    public function Options()
+    {
+        return $this->belongsToMany('App\CharacteristicOption');
+    }
 }

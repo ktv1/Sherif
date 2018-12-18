@@ -10,17 +10,20 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/autocomplete', 'AutocompleteController@index');
+Route::post('/autocomplete/fetch', 'AutocompleteController@fetch')->name('autocomplete.fetch');
+
 
 Route::get('/', 'ClientsController\IndexController@getIndex')->name('index');
 
 /*Catalog Routes*/
-Route::get('catalog/{slug}', 'ClientsController\CatalogController@getCatalog')->name('catalog');
-Route::get('catalog/{slug}/{subslug}', 'ClientsController\CatalogController@getSubCatalog')->name('subCatalog');
+//Route::get('catalog/{slug}', 'ClientsController\CatalogController@getCatalog')->name('catalog');
+//Route::get('catalog/{slug}/{subslug}', 'ClientsController\CatalogController@getSubCatalog')->name('subCatalog');
 
 
 /*Product Routes*/
 Route::get('get/product/{id}', 'ClientsController\ProductController@getProductNoURL')->name('productNoURL');
-Route::get('catalog/{slug}/{subslug}/{product}', 'ClientsController\ProductController@getProduct')->name('product');
+//Route::get('catalog/{slug}/{subslug}/{product}', 'ClientsController\ProductController@getProduct')->name('product');
 
 
 /*Basket Routes*/
@@ -106,6 +109,9 @@ Route::get('/account', 'Account\AccountController@index')->name('account');
 Route::post('/account/savepersonal','Account\AccountController@store')->name('saveUserPersonal');
 Route::post('/account/saveuserpassword','Account\AccountController@storePassword')->name('saveUserPassword');
 
-
+// Ecommerce Routes
+Route::get('/{slug}', 'ClientsController\CatalogController@getSlug')->name('catalog');
+Route::get('/{slug}/{subslug}', 'ClientsController\CatalogController@getSlug')->name('subCatalog');
+Route::get('/{slug}/{subslug}/{product}', 'ClientsController\CatalogController@getSlug')->name('product');;
 
 

@@ -44,7 +44,7 @@ class CatalogController extends Controller
         $CurrentSubCategory = Category::where('slug', $subslug)->first();
         //dd($subslug);
         if (($subslug != null) && (!$CurrentSubCategory)) {
-            return abort(404)->with(['header' => $this->header(), 'left_side_bar' =>$this->left_sidebar($slug)]);
+            return $this->viewMaker('errors.404')->with(['header' => $this->header(), 'left_side_bar' =>$this->left_sidebar($slug)]);
         }
    		$SubCategory = [];
    		foreach (Category::all() as $key => $value) {
