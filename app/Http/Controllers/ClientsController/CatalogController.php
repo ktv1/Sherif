@@ -23,7 +23,7 @@ class CatalogController extends Controller
 
     public function getSlug($slug,$subslug = null, $product = null)
     {
-        ///dd(ProductController::i()->getProduct($slug, $subslug, $product));
+        //dd(ProductController::i()->getProduct($slug, $subslug, $product));
         try {
             return ProductController::i()->getProduct($slug, $subslug, $product);
         } catch (\Exception $e) {
@@ -84,7 +84,7 @@ class CatalogController extends Controller
 
    		foreach (CategoryPivot::all() as $value) {
    			if($value->category_id == $CurrentSubCategory->id){
-   				$product = Product::find($value->product_id)->with('characteristics');//()->withPivot(['option_id'])->get();
+   				$product = Product::find($value->product_id);//->with('characteristics');//()->withPivot(['option_id'])->get();
    				array_push($Products, $product);
    			}
    		}
@@ -95,12 +95,16 @@ class CatalogController extends Controller
              $productsCategory = $productsCategory->orderBy('name', 'ASC');
          } elseif((Request()->get('sortby') == 'name') && (Request()->get('orderby') == 'DESC')) {
              $productsCategory = $productsCategory->orderBy('name', 'DESC');
+             //////////////////////
          } elseif((Request()->get('sortby') == 'default') && (Request()->get('orderby') == 'ASC')) {
              $productsCategory = $productsCategory->orderBy('ordering', 'ASC');
          } elseif((Request()->get('sortby') == 'default') && (Request()->get('orderby') == 'DESC')) {
              $productsCategory = $productsCategory->orderBy('ordering', 'DESC');
-         } elseif((Request()->get('sortby') == 'name') && (Request()->get('orderby') == 'DESC')) {
-             $productsCategory = $productsCategory->orderBy('name', 'DESC');
+             ///////////////
+         } elseif((Request()->get('sortby') == 'price') && (Request()->get('orderby') == 'ASC')) {
+             $productsCategory = $productsCategory->orderBy('price_final', 'ASC');
+         } elseif((Request()->get('sortby') == 'price') && (Request()->get('orderby') == 'DESC')) {
+             $productsCategory = $productsCategory->orderBy('price_final', 'DESC');
          };
         $productsCategory = $productsCategory->get();
 

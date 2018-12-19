@@ -66,10 +66,12 @@ class Controller extends BaseController
         }
         $links = session()->has('links') ? session('links') : [];
         $currentLink = request()->path();
-        array_unshift($links, $currentLink);
+        if (!in_array($currentLink, $links) && (!stripos($currentLink, 'storage/'))) {
+            array_unshift($links, $currentLink);
+        }
         session(['page' => $page]);
         session(['links' => $links]);
-
+        //dd(stripos($currentLink, 'storage/'));
        return view($page,$params);
 
     }

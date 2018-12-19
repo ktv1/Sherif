@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\ClientsController;
 
+use App\CharacteristicOption;
 use App\Session;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -33,7 +34,7 @@ class ProductController extends Controller
      public function getProduct($slug, $subslug, $product){
      	$CurrentCategory = Category::where('slug', $slug)->first();
    		$CurrentSubCategory = Category::where('slug', $subslug)->first();
-   		//dd($product);
+   		//dd(request()->session());
    		$product = Product::where('slug', $product)->first();
          if (($subslug != null) && (!$CurrentSubCategory)) {
              return $this->viewMaker('errors.404')->with(['header' => $this->header(), 'left_side_bar' =>$this->left_sidebar($slug)]);
@@ -41,29 +42,7 @@ class ProductController extends Controller
    		// $label = ProductLabel::where('id', $product->label)->first();
         //$viewed = [];
 
-         /////////////////////////////
-         // product characteristic
-         ///////////////////////
-         $productCharacteristics = app('App\ProductCharacteristicPivot')->where('product_id',$product->id)
-             ->join('characteristics as c','c.id','products_characteristics_pivot.characteristic_id')
-             ->selectRAW('*, count(`option_id`) as countopt')
-             ->groupBy('characteristic_id')
-             ->get();
-         $pc = array();
-         foreach ($productCharacteristics as $value){
-             if($value->countopt > 1) {
-                 for ($i = 0; $i <= $value->countopt - 1; $i++) {
-                     $pc[$value->characteristic_id][] = $value;
-                 }
-             } else {
-                 $pc[$value->characteristic_id] = $value;
-             }
-         }
-         foreach ($pc as $item) {
-             foreach ($item as $value){
 
-             }
-         }
 
          $session_viewedproduct = session('viewed_products');
          if(!is_array($session_viewedproduct)) {
@@ -95,13 +74,14 @@ class ProductController extends Controller
          $ipsession->session_id = request()->session()->getId();
          $ipsession->user_id = isset(Auth::user()->id) ? Auth::user()->id : 0;
          //dd(Auth::user()->id);
-
+         $productCharacteristic = Product::i()->getProductCharacteristics($product->id);
          $ipsession->save();
 
         return $this->viewMaker('Clients-page.product')->with([
         	'CurrentCategory' => $CurrentCategory,
             'CurrentSubCategory' => $CurrentSubCategory,
             'product' => $product,
+            'productCharacteristic' => $productCharacteristic,
             'status' => PS::where('id', $product->status)->first(),
             'left_side_bar' => $this->left_sidebar("None"),
             'header' => $this->header()
@@ -110,50 +90,17 @@ class ProductController extends Controller
 
 
     public function getProductNoURL($id){
-    	$product = Product::where('id', $id)->with('characteristicsopt')->first();
+    	$product = Product::where('products.id', $id)
+            //->with('characteristicsopt')
+            ->first();
 
-
-        dd((string)$product->characteristicsopt()->toSql());
-        /////////////////////////////
-        // product characteristic
-        ///////////////////////
-        $productCharacteristics = app('App\ProductCharacteristicPivot')->where('product_id',$product->id)
-            ->join('characteristics as c','c.id','products_characteristics_pivot.characteristic_id')
-            ->selectRAW('*, count(`option_id`) as countopt')
-            ->groupBy('characteristic_id')
-            ->get();
-        $pc = array();
-        foreach ($productCharacteristics as $value){
-            if($value->countopt > 1) {
-                for ($i = 0; $i <= $value->countopt - 1; $i++) {
-                    $pc[$value->characteristic_id][] = $value;
-                }
-            } else {
-                $pc[$value->characteristic_id] = $value;
-            }
-        }
-
-        $str = array();
-        foreach ($pc as $key => $item) {
-            if (count($item) == 1) {
-                $str[$key]['char_name'] = $item->name;
-                if (is_int($item->option_id)) {
-
-                }
-                //$str[$key]['char_value'] =
-            } else {
-                foreach ($item as $k => $value){
-                    $str[$key]['char_name'] = $value->name;
-                }
-            }
-        }
-        dd($str);
-
+        $productCharacteristic = Product::i()->getProductCharacteristics($id);
 		if(empty($product)){
 			return redirect()->back();
 		}else {
 			return $this->viewMaker('Clients-page.product')->with([
-				'product' => Product::where('id', $id)->first(),
+				'product' => $product,//Product::where('id', $id)->first(),
+                'productCharacteristic' => $productCharacteristic,
 				'status' => PS::where('id', $product->status)->first(),
 				'left_side_bar' => $this->left_sidebar("None"),
 				'header' => $this->header()

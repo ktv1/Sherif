@@ -13,6 +13,6 @@ class CharacteristicOption extends Model
 
     public function characteristics()
     {
-        return $this->belongsToOne('App\Characteristic');
+        return $this->belongsTo('App\Characteristic');
     }
 }

@@ -3,8 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class ProductCharacteristicPivot extends Model
+class ProductCharacteristicPivot extends Pivot
 {
     //
     protected $table = 'products_characteristics_pivot';
@@ -23,9 +24,19 @@ class ProductCharacteristicPivot extends Model
         return static::$_instance;
     }
 
+    public function product()
+    {
+        return $this->belongsTo('App\Product');
+    }
     public function characteristics()
     {
-        return $this->belongsToOne('App\Characteristic');
+        return $this->belongsTo('App\Characteristic','characteristic_id');
+    }
+
+    public function options()
+    {
+        return $this->hasManyThrough('App\ProductCharacteristicPivot','App\CharacteristicOption','id_characteristic','option_id');
+        //return $this->hasManyThrough('App\Characteristic','App\CharacteristicOption','id_characteristic','id','option_id');
     }
 
 

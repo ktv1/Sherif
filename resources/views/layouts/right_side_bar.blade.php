@@ -20,11 +20,11 @@
                     $ipsessionproducts = unserialize($ipsession->payload);
                     foreach ($ipsessionproducts as $ipsessionproduct) {
                         if(!in_array($ipsessionproduct, $viewedproducts))  {
-                            array_push($viewedproducts,$ipsessionproduct);
+                            array_unshift($viewedproducts,$ipsessionproduct);
                         }
                     }
                  }
-                $viewedproducts = array_reverse($viewedproducts);
+                $viewedproducts = array_slice(array_reverse($viewedproducts),0,6);
 
             @endphp
             @if(count($viewedproducts) > 0)
@@ -33,7 +33,8 @@
                 <button class="sherif_home_main-right_bar-viewed-button button_top"></button>
                     @foreach($viewedproducts as $viewedproduct)
                         @php
-                            $product = \App\Product::where('id',$viewedproduct)->first();
+                            $product = \App\Product::where('id',$viewedproduct)->with('categories')->first();
+                        //dd($product);
                         @endphp
                         <div class="sherif_home_main-right_bar-viewed-trade_item">
                             <div class="sherif_home_main-right_bar-viewed-trade_item-pic">
@@ -43,8 +44,15 @@
                             </div>
                             <div class="sherif_home_main-right_bar-viewed-trade_item-description">
                                 <div class="sherif_home_main-right_bar-viewed-trade_item-description-top">
-                                    <h5>{{$product->name}}</h5>
-                                    <p>Артикул: {{$product->code}}</p>
+                                    @if(($product->categories))
+                                        @php
+                                            $categorypath = \App\Product::i()->GetCategoriesPath($product->categories[0]->id);
+                                        @endphp
+                                        <h5><a href="{{route('product', ['slug'=>array_pop($categorypath), 'subslug'=>array_shift($categorypath), 'product' => $product->slug])}}">{{$product->name}}</a></h5>
+                                    @else
+                                        <h5><a href="{{route('productNoURL',['slug'=>$product->id])}}">{{$product->name}}</a></h5>
+                                    @endif
+                                        <p>Артикул: {{$product->code}}</p>
                                 </div>
                                 <div class="sherif_home_main-right_bar-viewed-trade_item-description_bot">
                                     <h5>Цена: {{$product->price_final}}</h5>

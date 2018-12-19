@@ -11,12 +11,12 @@ class Characteristic extends Model
     protected $fillable = ['*'];
     public $timestamps = false;
 
-    public function Products()
-    {
-        return $this->belongsToMany('App\Product')->withPivot('products_characteristics_pivot');
-    }
+    //public function Products()
+    //{
+    //    return $this->belongsToMany('App\Product')->withPivot('products_characteristics_pivot');
+    //}
     public function Options()
     {
-        return $this->belongsToMany('App\CharacteristicOption');
+        return $this->hasMany('App\CharacteristicOption','id_characteristic');
     }
 }

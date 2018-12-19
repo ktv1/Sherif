@@ -1,6 +1,7 @@
 @section("top_alert")
-    @if ((\Carbon\Carbon::now()->hour > 13) && (\Carbon\Carbon::now()->hour <= 16) && \Carbon\Carbon::MONDAY &&
-    \Carbon\Carbon::TUESDAY && \Carbon\Carbon::WEDNESDAY && \Carbon\Carbon::THURSDAY && \Carbon\Carbon::FRIDAY && count(request()->session('links')) > 2)
+
+    @if ((\Carbon\Carbon::now()->hour > 13) && (\Carbon\Carbon::now()->hour <= 24) && \Carbon\Carbon::MONDAY &&
+    \Carbon\Carbon::TUESDAY && \Carbon\Carbon::WEDNESDAY && \Carbon\Carbon::THURSDAY && \Carbon\Carbon::FRIDAY && (count(session('links')) > 2))
 
     <div class="sherif_alert">
         <div class="sherif_alert_hight_bg"></div>
