@@ -16,8 +16,7 @@ class BlockedIp
      */
     public function handle($request, Closure $next)
     {
-        $isBlocked = Blocked::where('value', '=', $request->ip())
-            ->where('type','=', 'ip')
+        $isBlocked = Blocked::where('ip', '=', $request->ip())
             ->where('blocked', '=', true)
             ->where('deleted_at', '=', null)->get();
 

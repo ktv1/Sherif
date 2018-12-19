@@ -105,6 +105,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::delete('/blacklist/delete', 'Voyager\BlacklistController@deleteItem')->name('voyager.blacklist.delete');
 
     Route::put('/blacklist/restore', 'Voyager\BlacklistController@restoreItem')->name('voyager.blacklist.restore');
+
+    Route::get('/blacklist/import', 'Voyager\BlacklistController@importItems')->name('voyager.blacklist.import');
 /*END Blacklist CRUD*/
 
 });

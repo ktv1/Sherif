@@ -32,25 +32,33 @@
                 <table id="blacklist" class="table table-striped table-sm table-bordered">
                     <thead>
                     <tr>
-                        <th class="th-sm">Тип записи</th>
-                        <th class="th-sm">Значение</th>
+                        <th class="th-sm">Телефон</th>
+                        <th class="th-sm">IP Адресс</th>
+                        <th class="th-sm">E-Mail</th>
+                        <th class="th-sm">Полное Имя</th>
+                        <th class="th-sm">Город</th>
+                        <th class="th-sm">Дата Заказа</th>
+                        <th class="th-sm">Номер Заказа</th>
                         <th class="th-sm">Комментарий</th>
                         <th class="th-sm">Доступ на сайт</th>
                         <th class="th-sm">Автор</th>
-                        <th class="th-sm">Создано</th>
+                        <th class="th-sm">Дата создания</th>
                         <th class="th-sm">Действия</th>
                     </tr>
                     </thead>
                     <tbody>
                 @foreach($blacklist as $index => $item)
                     <tr class="{{$item['deleted_at'] ? 'danger trashed' : ''}}">
-                        <td>{{$item['type']}}</td>
-                        <td>{{$item['value']}}</td>
+                        <td>{{$item['phone']}}</td>
+                        <td>{{$item['ip']}}</td>
+                        <td>{{$item['email']}}</td>
+                        <td>{{$item['fullname']}}</td>
+                        <td>{{$item['city']}}</td>
+                        <td>{{$item['buyed_at']}}</td>
+                        <td>{{$item['order_num']}}</td>
                         <td>{{$item['comment']}}</td>
                         <td class="text-{{$item['blocked'] ? 'danger' : 'success'}}">
-                            @if($item['type'] == 'ip')
                                 {{$item['blocked'] ? 'Нет' : 'Да'}}
-                            @endif
                         </td>
                         <td>{{$item['user']['name']}}</td>
                         <td>{{$item['created_at']}}</td>

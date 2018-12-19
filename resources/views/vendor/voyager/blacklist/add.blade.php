@@ -5,30 +5,55 @@
         <h1 class="page-title"><i class="voyager-skull"></i>Blacklist</h1>
     </div>
     <div class="page-content browse container-fluid">
-        <form class="form-horizontal col-md-4" id="blacklist_add">
+        <form class="form-horizontal col-md-4" id="blacklist_update">
             <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" />
             <div class="form-group">
-                <label class="control-label col-sm-4 text-right" for="type">Тип записи:</label>
+                <label class="control-label col-sm-4 text-right" for="phone">Телефон:</label>
                 <div class="col-sm-8">
-                    <select name="type" id="type" class="form-control" required>
-                        <option disabled selected value>-- Выберите тип записи --</option>
-                        <option value="ip">IP Адресс</option>
-                        <option value="phone">Телефон</option>
-                        <option value="email">E-Mail</option>
-                    </select>
+                    <input type="text" name="phone" class="form-control" id="phone">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4 text-right" for="ip">IP Адресс:</label>
+                <div class="col-sm-8">
+                    <input type="text" name="ip" class="form-control" id="ip">
                 </div>
             </div>
             <div class="form-group blocked hidden">
                 <label class="control-label col-sm-4 text-right" for="blocked">Доступ к сайту:</label>
-                    <div class="col-sm-offset-1 col-sm-2">
+                <div class="col-sm-offset-1 col-sm-2">
                     <input type="checkbox" name="blocked" id="blocked" class="ios-toggle">
                     <label for="blocked" class="checkbox-label" data-off="Да" data-on="Нет"></label>
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-sm-4 text-right" for="value">Значение:</label>
+                <label class="control-label col-sm-4 text-right" for="email">E-Mail:</label>
                 <div class="col-sm-8">
-                    <input type="text" name="value" class="form-control" id="value" required>
+                    <input type="text" name="email" class="form-control" id="email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4 text-right" for="fullname">Полное Имя:</label>
+                <div class="col-sm-8">
+                    <input type="text" name="fullname" class="form-control" id="fullname">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4 text-right" for="city">Город:</label>
+                <div class="col-sm-8">
+                    <input type="text" name="city" class="form-control" id="city">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4 text-right" for="buyed_at">Дата заказа:</label>
+                <div class="col-sm-8">
+                    <input type="text" name="buyed_at" class="form-control" id="buyed_at">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4 text-right" for="order_num">Номер заказа:</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order_num" class="form-control" id="order_num">
                 </div>
             </div>
             <div class="form-group">
@@ -38,9 +63,9 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-sm-4 text-right" for="comment">Создал:</label>
+                <label class="control-label col-sm-4 text-right" for="author">Создал:</label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" id="value" value="{{auth()->user()->name}}" disabled>
+                    <input type="text" class="form-control" id="author" value="{{auth()->user()->name}}" disabled>
                 </div>
             </div>
             <div class="form-group">
@@ -51,27 +76,6 @@
         </form>
     </div>
 
-    <div class="modal fade" id="restoreModal" role="dialog">
-        <div class="modal-dialog">
+    @include('voyager::blacklist.partials.modal')
 
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Дублирование записи</h4>
-                </div>
-                <div class="modal-body">
-                    <p>Запись с таким значением уже существует.</p>
-                    <p>Вы можете выбрать слудющие действия: </p>
-                </div>
-                <div class="modal-footer text-center">
-                    <a href="javascript:;" title="Restore" class="btn btn-sm btn-success restore" id="restoreItemId" data-id="">
-                        <i class="voyager-move"></i> <span class="hidden-xs hidden-sm">Восстановить</span>
-                    </a>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Вернуться</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
 @endsection

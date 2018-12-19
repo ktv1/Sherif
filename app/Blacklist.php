@@ -21,28 +21,43 @@ class Blacklist extends Model
      * @var array
      */
     protected $fillable = [
-        'type',
-        'value',
-        'comment',
+        'phone',
+        'ip',
+        'email',
+        'fullname',
+        'city',
+        'buyed_at',
+        'order_num',
+        'comment'
     ];
 
     /**
-     * The attributes enumerate of type column.
+     * Soft delete variable
      *
      * @var array
      */
-    protected $types = [
-        'ip',
-        'phone',
-        'email'
-    ];
-
     protected $dates = ['deleted_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class, 'author');
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public static function getDuplicate($data)
+    {
+        return Blacklist::withTrashed()
+            ->where('id', '!=', $data['exclude'])
+            ->where(function($query) use($data) {
+                foreach(array_slice($data, 1) as $k => $v) {
+                    $query->orWhere($k, $v);
+                }
+            })->get(['id', 'deleted_at'])->toArray()[0];
     }
 }

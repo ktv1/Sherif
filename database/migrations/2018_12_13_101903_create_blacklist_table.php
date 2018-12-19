@@ -16,8 +16,13 @@ class CreateBlacklistTable extends Migration
         Schema::create('blacklist', function(Blueprint $table)
         {
             $table->increments('id');
-            $table->enum('type',['ip','phone','email']);
-            $table->string('value')->unique();
+            $table->string('phone')->unique()->nullable();
+            $table->string('ip')->unique()->nullable();
+            $table->string('email')->unique()->nullable();
+            $table->string('fullname')->nullable();
+            $table->string('city')->nullable();
+            $table->string('buyed_at')->nullable();
+            $table->string('order_num')->nullable();
             $table->string('comment')->nullable();
             $table->tinyInteger('author');
             $table->boolean('blocked')->default(false);
