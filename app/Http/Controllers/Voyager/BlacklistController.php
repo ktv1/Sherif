@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Voyager;
 
 use App\Blacklist;
 use Illuminate\Http\Request;
-use Jabran\CSV_Parser as Parser;
 
 use TCG\Voyager\Http\Controllers\VoyagerBaseController;
 
@@ -39,10 +38,6 @@ class BlacklistController extends VoyagerBaseController
                 $model->$v = !empty($data[$v]) ? $data[$v] : null;
             }
 
-            if(!empty($model->ip)) {
-                $model->blocked = isset($item['blocked']);
-            }
-
             $model->blocked = !empty($model->ip) ? isset($data['blocked']) : false;
             $model->author  = auth()->user()->id;
 
@@ -51,6 +46,7 @@ class BlacklistController extends VoyagerBaseController
             } catch (\Illuminate\Database\QueryException $e) {
                 if($e->errorInfo[1] == 1062) { // Duplicate entry error code
 
+                    $find['exclude'] = 0;
                     if(!empty($model->phone)) $find['phone'] = $model->phone;
                     if(!empty($model->ip))    $find['ip']    = $model->ip;
                     if(!empty($model->email)) $find['email'] = $model->email;
