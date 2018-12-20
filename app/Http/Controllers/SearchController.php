@@ -3,20 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Product;
-use App\ProductCategoriesPivot;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Response;
 use App\Models\Banner;
 
 
 class SearchController extends Controller
 {
-
-    public function func_search($q, $count){
+    public function func_search($q, $count)
+    {
         $query = mb_strtolower($q, 'UTF-8');
         $arr = explode(" ", $query); //разбивает строку на массив по разделителю
+        
         /*
          * Для каждого элемента массива (или только для одного) добавляет в конце звездочку,
          * что позволяет включить в поиск слова с любым окончанием.
@@ -56,10 +55,30 @@ class SearchController extends Controller
         }
         $query = array_unique($query, SORT_STRING);
         $qQeury = implode(" ", $query); //объединяет массив в строку
+        
         // Таблица для поиска
         $results = Product::whereRaw(
             "MATCH(name,description) AGAINST(? IN BOOLEAN MODE)", // name,email - поля, по которым нужно искать
-            $qQeury)->paginate($count) ;
+            $qQeury)->paginate($count);
+        
+        
+        //если товары не найдены - используется список синонимом
+        if (count($results) == 0)
+        {
+            $arrs = json_decode(File::get(storage_path('synonyms.json')), true);
+            foreach($arrs as $k => $e){
+                for ($i = 0; $i < count($e); $i++){
+                    if ($q == $e[$i]){
+                        $results = DB::table('products')
+                            ->where('name', 'LIKE',"%{$k}%")
+                            ->orWhere('description', 'LIKE',"%{$k}%")
+                            ->paginate($count);
+                        return $results;
+                    }
+                }
+            }
+        }
+
         return $results;
     }
 
@@ -67,8 +86,10 @@ class SearchController extends Controller
     {
         $q = $request->input('q');
         $max_page = 50;
+        
         //Полнотекстовый поиск с пагинацией
         $results = $this->func_search($q, $max_page);
+
         $banner = Banner::with(['bannerImages.bannerLinkPosition'])->first();
         return $this->viewMaker('Clients-page.search')->with([
             'banner' => $banner,
@@ -79,21 +100,4 @@ class SearchController extends Controller
 
         ]);
     }
-
-    /*public function autocomplete(){
-        $term = Input::get('q');
-
-        $results = array();
-
-        $queries = DB::table('products')
-            ->where('name', 'LIKE', '%'.$term.'%')
-            ->orWhere('id', 'LIKE', '%'.$term.'%')
-            ->take(5)->get();
-
-        foreach ($queries as $query)
-        {
-            $results[] = [ 'id' => $query->id, 'name' => $query->name ];
-        }
-        return Response::json($results, 200, [], JSON_UNESCAPED_UNICODE);
-    }*/
 }

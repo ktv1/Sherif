@@ -46,7 +46,6 @@
             clear. can take out subcatalog.blade.php
             -->
 
-
             <div class="sherif_row-btn tab">
                 <button type="button" class="btn-sherif-product btn-hide" data-toggle="collapse" data-target="#link1">ФИЛЬТР ТОВАРОВ</button>
                 <div id="link1" class="collapse">
