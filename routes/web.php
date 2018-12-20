@@ -11,6 +11,12 @@
 |
 */
 
+
+Route::get('/search', 'SearchController@search')->name('search');
+
+Route::get('/autocomplete', 'AutocompleteController@index');
+Route::post('/autocomplete/fetch', 'AutocompleteController@fetch')->name('autocomplete.fetch');
+
 Route::get('/', 'ClientsController\IndexController@getIndex')->name('index');
 
 /*Catalog Routes*/
@@ -19,7 +25,7 @@ Route::get('catalog/{slug}/{subslug}', 'ClientsController\CatalogController@getS
 
 
 /*Product Routes*/
-Route::get('get/product/{id}', 'ClientsController\ProductController@getProductNoURL')->name('productNoURL');
+Route::get('get/product/{id}', 'ClientsController\ProductController@getProductNoURL');
 Route::get('catalog/{slug}/{subslug}/{product}', 'ClientsController\ProductController@getProduct')->name('product');
 
 
@@ -96,8 +102,19 @@ Route::group(['prefix' => 'admin'], function () {
    Route::get('/get/characteristic', 'Voyager\CharacteristicsController@getSelectCharacteristic');
 /*END Product Characteristics*/
 
+/*Blacklist CRUD*/
+    Route::get('/blacklist', 'Voyager\BlacklistController@index')->name('voyager.blacklist.index');
 
-   
+    Route::match(['GET','POST'], '/blacklist/add', 'Voyager\BlacklistController@addItem')->name('voyager.blacklist.add');
+    Route::match(['GET','POST'], '/blacklist/edit/{id}', 'Voyager\BlacklistController@editItem')->name('voyager.blacklist.edit');
+
+    Route::delete('/blacklist/delete', 'Voyager\BlacklistController@deleteItem')->name('voyager.blacklist.delete');
+
+    Route::put('/blacklist/restore', 'Voyager\BlacklistController@restoreItem')->name('voyager.blacklist.restore');
+
+    Route::get('/blacklist/import', 'Voyager\BlacklistController@importItems')->name('voyager.blacklist.import');
+/*END Blacklist CRUD*/
+
 });
 
 Auth::routes();
@@ -105,6 +122,9 @@ Route::get('/account', 'Account\AccountController@index')->name('account');
 
 Route::post('/account/savepersonal','Account\AccountController@store')->name('saveUserPersonal');
 Route::post('/account/saveuserpassword','Account\AccountController@storePassword')->name('saveUserPassword');
+
+
+Route::get('search/autocomplete', 'SearchController@autocomplete');
 
 
 

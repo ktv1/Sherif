@@ -10,7 +10,7 @@ use App\ProductLabel;
 use App\ProductStatus as PS;
 
 use App\Category;
-use App\ProductCategoriesPivot as PCC;
+use App\ProductCategoriesPivot as PCP;
 
 use Illuminate\Support\Facades\Cache;
 
@@ -34,10 +34,20 @@ class ProductController extends Controller
 
     public function getProductNoURL($id){
     	$product = Product::where('id', $id)->first();
-    	if(empty($product)){
+		if(empty($product)){
+			return redirect()->back();
+		}else {
+			return $this->viewMaker('Clients-page.product')->with([
+				'product' => Product::where('id', $id)->first(),
+				'status' => PS::where('id', $product->status)->first(),
+				'left_side_bar' => $this->left_sidebar("None"),
+				'header' => $this->header()
+			]);
+		}
+    	/*if(empty($product)){
     		return redirect()->back();
     	}else{
-    		$subcategory_id = PCC::where('product_id', $id)->first();
+    		$subcategory_id = PCP::where('product_id', $id)->first();
     		if(!empty($subcategory_id)){
 	    		$subcategory = Category::where('id', $subcategory_id)->first();
 	    		if(!empty($subcategory)){
@@ -59,7 +69,7 @@ class ProductController extends Controller
 	    	}else{
 	    		return redirect()->back();
 	    	}
-    	}
+    	}*/
     }
 
 

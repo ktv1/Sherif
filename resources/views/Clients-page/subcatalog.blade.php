@@ -386,7 +386,7 @@
                                     <?php  
                                         $img_cropped = explode('.', $product->mainimage)
                                     ?>
-                                        <img class="sherif-product_content_img" src="/storage/{{get_download_image_cache($product->mainimage,140,200)}}" alt="">
+                                        <img class="sherif-product_content_img" src="/storage/app/public/{{get_download_image_cache($product->mainimage,140,200)}}" alt="">
                                     <!--<img class="sherif-product_content_img" src="{{asset('storage/'. $img_cropped[0] . '-cropped.' . $img_cropped[1])}}" alt="">-->
                                 </div>
                                 <a href="{{route('product', ['slug'=>$CurrentCategory->slug, 'subslug'=>$CurrentSubCategory->slug, 'product'=>$product->slug])}}" class="sherif-product_content_link">{{$product->name}}</a><br />

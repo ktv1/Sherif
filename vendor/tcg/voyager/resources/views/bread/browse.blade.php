@@ -83,7 +83,7 @@
                                             @endif
                                         </th>
                                         @endforeach
-                                        <th class="actions text-right"><!--{{ __('voyager::generic.actions') }}--></th>
+                                        <th class="actions text-right">{{ __('voyager::generic.actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -105,7 +105,6 @@
                                                     @if(property_exists($options, 'relationship'))
 
                                                         @foreach($data->{$row->field} as $item)
-                                                        
                                                             @if($item->{$row->field . '_page_slug'})
                                                             <a href="{{ $item->{$row->field . '_page_slug'} }}">{{ $item->{$row->field} }}</a>@if(!$loop->last), @endif
                                                             @else
@@ -184,7 +183,7 @@
                                                 @endif
                                             </td>
                                         @endforeach
-                                        <td class="no-sort no-click" id="bread-actions" style="display: flex; flex-direction: row-reverse;">
+                                        <td class="no-sort no-click" id="bread-actions">
                                             @foreach(Voyager::actions() as $action)
                                                 @include('voyager::bread.partials.actions', ['action' => $action])
                                             @endforeach
