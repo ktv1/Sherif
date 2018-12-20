@@ -27,13 +27,21 @@ class Controller extends BaseController
     public $uah_to_usd = 0;
     public $uah_to_eur = 0;
     public $viewed_pages = array();
+
+    /**
+     * Controller constructor.
+     */
     public function __construct(){
         if($this->is_admin){
             // $this->getExchange();
         }
+
+        $this->middleware('blocked');
     }
 
-
+    /**
+     *
+     */
     public function getExchange(){
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11");
@@ -45,6 +53,11 @@ class Controller extends BaseController
     }
 
     //view maker
+
+    /**
+     * @param $page
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function viewMaker($page){
         if($this->is_admin){
             $params = [
@@ -71,6 +84,11 @@ class Controller extends BaseController
 
     /*Left Sidebar*/
 
+    /**
+     * @param $status
+     * @return string
+     * @throws \Throwable
+     */
     protected function left_sidebar($status){
     	$category = Category::all();
         $Global_category = [];
@@ -89,6 +107,10 @@ class Controller extends BaseController
         ])->render();
     }
 
+    /**
+     * @param $data
+     * @return array
+     */
     public function returnData($data){
 
         $products = [];
@@ -128,6 +150,10 @@ class Controller extends BaseController
         
     }
 
+    /**
+     * @return string
+     * @throws \Throwable
+     */
     protected function header(){
        $array = $this->getSession();
             return view('layouts.header')->with([
@@ -139,7 +165,9 @@ class Controller extends BaseController
     }
 
 
-
+    /**
+     * @return array
+     */
     public function getSession(){
         $ip_user = request()->ip();
         $is_auth = Auth::user();
