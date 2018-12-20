@@ -162,23 +162,32 @@
                     <!-- Smallest -->
                     <div class="sherif_home_header-toolbar_navigation-mobile smaller">
                         <a class="sherif_home_header-toolbar_navigation-mobile_catalog-btn smaller catalog-toggle" toggle="off">Каталог <i class="fas fa-caret-down"></i></a>
-                        <a href="#">Мой аккаунт</a>
+                        <a href="/account">Мой аккаунт</a>
                     </div>
                     <!-- End Smallest -->
                     <!-- Mobile -->
                     <div class="sherif_home_header-toolbar_navigation-mobile">
                         <a class="sherif_left_column sherif_home_header-toolbar_navigation-mobile_catalog-btn catalog-toggle" toggle="off">Каталог <i class="fas fa-caret-down"></i></a>
-                        <a href="#">Мой аккаунт</a>
+                        <a href="/account">Мой аккаунт</a>
                         <a href="#">Мой список желаний</a>
                         <a href="#">Программа лояльности</a>
                         <a href="#">Вход</a>
                     </div>
                     <!-- End Mobile -->
                     <div class="sherif_home_header-toolbar_navigation">
-                        <a href="#">Мой аккаунт</a>
-                        <a href="#">Мой список желаний</a>
+                        @auth()
+                            <a href="/account">Мой аккаунт</a>
+                            <a href="#">Мой список желаний</a>
+                        @endauth
                         <a href="#">Программа лояльности</a>
-                        <a href="{{url('/login')}}">Вход</a>
+
+                        @guest()
+                            <a href="{{url('/login')}}">Вход</a>
+                        @endguest
+
+                        @auth()
+                                <a href="{{url('/logout')}}">Выход</a>
+                        @endauth
                     </div>
                 </div>
             </div>
