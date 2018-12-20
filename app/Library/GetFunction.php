@@ -57,6 +57,31 @@ class GetFunction
         }
     }
 
+    public static function curl_get_contents($url)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        $data = curl_exec($ch);
+        curl_close($ch);
+        return $data;
+    }
+
+    public static function file_get_contents_curl($url) {
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_AUTOREFERER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+        $data = curl_exec($ch);
+        curl_close($ch);
+
+        return $data;
+    }
+
     public static function create_download_image_url_cache($filepath, $w, $h) {
         //dd($filepath);
 
@@ -73,7 +98,7 @@ class GetFunction
             $orig_image = get_file_path($filepath);
             $img = $new_image;
 
-            file_put_contents($orig_image, file_get_contents($url));
+            file_put_contents($orig_image, GetFunction::file_get_contents_curl($url));
             //$filepath = get_file_path($filepath);
             if (!is_file($orig_image)) {
               return ('/storage/placeholder.png');

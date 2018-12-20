@@ -12,16 +12,13 @@ class Image extends BaseType
     public function handle()
     {
         if ($this->request->hasFile($this->row->field)) {
-
-            $uri = '';
-            $uri = str_replace('/admin/','',$this->request->getRequestUri());
             $file = $this->request->file($this->row->field);
-            $path = $uri.DIRECTORY_SEPARATOR.date('FY').DIRECTORY_SEPARATOR;
-            //$path = $this->slug.DIRECTORY_SEPARATOR.date('FY').DIRECTORY_SEPARATOR;
+
+            $path = $this->slug.DIRECTORY_SEPARATOR.date('FY').DIRECTORY_SEPARATOR;
 
             $filename = $this->generateFileName($file, $path);
 
-            $image = InterventionImage::make($file);//->exif(); //exif
+            $image = InterventionImage::make($file);
 
             $fullPath = $path.$filename.'.'.$file->getClientOriginalExtension();
 

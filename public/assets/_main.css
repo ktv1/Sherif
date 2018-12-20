@@ -745,11 +745,13 @@ body textarea:required:valid {
 								text-align: right;
 								font-family: "OpenSansRegular";
 							}
-								.sherif-product_availability_available{
+								.sherif-product_availability_available::before{
 									color: #3e5368;
+									content: "есть в наличии";
 								}
-								.sherif-product_availability_non-available{
+								.sherif-product_availability_non-available::before{
 									color: #e00000;
+									content: "нет в наличии";
 								}
 							.sherif-product_content{
 
