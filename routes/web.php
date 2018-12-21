@@ -99,7 +99,14 @@ Route::group(['prefix' => 'admin'], function () {
 
    Route::get('/get/characteristic', 'Voyager\CharacteristicsController@getSelectCharacteristic');
 /*END Product Characteristics*/
-
+    /*Blacklist CRUD*/
+    Route::get('/blacklist', 'Voyager\BlacklistController@index')->name('voyager.blacklist.index');
+    Route::match(['GET','POST'], '/blacklist/add', 'Voyager\BlacklistController@addItem')->name('voyager.blacklist.add');
+    Route::match(['GET','POST'], '/blacklist/edit/{id}', 'Voyager\BlacklistController@editItem')->name('voyager.blacklist.edit');
+    Route::delete('/blacklist/delete', 'Voyager\BlacklistController@deleteItem')->name('voyager.blacklist.delete');
+    Route::put('/blacklist/restore', 'Voyager\BlacklistController@restoreItem')->name('voyager.blacklist.restore');
+    Route::get('/blacklist/import', 'Voyager\BlacklistController@importItems')->name('voyager.blacklist.import');
+    /*END Blacklist CRUD*/
 
    
 });
