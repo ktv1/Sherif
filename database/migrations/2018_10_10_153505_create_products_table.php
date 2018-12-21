@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 
 class CreateProductsTable extends Migration {
 
@@ -53,6 +54,7 @@ class CreateProductsTable extends Migration {
 			$table->string('meta_heading')->nullable();
 			$table->string('meta_keywords')->nullable();
 			$table->integer('in_stock')->nullable();
+			DB::statement('ALTER TABLE products ADD FULLTEXT full(name, description)');
 		});
 	}
 
