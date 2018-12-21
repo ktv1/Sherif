@@ -91,21 +91,28 @@ class CatalogController extends Controller
         $productsCategory = CategoryPivot::join('products as p','p.id','product_categories_pivot.product_id')
                             ->where('category_id',$CurrentSubCategory->id);//->get();
 
-         if((Request()->get('sortby') == 'name') && (Request()->get('orderby') == 'ASC')) {
-             $productsCategory = $productsCategory->orderBy('name', 'ASC');
-         } elseif((Request()->get('sortby') == 'name') && (Request()->get('orderby') == 'DESC')) {
-             $productsCategory = $productsCategory->orderBy('name', 'DESC');
-             //////////////////////
-         } elseif((Request()->get('sortby') == 'default') && (Request()->get('orderby') == 'ASC')) {
-             $productsCategory = $productsCategory->orderBy('ordering', 'ASC');
-         } elseif((Request()->get('sortby') == 'default') && (Request()->get('orderby') == 'DESC')) {
-             $productsCategory = $productsCategory->orderBy('ordering', 'DESC');
-             ///////////////
-         } elseif((Request()->get('sortby') == 'price') && (Request()->get('orderby') == 'ASC')) {
-             $productsCategory = $productsCategory->orderBy('price_final', 'ASC');
-         } elseif((Request()->get('sortby') == 'price') && (Request()->get('orderby') == 'DESC')) {
-             $productsCategory = $productsCategory->orderBy('price_final', 'DESC');
-         };
+        if((Request()->get('sortby') == 'name') && (Request()->get('orderby') == 'ASC')) {
+            $productsCategory = $productsCategory->orderBy('name', 'ASC');
+        } elseif((Request()->get('sortby') == 'name') && (Request()->get('orderby') == 'DESC')) {
+            $productsCategory = $productsCategory->orderBy('name', 'DESC');
+        }elseif((Request()->get('sortby') == 'name') && (Request()->get('orderby') == null)) {
+            $productsCategory = $productsCategory->orderBy('name', 'ASC');
+            //////////////////////
+        } elseif((Request()->get('sortby') == 'default') && (Request()->get('orderby') == 'ASC')) {
+            $productsCategory = $productsCategory->orderBy('ordering', 'ASC');
+        } elseif((Request()->get('sortby') == 'default') && (Request()->get('orderby') == 'DESC')) {
+            $productsCategory = $productsCategory->orderBy('ordering', 'DESC');
+        } elseif((Request()->get('sortby') == 'default') && (Request()->get('orderby') == null)) {
+            $productsCategory = $productsCategory->orderBy('ordering', 'ASC');
+            ///////////////
+        } elseif ((Request()->get('sortby') == 'price') && (Request()->get('orderby') == null)){
+            $productsCategory = $productsCategory->orderBy('price_final', 'ASC');
+        } elseif((Request()->get('sortby') == 'price') && (Request()->get('orderby') == 'ASC')) {
+            $productsCategory = $productsCategory->orderBy('price_final', 'DESC');
+        } elseif((Request()->get('sortby') == 'price') && (Request()->get('orderby') == 'DESC')) {
+
+            $productsCategory = $productsCategory->orderBy('price_final', 'DESC');
+        };
         $productsCategory = $productsCategory->get();
 
         $currentPage = LengthAwarePaginator::resolveCurrentPage();

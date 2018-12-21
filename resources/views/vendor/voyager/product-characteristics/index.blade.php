@@ -154,7 +154,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
                                     @foreach($dataTypeContent as $data)
                                     <tr>
                                         @can('delete',app($dataType->model_name))
@@ -178,9 +177,9 @@
                                                                         <option disabled>--{{ $value->name }}</option>
                                                                     @endif
                                                                  @endforeach
-                                                            </select>
+                                                            </select> 
                                                         @else
-                                                            <?php
+                                                            <?php 
                                                                 $array = explode(',', $data->{$row->field});
                                                             ?>
                                                             <select multiple size="3" style="width:100%">
@@ -191,11 +190,10 @@
                                                                             $value = explode(']', $value[1]);
                                                                             $value = $value[0];
                                                                             $value = $categories->where('id', $value)->first();
-                                                                            $value = isset($value->name) ? $value->name : '';
+                                                                            $value = $value->name;
                                                                         }else{
-
                                                                             $value = $categories->where('id', $value)->first();
-                                                                            $value = isset($value->name) ? "--" .  $value->name : '';
+                                                                            $value = "--" .  $value->name;
                                                                         }
                                                                     ?>
                                                                     <option disabled>{{ $value }}</option>  

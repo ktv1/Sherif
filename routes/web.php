@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/search', 'SearchController@search')->name('search');
 
 Route::get('/autocomplete', 'AutocompleteController@index');
 Route::post('/autocomplete/fetch', 'AutocompleteController@fetch')->name('autocomplete.fetch');
@@ -17,13 +18,13 @@ Route::post('/autocomplete/fetch', 'AutocompleteController@fetch')->name('autoco
 Route::get('/', 'ClientsController\IndexController@getIndex')->name('index');
 
 /*Catalog Routes*/
-Route::get('catalog/{slug}', 'ClientsController\CatalogController@getCatalog')->name('catalog');
-Route::get('catalog/{slug}/{subslug}', 'ClientsController\CatalogController@getSubCatalog')->name('subCatalog');
+//Route::get('catalog/{slug}', 'ClientsController\CatalogController@getCatalog')->name('catalog');
+//Route::get('catalog/{slug}/{subslug}', 'ClientsController\CatalogController@getSubCatalog')->name('subCatalog');
 
 
 /*Product Routes*/
-Route::get('get/product/{id}', 'ClientsController\ProductController@getProductNoURL');
-Route::get('catalog/{slug}/{subslug}/{product}', 'ClientsController\ProductController@getProduct')->name('product');
+Route::get('get/product/{id}', 'ClientsController\ProductController@getProductNoURL')->name('productNoURL');;
+//Route::get('catalog/{slug}/{subslug}/{product}', 'ClientsController\ProductController@getProduct')->name('product');
 
 
 /*Basket Routes*/
@@ -112,6 +113,12 @@ Route::post('/account/saveuserpassword','Account\AccountController@storePassword
 
 Route::get('search/autocomplete', 'SearchController@autocomplete');
 
+
+
+// Ecommerce Routes
+Route::get('/{slug}', 'ClientsController\CatalogController@getSlug')->name('catalog');
+Route::get('/{slug}/{subslug}', 'ClientsController\CatalogController@getSlug')->name('subCatalog');
+Route::get('/{slug}/{subslug}/{product}', 'ClientsController\CatalogController@getSlug')->name('product');;
 
 
 

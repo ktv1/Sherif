@@ -43,12 +43,12 @@ class Product extends Model
     }
 
     public function SubcategoryAttributes($id) {
-       return DB::table('category_attributes_pivot as cap')
-           ->join('attribute_value_pivot as avp','avp.attribute_id','cap.attribute_id')
-           ->join('attribute_values as av', 'av.id','avp.attribute_value_id')
-               ->where(
-           'subcategory_id', '=', $id
-        )->get();
+        return DB::table('category_attributes_pivot as cap')
+            ->join('attribute_value_pivot as avp','avp.attribute_id','cap.attribute_id')
+            ->join('attribute_values as av', 'av.id','avp.attribute_value_id')
+            ->where(
+                'subcategory_id', '=', $id
+            )->get();
     }
 
     public function scopeActive($query)
@@ -130,7 +130,7 @@ class Product extends Model
                             $st .= $value->value . ', ';
                         }
                     }
-                        $str[$key]['char_value'] = $st;
+                    $str[$key]['char_value'] = $st;
                 }
             }
         }

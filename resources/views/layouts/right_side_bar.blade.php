@@ -18,9 +18,11 @@
                 $ipsession = \App\Session::where('ip_address',request()->getClientIp())->first();
                 if ($ipsession) {
                     $ipsessionproducts = unserialize($ipsession->payload);
-                    foreach ($ipsessionproducts as $ipsessionproduct) {
-                        if(!in_array($ipsessionproduct, $viewedproducts))  {
-                            array_unshift($viewedproducts,$ipsessionproduct);
+                    if(is_array($ipsessionproducts)) {
+                        foreach ($ipsessionproducts as $ipsessionproduct) {
+                            if(!in_array($ipsessionproduct, $viewedproducts))  {
+                                array_unshift($viewedproducts,$ipsessionproduct);
+                            }
                         }
                     }
                  }

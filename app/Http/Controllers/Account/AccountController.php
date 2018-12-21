@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\Account;
 
-use App\Ip;
 use App\Models\UserPersonal;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
-use View;
 
 class AccountController extends Controller
 {
@@ -21,8 +19,6 @@ class AccountController extends Controller
      */
     public function __construct()
     {
-        $this->isadm = Ip::isadmin()->count();
-        View::share('isadm',$this->isadm);
         $this->middleware('auth');
     }
 
@@ -49,8 +45,7 @@ class AccountController extends Controller
             'uah_to_eur'=>32,
             'uah_to_usd'=>27,
             'left_side_bar' => $this->left_sidebar("None"),
-            'header' => $this->header(),
-            //'isadm' => $this->isadm
+            'header' => $this->header()
         ]);
     }
 

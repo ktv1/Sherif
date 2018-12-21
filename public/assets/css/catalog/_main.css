@@ -1565,12 +1565,3 @@ div.colors:nth-child(25){
 	width: 27px;
 	margin-right: 5px;
 }
-
-.sherif_sidebar_catalog_info {
-    list-style-type: none;
-    font-size: 12px;
-    line-height: 14px;
-    padding-left: 15px;
-    padding-top: 10px;
-    color: #777;
-}
