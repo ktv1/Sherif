@@ -22,13 +22,3 @@ yarn-error.log
 !/vendor/tcg/voyager
 =======
 .phpunit.result.cache
->>>>>>> 0ab732f11c2573e889f861ca7781e34bda1c0566
-.env.example.localhost
-.env.example.server
-Sherif-master.zip
-app/JoomlaProducts.php
-app/ProductImages.php
-app/ProductsExtraFields.php
-app/ProductsExtraFieldsValues.php
-export.csv
-sherif123.zip

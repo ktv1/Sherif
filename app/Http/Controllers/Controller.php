@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 /*For Left Sidebar*/
 use App\Category;
-use App\Ip;
 use App\Product;
 use App\Session;
 
@@ -15,7 +14,6 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use View;
 
 
 class Controller extends BaseController
@@ -24,7 +22,6 @@ class Controller extends BaseController
 
     //variable to show admin's part
     public $is_admin = true;
-    public $isadm = 0;
 
     //exchange rate
     public $uah_to_usd = 0;
@@ -34,8 +31,6 @@ class Controller extends BaseController
         if($this->is_admin){
             // $this->getExchange();
         }
-        $this->isadm = Ip::isadmin()->count();
-        View::share('isadm',$this->isadm);
     }
 
 
@@ -55,23 +50,19 @@ class Controller extends BaseController
             $params = [
                 'is_admin'=>$this->is_admin,
                 'uah_to_eur'=>$this->uah_to_eur,
-                'uah_to_usd'=>$this->uah_to_usd,
-                'isadm' => $this->isadm,
+                'uah_to_usd'=>$this->uah_to_usd
             ];
         }else{
             $params = [
-                'is_admin'=>$this->is_admin,
-                'isadm' => $this->isadm,
+                'is_admin'=>$this->is_admin
             ];
         }
         $links = session()->has('links') ? session('links') : [];
         $currentLink = request()->path();
-        if (!in_array($currentLink, $links) && (!stripos($currentLink, 'storage/'))) {
-            array_unshift($links, $currentLink);
-        }
+        array_unshift($links, $currentLink);
         session(['page' => $page]);
         session(['links' => $links]);
-        //dd(stripos($currentLink, 'storage/'));
+
        return view($page,$params);
 
     }
@@ -160,7 +151,7 @@ class Controller extends BaseController
             $session = Session::all();
             //dd($session);
             if(count($session) != 0){
-                if($is_auth == true && count($session->where('user_id', Auth::user()->id)) != 0){
+                if($is_auth == true && count($session->where('user_id', Auth::user()->id)->get()) != 0){
                     $session = $session->where('user_id', Auth::user()->id);
                 }else{
                     $session = $session->where('ip_address', $ip_user);
