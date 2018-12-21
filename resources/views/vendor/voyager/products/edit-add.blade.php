@@ -539,7 +539,7 @@
                                                 <tbody id='ctbody'>
                                                 @php $count = 0; @endphp
                                                     @foreach($characteristics_list_objects as $char)
-                                                    <tr class="chosen_char" id_row="'+count+'">
+                                                    <tr class="chosen_char" id_row="{{$count}}">
                                                         <td>
                                                             <select class="form-control chosen_select" name="select_characteristic[]" id_row="{{$count}}">
                                                                     <option value="">None</option>
@@ -551,8 +551,7 @@
                                                                 <?php endforeach; ?>
                                                             </select>
                                                         </td>
-                                                        <td>
-
+                                                        <td  name="characteristic_options" id="option_{{$count}}">
                                                                 @php
                                                                     $char_options = DB::table('products_characteristics_pivot')->where([
                                                                         'product_id' => $dataTypeContent->id,
@@ -565,7 +564,7 @@
                                                                         ->toArray();//list of all options of current characteristic
                                                                 @endphp
                                                                 @if ($char->choose == 1)
-                                                                    <select multiple class="form-control" name="characteristics_options[]">
+                                                                    <select multiple class="form-control" name="characteristics_options[{{$char->id}}][]">
 
                                                                     @foreach($all_char_options as $char_opt)
                                                                         <option value="{{(int)$char_opt->id}}" {{ in_array((int)$char_opt->id, $char_options) ? 'selected' : ''}}>
@@ -574,7 +573,7 @@
                                                                     @endforeach
                                                                     </select>
                                                                 @else
-                                                                    <input class="form-control" type="text" name="characteristics_options[]" value="{{isset($char_options[0]) ? $char_options[0] : ''}}">
+                                                                    <input class="form-control" type="text" name="characteristics_options[{{$char->id}}][]" value="{{isset($char_options[0]) ? $char_options[0] : ''}}">
                                                                 @endif
                                                         </td>
                                                         <td>
@@ -589,7 +588,7 @@
                                                             <button type="button" class="btn btn-primary btn-sm" id='addRow'><span class="glyphicon glyphicon-plus"></span></button>
                                                         </td>
                                                     </tr>
-                                                <input type="hidden" id="count_row" value="0">
+                                                <input type="hidden" id="count_row" value="{{$count}}">
                                             </table>
                                         </div>
                                     </div>
@@ -1017,6 +1016,9 @@
         
         $(document).on('change', ".chosen_select", function() {
             var id_row = $(this).attr('id_row');
+
+
+            var maincategory = {{$dataTypeContent->maincategory}};
             if($(this).val() != '') {
                 var data = $(this).val(); 
                 $.ajax({
@@ -1025,7 +1027,7 @@
                     },
                     url:'{{ route("char_opt") }}',
                     method:"POST",
-                    data: {data: data},  
+                    data: {data: data, maincategory:maincategory},
                     success: function (data) {
                         $('#option_' + id_row).empty().append(data);
                     }

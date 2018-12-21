@@ -63,53 +63,7 @@
                             </div>
                         </div>
                     @endforeach
-                <!--
-                <div class="sherif_home_main-right_bar-viewed-trade_item">
-                    <div class="sherif_home_main-right_bar-viewed-trade_item-pic">
-                        <img src="{{asset('/assets/img/recommended/icon2.png')}}" alt="" >
-                    </div>
-                    <div class="sherif_home_main-right_bar-viewed-trade_item-description">
-                        <div class="sherif_home_main-right_bar-viewed-trade_item-description-top">
-                            <h5>Костюм Полиция нового образца, тип А </h5>
-                            <p>Артикул: 30700А</p>
-                        </div>
-                        <div class="sherif_home_main-right_bar-viewed-trade_item-description_bot">
-                            <h5>Цена:870.00 грн</h5>
-                            <h4><strong>Цена:870.00 грн</strong></h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="sherif_home_main-right_bar-viewed-trade_item">
-                    <div class="sherif_home_main-right_bar-viewed-trade_item-pic">
-                        <img src="{{asset('/assets/img/recommended/icon1.png')}}" alt="" >
-                    </div>
-                    <div class="sherif_home_main-right_bar-viewed-trade_item-description">
-                        <div class="sherif_home_main-right_bar-viewed-trade_item-description-top">
-                            <h5>Костюм Полиция нового образца, тип А </h5>
-                            <p>Артикул: 30700А</p>
-                        </div>
-                        <div class="sherif_home_main-right_bar-viewed-trade_item-description_bot">
-                            <h5>Цена:870.00 грн</h5>
-                            <h4><strong>Цена:870.00 грн</strong></h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="sherif_home_main-right_bar-viewed-trade_item">
-                    <div class="sherif_home_main-right_bar-viewed-trade_item-pic">
-                        <img src="{{asset('/assets/img/recommended/icon3.png')}}" alt="" >
-                    </div>
-                    <div class="sherif_home_main-right_bar-viewed-trade_item-description">
-                        <div class="sherif_home_main-right_bar-viewed-trade_item-description-top">
-                            <h5>Костюм Полиция нового образца, тип А </h5>
-                            <p>Артикул: 30700А</p>
-                        </div>
-                        <div class="sherif_home_main-right_bar-viewed-trade_item-description_bot">
-                            <h5>Цена:870.00 грн</h5>
-                            <h4><strong>Цена:870.00 грн</strong></h4>
-                        </div>
-                    </div>
-                </div>
-                -->
+
                 <button class="sherif_home_main-right_bar-viewed-button button_bot"></button>
             </div>
             @endif

@@ -232,24 +232,48 @@
                             <div id="characteristics" class="tabe-pane active">
                                 <div class="sherif_home_main-product-tabs-tab-content-block">
                                     <div class="sherif_home_main-product-tabs-tab-content-left">
-
-
-
                                         <ul class="tab-content-characteristics">
+
                                             @foreach($productCharacteristic as $key => $charact)
+                                                @if (($isadm === 0) && ($charact['gr_id'] === 11))
+                                                    @php continue @endphp
+                                                @endif
+                                                @if (($isadm != 0) && ($charact['gr_id'] === 11))
+
+                                                    <li>
+                                                        <span style="color: red;">*</span><span class="text">{!!$charact['char_name'] !!}</span>
+                                                    </li>
+                                                @else
+
                                                     <li>
                                                         <span class="text">{!!$charact['char_name'] !!}</span>
                                                     </li>
+                                                @endif
                                             @endforeach
+                                                @if (($isadm != 0))
+                                                    <p><span  style="color: red; font-size: 10px;">* Только для служебных айпи!!!</span></p>
+                                                @endif
                                         </ul>
                                     </div>
                                     <div class="sherif_home_main-product-tabs-tab-content-right">
                                         <ul class="tab-content-characteristics-right">
                                             @foreach($productCharacteristic as $key => $charact)
-                                                <li>
-                                                    <span class="text">{!!$charact['char_value'] !!}</span>
-                                                </li>
+                                                @if (($isadm === 0) && ($charact['gr_id'] === 11))
+                                                    @php continue @endphp
+                                                @endif
+                                                    @if (($isadm != 0) && ($charact['gr_id'] === 11))
+
+                                                        <li>
+                                                            <span style="color: red;">*</span><span class="text">{!!$charact['char_value'] !!}</span>
+                                                        </li>
+                                                    @else
+
+                                                        <li>
+                                                            <span class="text">{!!$charact['char_value'] !!}</span>
+                                                        </li>
+                                                    @endif
                                             @endforeach
+
                                         </ul>
                                     </div>
                                 </div>

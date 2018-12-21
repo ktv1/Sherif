@@ -439,6 +439,9 @@
                             @if($productCharacteristic)
                                 <div class="hiden">
                                     @foreach($productCharacteristic as $value)
+                                        @if (($isadm === 0) && ($value['gr_id'] === 11))
+                                            @php continue @endphp
+                                        @endif
                                         @if (($isadm != 0) && ($value['gr_id'] === 11))
                                             <p><span style="color: red;">*</span>{{$value['char_name']}}: <span>{{$value['char_value']}}</span></p>
                                         @else
@@ -447,7 +450,7 @@
                                         @endif
 
                                     @endforeach
-                                        @if (($isadm != 0) && ($value['gr_id'] === 11))
+                                        @if (($isadm != 0)))
                                             <p><span  style="color: red; font-size: 8px;">* Только для служебных айпи!!!</span></p>
                                         @endif
                                 </div>
