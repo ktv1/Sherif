@@ -64,20 +64,15 @@
                 </div>
                 <!-- Mobile -->
                 <div class="sherif_home_header-content-mobile">
-                    <div class="form-group">
-                        <form class="sherif_home_header-toolbar_searcher_block" action="{{route('search')}}" method="GET">
-                            <input type="text" id="product_name" class="toolbar_searcher" name="q" value="{{ old('q') }}" placeholder="Поиск">
-                            <!--<select class="toolbar_selector" name="toolbar_selector">
-                                <option>Категория</option>
-                                <option>Lorem ipsum</option>
-                                <option>Lorem ipsum</option>
-                            </select>-->
-                            <button type="submit" class="toolbar_button"><i class="fas fa-search"></i></button>
-                        </form>
-                        <div id="productList">
-                        </div>
-                    </div>
-                    {{ csrf_field() }}
+                    <form class="sherif_home_header-toolbar_searcher_block" action="" method="">
+                        <input type="name" class="toolbar_searcher" name="toolbar_searcher" placeholder="Поиск">
+                        <select class="toolbar_selector" name="toolbar_selector">
+                            <option>Категория</option>
+                            <option>Lorem ipsum</option>
+                            <option>Lorem ipsum</option>
+                        </select>
+                        <button class="toolbar_button"><i class="fas fa-search"></i></button>
+                    </form>
                 </div>
                 <!-- End Mobile -->
                 <div class="sherif_home_header-content_info_arrange">
@@ -136,20 +131,15 @@
     </div>
     <!-- Small Mobile -->
     <div class="sherif_home_header-content-mobile smaller">
-        <div class="form-group">
-            <form class="sherif_home_header-toolbar_searcher_block" action="{{route('search')}}" method="GET">
-                <input type="text" id="product_name" class="toolbar_searcher" name="q" value="{{ old('q') }}" placeholder="Поиск">
-                <!--<select class="toolbar_selector" name="toolbar_selector">
-                    <option>Категория</option>
-                    <option>Lorem ipsum</option>
-                    <option>Lorem ipsum</option>
-                </select>-->
-                <button type="submit" class="toolbar_button"><i class="fas fa-search"></i></button>
-            </form>
-            <div id="productList">
-            </div>
-        </div>
-        {{ csrf_field() }}
+        <form class="sherif_home_header-toolbar_searcher_block" action="" method="">
+            <input type="name" class="toolbar_searcher" name="toolbar_searcher" placeholder="Поиск">
+            <select class="toolbar_selector" name="toolbar_selector">
+                <option>Категория</option>
+                <option>Lorem ipsum</option>
+                <option>Lorem ipsum</option>
+            </select>
+            <button class="toolbar_button"><i class="fas fa-search"></i></button>
+        </form>
     </div>
     <!-- End Small Mobile -->
     <div class="sherif_home_header-toolbar">
@@ -208,7 +198,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function(){
-
         $('#product_name').keyup(function(){
             var query = $(this).val();
             if(query != '')
@@ -225,12 +214,10 @@
                 });
             }
         });
-
         $(document).on('click', 'li', function(){
             $('#product_name').val($(this).text());
             $('#productList').fadeOut();
         });
-
         $(document).mouseup(function (e){ // событие клика по веб-документу
             var div = $("#productList"); // тут указываем ID элемента
             if (!div.is(e.target) // если клик был не по нашему блоку
@@ -238,6 +225,5 @@
                 div.hide(); // скрываем его
             }
         });
-
     });
 </script>
