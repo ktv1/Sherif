@@ -11,6 +11,7 @@ use App\Category;
 use App\ProductCategoriesPivot;
 
 use App\ProductCharacteristicPivot;
+use App\ProductEditInfo;
 use App\ProductWholesale;
 
 use Illuminate\Support\Collection;
@@ -352,32 +353,67 @@ class ProductsController extends VoyagerBaseController
             }
 
             $user_name = \Auth::user()->name;
-            
+
             if($request->publication !== $last_value) {
                 if($request->publication == 'on') {
-                    DB::table('product_edit_info')->where('product_id', $id)
-                        ->update(['publication_updated_at' => date("Y-m-d H:i:s"), 'publication_user' => $user_name, 'publication_action' => 'Опубликовано']);
+                    ProductEditInfo::firstOrNew(['product_id' => $id])
+                        ->fill([
+                            'publication_updated_at' => date("Y-m-d H:i:s"),
+                            'publication_user' => $user_name,
+                            'publication_action' => 'Опубликовано'
+                        ])->save();
+                   //DB::table('product_edit_info')->where('product_id', $id)
+                    //    ->update(['publication_updated_at' => date("Y-m-d H:i:s"), 'publication_user' => $user_name, 'publication_action' => 'Опубликовано']);
                 } else {
-                    DB::table('product_edit_info')->where('product_id', $id)
-                        ->update(['publication_updated_at' => date("Y-m-d H:i:s"), 'publication_user' => $user_name, 'publication_action' => 'Снято с публикации']);
+                    ProductEditInfo::firstOrNew(['product_id' => $id])
+                        ->fill([
+                            'publication_updated_at' => date("Y-m-d H:i:s"),
+                            'publication_user' => $user_name,
+                            'publication_action' => 'Снято с публикации'
+                        ])->save();
+                    //DB::table('product_edit_info')->where('product_id', $id)
+                     //   ->update(['publication_updated_at' => date("Y-m-d H:i:s"), 'publication_user' => $user_name, 'publication_action' => 'Снято с публикации']);
                 }
             }
 
             /* Editing history */
-            DB::table('product_edit_info')->where('product_id', $id)->update(['editing_updated_at' => date("Y-m-d H:i:s"), 'editing_user' => $user_name]);
-
+            //DB::table('product_edit_info')->where('product_id', $id)->update(['editing_updated_at' => date("Y-m-d H:i:s"), 'editing_user' => $user_name]);
+            ProductEditInfo::firstOrNew(['product_id' => $id])
+                ->fill([
+                    'editing_updated_at' => date("Y-m-d H:i:s"),
+                    'editing_user' => $user_name
+                ])->save();
             /* Description editor */
             $last_description = Product::find($id)->description;
             if($request->description != $last_description) {
-                DB::table('product_edit_info')->where('product_id', $id)->update(['description_updated_at' => date("Y-m-d H:i:s"), 'description_user' => $user_name]);
+                ProductEditInfo::firstOrNew(['product_id' => $id])
+                    ->fill([
+                        'description_updated_at' => date("Y-m-d H:i:s"),
+                        'description_user' => $user_name,
+                    ])->save();
+                //DB::table('product_edit_info')->where('product_id', $id)->update(['description_updated_at' => date("Y-m-d H:i:s"), 'description_user' => $user_name]);
             }
 
             /* Status date and info */
-            DB::table('product_edit_info')->where('product_id', $data->id)->update(['status_updated_at' => date("Y-m-d H:i:s"), 'status_user' => $user_name, 'status' => DB::table('product_statuses')->where('id', $request->status)->first()->name]);
+            //DB::table('product_edit_info')->where('product_id', $data->id)->update(['status_updated_at' => date("Y-m-d H:i:s"), 'status_user' => $user_name, 'status' => DB::table('product_statuses')->where('id', $request->status)->first()->name]);
+            ProductEditInfo::firstOrNew(['product_id' => $id])
+                ->fill([
+                    'status_updated_at' => date("Y-m-d H:i:s"),
+                    'status_user' => $user_name,
+                    'status' => DB::table('product_statuses')->where('id', $request->status)->first()->name
+                ])->save();
             if($request->status == '3') {
-                DB::table('product_edit_info')->where('product_id', $data->id)->update(['status_to_change' => date("Y-m-d H:i:s", strtotime("+10 day", strtotime("now")))]);
+                ProductEditInfo::firstOrNew(['product_id' => $id])
+                    ->fill([
+                        'status_to_change' => date("Y-m-d H:i:s", strtotime("+10 day", strtotime("now")))
+                    ])->save();
+                //DB::table('product_edit_info')->where('product_id', $data->id)->update(['status_to_change' => date("Y-m-d H:i:s", strtotime("+10 day", strtotime("now")))]);
             } else {
-                DB::table('product_edit_info')->where('product_id', $data->id)->update(['status_to_change' => null]);
+                ProductEditInfo::firstOrNew(['product_id' => $id])
+                    ->fill([
+                        'status_to_change' => null
+                    ])->save();
+                //DB::table('product_edit_info')->where('product_id', $data->id)->update(['status_to_change' => null]);
             }
         }
 
@@ -397,7 +433,6 @@ class ProductsController extends VoyagerBaseController
                 }
             }
         }*/
-        
         /// addimage
         if ($request->addimage) {
             $strimage = array();

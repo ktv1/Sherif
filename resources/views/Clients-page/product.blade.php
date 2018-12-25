@@ -161,7 +161,7 @@
                                         <p>Страна произзводства:</p>
                                     </div>
                                     <div class="sherif_home_main-product-good_block-info-description-abotu_manufactor-right">
-                                        <p>Украина</p>
+                                        <p>{{$product->vendor->name}}</p>
                                         <p>Украина</p>
                                     </div>
                                 </div>
@@ -279,7 +279,9 @@
                                 </div>
                             </div>
                             <div id="video_review" class="tabe-pane"></div>
-                            <div id="reviews" class="tabe-pane"></div>
+                            <div id="reviews" class="tabe-pane">
+                                {!! $product->reviews !!}
+                            </div>
                         </div>
                     </div>
             </div>

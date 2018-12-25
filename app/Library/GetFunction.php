@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Storage;
 
 class GetFunction
 {
+
+
     public static function create_image_url_cache($filepath, $w, $h) {
         //print_r($filepath);
         $old_image = $filepath;
@@ -147,5 +149,24 @@ class GetFunction
     public static function get_file_path($file) {
 
             return platformSlashes(Storage::disk(config('voyager.storage.disk'))->path($file));
+    }
+
+    private static function roundUpToAny($n,$x=5) {
+        return round(($n+$x/2)/$x)*$x;
+    }
+
+    public static function roundFinalPrice($price_final = 0) {
+        //round prices
+        $endprice = 0;
+        if ($price_final < 100) {
+            $endprice = self::roundUpToAny($price_final,1);
+        } elseif (($price_final >= 100) && ($price_final < 300)) {
+            $endprice = self::roundUpToAny($price_final);
+        } elseif (($price_final >= 300) && ($price_final < 1000)){
+            $endprice = self::roundUpToAny($price_final,10);
+        } elseif (($price_final >= 1000)) {
+            $endprice = self::roundUpToAny($price_final,50);
+        }
+        return $endprice;
     }
 }

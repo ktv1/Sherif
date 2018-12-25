@@ -35,13 +35,13 @@ class ProductController extends Controller
      	$CurrentCategory = Category::where('slug', $slug)->first();
    		$CurrentSubCategory = Category::where('slug', $subslug)->first();
    		//dd(request()->session());
-   		$product = Product::where('slug', $product)->first();
+   		$product = Product::where('slug', $product)
+            ->with(['reviews','vendor'])->first();
          if (($subslug != null) && (!$CurrentSubCategory)) {
              return $this->viewMaker('errors.404')->with(['header' => $this->header(), 'left_side_bar' =>$this->left_sidebar($slug)]);
          }
    		// $label = ProductLabel::where('id', $product->label)->first();
         //$viewed = [];
-
 
 
          $session_viewedproduct = session('viewed_products');
@@ -91,6 +91,7 @@ class ProductController extends Controller
 
     public function getProductNoURL($id){
     	$product = Product::where('products.id', $id)
+            ->with('reviews')
             //->with('characteristicsopt')
             ->first();
 

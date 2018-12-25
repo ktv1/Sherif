@@ -17,6 +17,7 @@ use App\ProductCategoriesPivot as CategoryPivot;
 use Illuminate\Support\Facades\Cache;
 use App\Category;
 use App\Product;
+use Illuminate\Support\Facades\DB;
 
 class CatalogController extends Controller
 {
@@ -81,11 +82,12 @@ class CatalogController extends Controller
         }
       // Cache::put('name', $CurrentSubCategory, 1);
         //dd($CurrentSubCategory);
-
+        $product_prices = [];
    		foreach (CategoryPivot::all() as $value) {
    			if($value->category_id == $CurrentSubCategory->id){
-   				$product = Product::find($value->product_id);//->with('characteristics');//()->withPivot(['option_id'])->get();
-   				array_push($Products, $product);
+   				$product = Product::find($value->product_id);//()->withPivot(['option_id'])->get();
+   				$product_prices[$product->id] = $product->price_final;
+                array_push($Products, $product);
    			}
    		}
         $productsCategory = CategoryPivot::join('products as p','p.id','product_categories_pivot.product_id')
@@ -110,7 +112,6 @@ class CatalogController extends Controller
         } elseif((Request()->get('sortby') == 'price') && (Request()->get('orderby') == 'ASC')) {
             $productsCategory = $productsCategory->orderBy('price_final', 'DESC');
         } elseif((Request()->get('sortby') == 'price') && (Request()->get('orderby') == 'DESC')) {
-
             $productsCategory = $productsCategory->orderBy('price_final', 'DESC');
         };
         $productsCategory = $productsCategory->get();
@@ -218,4 +219,33 @@ class CatalogController extends Controller
         }
     }
     */
+
+    public function importSimiliar()
+    {
+        $productsSimiliar = DB::table('u_jshopping_products_alike')
+        ->selectRAW('product_id, GROUP_CONCAT(product_alike_id) AS CSV')
+        ->groupBy('product_id')->get()->toArray();
+
+        foreach ($productsSimiliar as $similiar) {
+            $pr = [];
+            $pr = explode(',',$similiar->CSV);
+            $product = Product::where('id',$similiar->product_id)
+                        ->update(['similar' => addslashes(json_encode($pr))]);
+            //dd($similiar->product_id);
+        }
+    }
+
+    public function importConcomitant()
+    {
+        $productsConcomitant = DB::table('u_jshopping_products_relations')
+            ->selectRAW('product_id, GROUP_CONCAT(product_related_id) AS CSV')
+            ->groupBy('product_id')->get()->toArray();
+        //dd($productsConcomitant);
+        foreach ($productsConcomitant as $concomitant) {
+            $pr = [];
+            $pr = explode(',',$concomitant->CSV);
+            $product = Product::where('id',$concomitant->product_id)
+                ->update(['concomitant' => addslashes(json_encode($pr))]);
+        }
+    }
 }

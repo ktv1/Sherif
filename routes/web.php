@@ -10,6 +10,11 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+/*import from joomla tables */
+Route::get('/importsimiliar', 'ClientsController\CatalogController@importSimiliar')->name('importsimiliar');
+Route::get('/importconcomitant', 'ClientsController\CatalogController@importConcomitant')->name('importconcomitant');
+/* end import */
+
 Route::get('/search', 'SearchController@search')->name('search');
 
 Route::get('/autocomplete', 'AutocompleteController@index');
@@ -107,6 +112,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('/blacklist/restore', 'Voyager\BlacklistController@restoreItem')->name('voyager.blacklist.restore');
     Route::get('/blacklist/import', 'Voyager\BlacklistController@importItems')->name('voyager.blacklist.import');
     /*END Blacklist CRUD*/
+
+    Route::post('/autocomplete/fetchadm', 'AutocompleteController@fetchadm')->name('autocomplete.fetchadm');
 
    
 });

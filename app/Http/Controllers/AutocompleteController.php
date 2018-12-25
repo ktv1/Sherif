@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 
 class AutocompleteController extends Controller
 {
@@ -66,6 +67,45 @@ class AutocompleteController extends Controller
             
             $output .= '</ul>';
             echo $output;
+        }
+    }
+    //fetchin in admin
+    function fetchadm(Request $request)
+    {
+        if($request->get('query') && (strlen($request->get('query')) >=3))
+        {
+            $array = json_decode(File::get(storage_path('synonyms.json')), true);
+            $query = $request->get('query');
+
+            $data = DB::table('products')
+                ->where('name', 'LIKE',"%{$query}%")
+                ->orWhere('id', '=', $query)
+                ->orWhere('code', '=', $query)
+                ->orWhere('description', 'LIKE',"%{$query}%")
+                ->take(10)->get();
+
+            if (count($data) == 0)
+            {
+                foreach($array as $k => $e){
+                    for ($i = 0; $i < count($e); $i++){
+                        if ($query == $e[$i]){
+                            $data = DB::table('products')
+                                ->where('name', 'LIKE',"%{$k}%")
+                                ->orWhere('description', 'LIKE',"%{$k}%")
+                                ->take(10)->get();
+                        }
+                    }
+                }
+            }
+
+            ///add thumbs
+            if (count($data) > 0 ){
+                foreach ($data as $datum) {
+                    $datum->th =  '/storage/' . get_download_image_cache($datum->mainimage,50,50);
+                }
+            }
+
+            return Response::json($data);
         }
     }
 

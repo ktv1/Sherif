@@ -155,4 +155,13 @@ class Product extends Model
         return Category::where('id', $parent_id)->get();
     }
 
+    public function reviews()
+    {
+        return $this->hasMany('App\ProductReview');
+    }
+
+    public function vendor()
+    {
+        return $this->belongsTo('App\Vendor','manufacturer');
+    }
 }

@@ -23,11 +23,11 @@
 
 
 @section('header')
-    {{--$header--}}
+    {{-- $header --}}
 @endsection
 
 @section('left_sidebar')
-    {{--$left_side_bar--}}
+    {{-- $left_side_bar--}}
 @endsection
 
 @section("main_column")

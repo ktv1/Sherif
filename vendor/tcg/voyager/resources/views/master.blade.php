@@ -38,16 +38,17 @@
             color:{{ config('voyager.primary_color','#22A7F0') }};
         }
     </style>
-
     @if(!empty(config('voyager.additional_css')))<!-- Additional CSS -->
         @foreach(config('voyager.additional_css') as $css)<link rel="stylesheet" type="text/css" href="{{ asset($css) }}">@endforeach
     @endif
+
 
     @yield('head')
 </head>
 
 <body class="voyager @if(isset($dataType) && isset($dataType->slug)){{ $dataType->slug }}@endif">
-
+@yield('top-js')
+@yield('top-css')
 <div id="voyager-loader">
     <?php $admin_loader_img = Voyager::setting('admin.loader', ''); ?>
     @if($admin_loader_img == '')
