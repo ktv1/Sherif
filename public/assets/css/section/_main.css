@@ -135,3 +135,26 @@
 			flex-wrap: wrap;
 		}
 
+.review-data {
+	margin-top: 20px;
+	padding: 10px;
+	border: 1px solid #e3e3e3;
+	border-radius: 4px;
+	background: #fbfbfb;
+}
+
+.review-data div {
+	color: #0e3950;
+}
+
+.review-data div span {
+	width: 128px;
+	display: inline-block;
+	text-align: right;
+	margin-right: 15px;
+	color: #213951;
+}
+
+.review-data .info {
+	margin-bottom: 20px;
+}

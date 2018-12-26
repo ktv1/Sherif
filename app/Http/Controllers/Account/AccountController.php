@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Account;
 
 use App\Models\UserPersonal;
+use App\ProductReview;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -37,6 +38,11 @@ class AccountController extends Controller
             $userpersonal->save();
         }
 
+        $reviews = ProductReview::with('product','manager')
+            ->where('uid', auth()->user()->id)
+            ->get()
+            ->toArray();
+
         $sexvalues = ['M', 'F'];
         return view('frontend.account.account')->with([
             'user' => $user,
@@ -45,7 +51,8 @@ class AccountController extends Controller
             'uah_to_eur'=>32,
             'uah_to_usd'=>27,
             'left_side_bar' => $this->left_sidebar("None"),
-            'header' => $this->header()
+            'header' => $this->header(),
+            'reviews' => $reviews
         ]);
     }
 

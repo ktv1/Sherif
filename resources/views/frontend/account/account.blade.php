@@ -569,7 +569,7 @@
                         CONTENT
                     </div>
                     <div class="tab-pane fade in" id="tab-7">
-                        CONTENT
+                        @include('frontend.account.partials.reviews')
                     </div>
                 </div>
             </div>
