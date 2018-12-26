@@ -1,1 +1,0 @@
-<h1>E-Mail response on Your review</h1>
