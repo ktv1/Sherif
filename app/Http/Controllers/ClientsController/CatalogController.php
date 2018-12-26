@@ -9,6 +9,7 @@ use App\ProductCharacteristicPivot;
 use App\ProductImages;
 use App\ProductsExtraFields;
 use App\ProductsExtraFieldsValues;
+use App\Provider;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
@@ -246,6 +247,39 @@ class CatalogController extends Controller
             $pr = explode(',',$concomitant->CSV);
             $product = Product::where('id',$concomitant->product_id)
                 ->update(['concomitant' => addslashes(json_encode($pr))]);
+        }
+    }
+
+    public function setInfoProduct($ch_id, $fieldname)
+    {
+        $char_pr_pivot = ProductCharacteristicPivot::
+            where('characteristic_id','=', $ch_id)
+            ->where('option_id','<>','')
+            ->get();
+        foreach ($char_pr_pivot as $item) {
+            Product::where('id',$item->product_id)
+                ->update([
+                   $fieldname => $item->option_id
+                ]);
+        }
+    }
+
+    public function setProviders()
+    {
+        $char_pr_pivot = ProductCharacteristicPivot::
+        where('characteristic_id','=', 72)
+            ->where('option_id','<>','')
+            ->get();
+
+        foreach ($char_pr_pivot as $item) {
+            $id_prov = Provider::where('name',$item->option_id)->first();
+            if($id_prov) {
+                DB::table('product_provider_pivot')
+                    ->insert([
+                        'product_id' => $item->product_id,
+                        'provider_id' => $id_prov->id,
+                    ]);
+            }
         }
     }
 }

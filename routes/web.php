@@ -11,8 +11,10 @@
 |
 */
 /*import from joomla tables */
-Route::get('/importsimiliar', 'ClientsController\CatalogController@importSimiliar')->name('importsimiliar');
-Route::get('/importconcomitant', 'ClientsController\CatalogController@importConcomitant')->name('importconcomitant');
+//Route::get('/importsimiliar', 'ClientsController\CatalogController@importSimiliar')->name('importsimiliar');
+//Route::get('/importconcomitant', 'ClientsController\CatalogController@importConcomitant')->name('importconcomitant');
+//Route::get('/setInfoProduct/{id}-{name}', 'ClientsController\CatalogController@setInfoProduct')->name('setInfoProduct');
+//Route::get('/setProviders', 'ClientsController\CatalogController@setProviders')->name('setProviders');
 /* end import */
 
 Route::get('/search', 'SearchController@search')->name('search');

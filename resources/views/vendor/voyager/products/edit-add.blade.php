@@ -144,6 +144,7 @@
                                                         $row->field == 'meta_keywords' ||
                                                         $row->field == 'label_end_date' ||
                                                         $row->field == 'product_belongsto_season_relationship' ||
+                                                        $row->field == 'product_belongstomany_provider_relationship' ||
                                                         $row->field == 'box' ||
                                                         $row->field == 'storage' ||
                                                         $row->field == 'tel1' ||
@@ -942,7 +943,8 @@
                                                 <tbody>
                                                 @foreach($dataTypeRows as $row)
                                                     <tr>
-                                                    @if($row->field == 'box' ||
+                                                    @if($row->field == 'product_belongstomany_provider_relationship' ||
+                                                        $row->field == 'box' ||
                                                         $row->field == 'storage' ||
                                                         $row->field == 'tel1' ||
                                                         $row->field == 'tel2' ||
