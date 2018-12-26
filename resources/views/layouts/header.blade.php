@@ -147,15 +147,20 @@
 
             <div class="sherif_home_header-toolbar_arrange">
                 <div class="sherif_home_header-toolbar_searcher_block_arrange">
-                    <form class="sherif_home_header-toolbar_searcher_block" action="" method="">
-                        <input type="name" class="toolbar_searcher" name="toolbar_searcher" placeholder="Поиск">
-                        <select class="toolbar_selector" name="toolbar_selector">
-                            <option>Категория</option>
-                            <option>Lorem ipsum</option>
-                            <option>Lorem ipsum</option>
-                        </select>
-                        <button class="toolbar_button"><i class="fas fa-search"></i></button>
-                    </form>
+                    <div class="form-group">
+                        <form class="sherif_home_header-toolbar_searcher_block" action="{{route('search')}}" method="GET">
+                            <input type="text" id="product_name" class="toolbar_searcher" name="q" value="{{ old('q') }}" placeholder="Поиск">
+                            <!--<select class="toolbar_selector" name="toolbar_selector">
+                                <option>Категория</option>
+                                <option>Lorem ipsum</option>
+                                <option>Lorem ipsum</option>
+                            </select>-->
+                            <button type="submit" class="toolbar_button"><i class="fas fa-search"></i></button>
+                        </form>
+                        <div id="productList">
+                        </div>
+                    </div>
+                    {{ csrf_field() }}
                 </div>
                 <div class="sherif_home_header-toolbar_navigation_arrange">
 
@@ -197,3 +202,37 @@
         {!!$basket!!}
     @show
 </header>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#product_name').keyup(function(){
+            var query = $(this).val();
+            if(query != '')
+            {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('autocomplete.fetch') }}",
+                    method:"POST",
+                    data:{query:query, _token:_token},
+                    success:function(data){
+                        $('#productList').fadeIn();
+                        $('#productList').html(data);
+                    }
+                });
+            }
+        });
+        $(document).on('click', 'li', function(){
+            $('#product_name').val($(this).text());
+            $('#productList').fadeOut();
+        });
+        $(document).mouseup(function (e){ // событие клика по веб-документу
+            var div = $("#productList"); // тут указываем ID элемента
+            if (!div.is(e.target) // если клик был не по нашему блоку
+                    && div.has(e.target).length === 0) { // и не по его дочерним элементам
+                div.hide(); // скрываем его
+            }
+        });
+    });
+</script>

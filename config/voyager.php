@@ -213,6 +213,7 @@ return [
     'additional_js' => [
         //'js/custom.js',
         'js/voyager/product-reviews/script.js',
+        'js/voyager/blacklist/script.js',
     ],
 
     'googlemaps' => [

@@ -59,3 +59,11 @@ if (!function_exists('generate_filename')) {
         return $name;
     }
 }
+
+if(!function_exists('roundFinalPrice')) {
+    /* round final prices*/
+    function roundFinalPrice($price)
+    {
+        return GetFunction::roundFinalPrice($price);
+    }
+}

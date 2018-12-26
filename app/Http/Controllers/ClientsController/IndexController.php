@@ -17,6 +17,7 @@ class IndexController extends Controller
 
     public function getIndex(Request $request){
         $banner = Banner::with(['bannerImages.bannerLinkPosition'])->first();
+
         return $this->viewMaker('Clients-page.index')->with([
             'banner' => $banner,
             'left_side_bar' => $this->left_sidebar("None"),

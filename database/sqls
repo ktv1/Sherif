@@ -1,0 +1,28 @@
+update products as NEW, u_jshopping_products as OLD
+set NEW.UAH =
+case
+	when OLD.currency_id = 1 then  OLD.product_price
+	else 0
+end;
+
+set NEW.USD =
+case
+	when OLD.currency_id = 2 then  OLD.product_price
+	else 0
+end;
+set NEW.EUR =
+case
+	when OLD.currency_id = 3 then  OLD.product_price
+	else 0
+end;
+
+	WHERE NEW.id = OLD.product_id and NEW.id =1
+
+
+	////////
+
+
+	update characteristics as c
+    INNER JOIN u_jshopping_products_extra_fields as jc on c.id =jc.id
+    set c.`type` = jc.`type`
+    where 1

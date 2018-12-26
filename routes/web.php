@@ -10,17 +10,26 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+/*import from joomla tables */
+Route::get('/importsimiliar', 'ClientsController\CatalogController@importSimiliar')->name('importsimiliar');
+Route::get('/importconcomitant', 'ClientsController\CatalogController@importConcomitant')->name('importconcomitant');
+/* end import */
+
+Route::get('/search', 'SearchController@search')->name('search');
+
+Route::get('/autocomplete', 'AutocompleteController@index');
+Route::post('/autocomplete/fetch', 'AutocompleteController@fetch')->name('autocomplete.fetch');
 
 Route::get('/', 'ClientsController\IndexController@getIndex')->name('index');
 
 /*Catalog Routes*/
-Route::get('catalog/{slug}', 'ClientsController\CatalogController@getCatalog')->name('catalog');
-Route::get('catalog/{slug}/{subslug}', 'ClientsController\CatalogController@getSubCatalog')->name('subCatalog');
+//Route::get('catalog/{slug}', 'ClientsController\CatalogController@getCatalog')->name('catalog');
+//Route::get('catalog/{slug}/{subslug}', 'ClientsController\CatalogController@getSubCatalog')->name('subCatalog');
 
 
 /*Product Routes*/
-Route::get('get/product/{id}', 'ClientsController\ProductController@getProductNoURL')->name('productNoURL');
-Route::get('catalog/{slug}/{subslug}/{product}', 'ClientsController\ProductController@getProduct')->name('product');
+Route::get('get/product/{id}', 'ClientsController\ProductController@getProductNoURL')->name('productNoURL');;
+//Route::get('catalog/{slug}/{subslug}/{product}', 'ClientsController\ProductController@getProduct')->name('product');
 
 
 /*Basket Routes*/
@@ -95,13 +104,23 @@ Route::group(['prefix' => 'admin'], function () {
 
    Route::get('/get/characteristic', 'Voyager\CharacteristicsController@getSelectCharacteristic');
 /*END Product Characteristics*/
+    /*Blacklist CRUD*/
+    Route::get('/blacklist', 'Voyager\BlacklistController@index')->name('voyager.blacklist.index');
+    Route::match(['GET','POST'], '/blacklist/add', 'Voyager\BlacklistController@addItem')->name('voyager.blacklist.add');
+    Route::match(['GET','POST'], '/blacklist/edit/{id}', 'Voyager\BlacklistController@editItem')->name('voyager.blacklist.edit');
+    Route::delete('/blacklist/delete', 'Voyager\BlacklistController@deleteItem')->name('voyager.blacklist.delete');
+    Route::put('/blacklist/restore', 'Voyager\BlacklistController@restoreItem')->name('voyager.blacklist.restore');
+    Route::get('/blacklist/import', 'Voyager\BlacklistController@importItems')->name('voyager.blacklist.import');
+    /*END Blacklist CRUD*/
+
+    Route::post('/autocomplete/fetchadm', 'AutocompleteController@fetchadm')->name('autocomplete.fetchadm');
 
     /* Reviews */
     Route::get('/reviews', 'Voyager\ProductReviewsController@index')->name('voyager.product-reviews.index');
     Route::get('/reviews/moderate/{id}', 'Voyager\ProductReviewsController@moderate')->name('voyager.product-reviews.moderate');
     Route::post('/reviews/update/{id}', 'Voyager\ProductReviewsController@update');
     /* Reviews end*/
-   
+
 });
 
 Auth::routes();
@@ -110,6 +129,15 @@ Route::get('/account', 'Account\AccountController@index')->name('account');
 Route::post('/account/savepersonal','Account\AccountController@store')->name('saveUserPersonal');
 Route::post('/account/saveuserpassword','Account\AccountController@storePassword')->name('saveUserPassword');
 
+
+Route::get('search/autocomplete', 'SearchController@autocomplete');
+
+
+
+// Ecommerce Routes
+Route::get('/{slug}', 'ClientsController\CatalogController@getSlug')->name('catalog');
+Route::get('/{slug}/{subslug}', 'ClientsController\CatalogController@getSlug')->name('subCatalog');
+Route::get('/{slug}/{subslug}/{product}', 'ClientsController\CatalogController@getSlug')->name('product');;
 
 
 

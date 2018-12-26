@@ -43,7 +43,7 @@ abstract class Controller extends BaseController
     public function insertUpdateData($request, $slug, $rows, $data)
     {
         $multi_select = [];
-        
+
         /*
          * Prepare Translations and Transform data
          */
@@ -65,6 +65,7 @@ abstract class Controller extends BaseController
             }
 
             $content = $this->getContentBasedOnType($request, $slug, $row, $options);
+
             if ($row->type == 'relationship' && $options->type != 'belongsToMany') {
                 $row->field = @$options->column;
             }
@@ -80,14 +81,14 @@ abstract class Controller extends BaseController
                     }
                 }
             }
- 
+
             if (is_null($content)) {
 
                 // If the image upload is null and it has a current image keep the current image
                 if ($row->type == 'image' && is_null($request->input($row->field)) && isset($data->{$row->field})) {
                     $content = $data->{$row->field};
                 }
-               
+
                 // If the multiple_images upload is null and it has a current image keep the current image
                 if ($row->type == 'multiple_images' && is_null($request->input($row->field)) && isset($data->{$row->field})) {
                     $content = $data->{$row->field};
@@ -112,12 +113,6 @@ abstract class Controller extends BaseController
         }
 
         $data->save();
-        
-        if($slug == 'products' && !$data->code) {
-            /* Generating product code */
-            $data->code = $code = $request->product_belongstomany_subcategory_relationship[0] . '-' . $data->id;  
-            $data->save();
-        }   
 
         // Save translations
         if (count($translations) > 0) {

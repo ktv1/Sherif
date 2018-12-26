@@ -9,9 +9,20 @@
                 .ui-helper-hidden-accessible { display: none;}
                 .ui-autocomplete .ui-menu-item:hover {background: #eee;}
             /***************/
-    </style>
-@stop
 
+        .prodconcomitant {padding: 5px;border-radius: 5px; border: 1px solid #ddd; margin: 5px 0; background-color: rgba(189, 208, 250, 0.23);}
+        .prodconcomitant img{with:50px;margin:0 8px}
+    </style>
+    <script src="{{asset('assets/libs/jquery/jquery-1.11.2.min.js')}}"></script>
+
+    <link rel=stylesheet"" type="text/css"  href="{{asset('assets/libs/bootstrap-file-input/css/fileinput.min.css')}}">
+@stop
+@section('top-js')
+    <script src="{{asset('assets/libs/bootstrap-file-input/js/fileinput.js')}}"></script>
+@stop
+@section('top-css')
+    <link rel=stylesheet" type="text/css"  href="{{asset('assets/libs/bootstrap-file-input/css/fileinput.min.css')}}">
+@stop
 @section('page_title', __('voyager::generic.'.(!is_null($dataTypeContent->getKey()) ? 'edit' : 'add')).' '.$dataType->display_name_singular)
 
 @section('page_header')
@@ -92,6 +103,7 @@
                             @if($dataTypeContent->exists)
                             <li><a data-toggle="tab" href="#tab7">История изменений</a></li>
                             @endif
+                            <li><a data-toggle="tab" href="#tab9">Служебная информация</a></li>
                         </ul>
                         <div class="tab-content">
                             <div id="tab2" class="tab-pane fade in active">
@@ -131,7 +143,16 @@
                                                         $row->field == 'meta_description' ||
                                                         $row->field == 'meta_keywords' ||
                                                         $row->field == 'label_end_date' ||
-                                                        $row->field == 'product_belongsto_season_relationship')
+                                                        $row->field == 'product_belongsto_season_relationship' ||
+                                                        $row->field == 'box' ||
+                                                        $row->field == 'storage' ||
+                                                        $row->field == 'tel1' ||
+                                                        $row->field == 'tel2' ||
+                                                        $row->field == 'name_contact' ||
+                                                        $row->field == 'mailbox' ||
+                                                        $row->field == 'link_to_provider' ||
+                                                        $row->field == 'link_to_ishop' ||
+                                                        $row->field == 'note_product')
                                                         <?php continue ?>
                                                     @endif
                                                     <!-- GET THE DISPLAY OPTIONS -->
@@ -324,6 +345,7 @@
                                     </div>
                                     @php
                                         $imagesjson = json_decode($dataTypeContent->addimage);
+                                        //dd($dataTypeContent->addimage);
                                         $images = array();
                                         if(isset($imagesjson)) {
                                             foreach ($imagesjson as $key => $image) {
@@ -354,7 +376,7 @@
 
                                                 <input class="btn-image" id="mainimage" type="file" name="mainimage" accept="image/*">
                                                 <script>
-                                                    $(document).ready(function() {
+                                                    //$(document).ready(function() {
                                                         $("#mainimage").fileinput({
                                                             showUpload: false,
                                                             maxFileCount: 1,
@@ -374,7 +396,7 @@
                                                                 '</div>\n'
                                                             }
                                                         });
-                                                    });
+                                                    //});
                                                 </script>
                                             </td>
                                         </tr>
@@ -400,7 +422,7 @@
                                                 </div>
                                                 <input id="inputImg<?php echo $image_row; ?>" type="file" name="addimage[<?php echo $image_row; ?>]">
                                                 <script>
-                                                    $(document).ready(function() {
+                                                    //$(document).ready(function() {
                                                         $("#inputImg<?php echo $image_row; ?>").fileinput({
                                                             showUpload: false,
                                                             maxFileCount: 1,
@@ -418,7 +440,7 @@
                                                                 '</div>\n'
                                                             }
                                                         });
-                                                    });
+                                                   // });
                                                 </script>
 
                                                 <input type="hidden" name="addimage[<?php echo $image_row; ?>][image]" value="<?php echo $image['image']; ?>" id="input-image<?php echo $image_row; ?>" />
@@ -536,48 +558,60 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id='ctbody'>
-                                                @php $count = 0; @endphp
-                                                    @foreach($characteristics_list_objects as $char)
-                                                    <tr class="chosen_char" id_row="'+count+'">
-                                                        <td>
-                                                            <select class="form-control chosen_select" name="select_characteristic[]" id_row="{{$count}}">
-                                                                    <option value="">None</option>
-                                                                    
-                                                                <?php foreach($characteristics as $item): ?>
-                                                                    <option value="{{$item->id}}"{{ $char->id == $item->id ? 'selected' : ''}}>
-                                                                    {{$item->name}}
-                                                                    </option>
-                                                                <?php endforeach; ?>
-                                                            </select>
-                                                        </td>
-                                                        <td>
+                                                    @php $count = 0; @endphp
+                                                    @if(isset($characteristics_list_objects ))
+                                                        @foreach($characteristics_list_objects as $char)
+                                                            @if($char != null)
+                                                            <tr class="chosen_char" id_row="{{$count}}">
+                                                                <td>
+                                                                    <select class="form-control chosen_select" name="select_characteristic[]" id_row="{{$count}}">
+                                                                        <option value="">None</option>
+                                                                        <?php foreach($characteristics as $item): ?>
+                                                                            <option value="{{$item->id}}"{{ $char->id == $item->id ? 'selected' : ''}}>{{$item->name}}
+                                                                            </option>
+                                                                        <?php endforeach; ?>
+                                                                    </select>
+                                                                </td>
+                                                                <td  name="characteristic_options" id="option_{{$count}}">
+                                                                        @php
+                                                                            $char_options = DB::table('products_characteristics_pivot')->where([
+                                                                                'product_id' => $dataTypeContent->id,
+                                                                                'characteristic_id' => $char->id])
+                                                                                ->pluck('option_id')
+                                                                                ->toArray();//list of related options
+                                                                            $all_char_options = DB::table('characteristic_options as co')
+                                                                                ->where('id_characteristic', $char->id)
+                                                                                ->get()
+                                                                                ->toArray();//list of all options of current characteristic
+                                                                        @endphp
+                                                                        @if ($char->choose == 1)
+                                                                            <select multiple class="form-control" name="characteristics_options[{{$char->id}}][]">
 
-                                                                @php
-                                                                    $char_options = DB::table('products_characteristics_pivot')->where('characteristic_id', $char->id)->pluck('option_id')->toArray();//list of related options
-                                                                    $all_char_options = DB::table('characteristic_options')->where('id_characteristic', $char->id)->get()->toArray();//list of all options of current characteristic   
-                                                                @endphp
-
-                                                                <select multiple class="form-control" name="characteristics_options[]">    
-                                                                @foreach($all_char_options as $char_opt)
-                                                                    <option value="{{$char_opt->id}}" {{ in_array($char_opt->id, $char_options) ? 'selected' : ''}}>
-                                                                    {{$char_opt->value}}
-                                                                    </option>
-                                                                @endforeach
-                                                                </select>
-                                                        </td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-danger" id="dltRow"><span class="glyphicon glyphicon-remove"></span></button>
-                                                        </td>
-                                                    </tr>
-                                                    @php $count++; @endphp
-                                                    @endforeach
+                                                                            @foreach($all_char_options as $char_opt)
+                                                                                <option value="{{(int)$char_opt->id}}" {{ in_array((int)$char_opt->id, $char_options) ? 'selected' : ''}}>
+                                                                                {{$char_opt->value}}
+                                                                                </option>
+                                                                            @endforeach
+                                                                            </select>
+                                                                        @else
+                                                                            <input class="form-control" type="text" name="characteristics_options[{{$char->id}}][]" value="{{isset($char_options[0]) ? $char_options[0] : ''}}">
+                                                                        @endif
+                                                                </td>
+                                                                <td>
+                                                                    <button type="button" class="btn btn-danger" id="dltRow"><span class="glyphicon glyphicon-remove"></span></button>
+                                                                </td>
+                                                            </tr>
+                                                            @php $count++; @endphp
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
                                                 </tbody>
                                                     <tr>
                                                         <td colspan='3'>
                                                             <button type="button" class="btn btn-primary btn-sm" id='addRow'><span class="glyphicon glyphicon-plus"></span></button>
                                                         </td>
                                                     </tr>
-                                                <input type="hidden" id="count_row" value="0">
+                                                <input type="hidden" id="count_row" value="{{$count}}">
                                             </table>
                                         </div>
                                     </div>
@@ -600,109 +634,82 @@
                                             $selected_values = array();
                                         }
 
-                                        $relationshipOptions = app('App\Product')->all();
+                                        $relationshipOptions = app('App\Product')->whereIn('id',$selected_values)->get(['id','name','mainimage'])->toArray();
                                         $relationshipData = (isset($data)) ? $data : $dataTypeContent;
-                                        //$selected_values = isset($relationshipData) ? $relationshipData->belongsToMany($options->model, $options->pivot_table)->withPivot('value')->get() : array();
-                                       // dd($dataTypeContent->belongsToMany($options->model, $options->pivot_table)->get());
-                                        //dd();
+
                                     @endphp
 
                                     <div id="tableconcomitant" class="table-editable">
-                                        <span class="table-add-concomitant glyphicon glyphicon-plus"></span>
+
                                         <table class="table">
                                             <tr>
-                                                <th>Товар</th>
-                                                <th></th>
+                                                <th>Сопутствующие товары</th>
                                             </tr>
-                                            @php $c = 0; @endphp
-                                            @if (isset($selected_values))
-                                                @foreach($selected_values as $k => $key)
-                                                    <tr>
-                                                        <td contenteditable="true">
-                                                            @if(class_exists('App\Product'))
+                                            <tr>
+                                                <td style="position: relative;">
+                                                    <div>
+                                                        <input type="text" name="product-concomitant" value="" placeholder="сопутствующие" id="input-related" class="form-control" />
+                                                        <div id="product-concomitant" class="well well-sm" style="overflow: auto;">
+                                                            @php $c = 0; @endphp
+                                                            @if (isset($relationshipOptions))
+                                                            @foreach ($relationshipOptions as $k =>$product_related)
 
-                                                                <select class="form-control select2 selectconcomitant-{{$r}}" name="{{ $row->field }}[{{$k}}]">
-
-                                                                    @foreach($relationshipOptions as $relationshipOption)
-                                                                        <option value="{{ $relationshipOption->id }}" @if($relationshipOption->id == $key){{ 'selected="selected"' }}@endif>{{ $relationshipOption->name }}</option>
-                                                                    @endforeach
-
-                                                                </select>
-                                                            @endif
-                                                        </td>
-                                                        <td>
-                                                            <span class="table-remove glyphicon glyphicon-remove"></span>
-                                                        </td>
-                                                    </tr>
-                                                @php $c++; @endphp
-                                            @endforeach
-                                        @endif
-                                        <!-- This is our clonable table line -->
-                                            <tr class="hide">
-                                                <td contenteditable="true">
-                                                    @if(class_exists('App\Product'))
-                                                        <select class="form-control hiddenatr select_new_row_concomitant">
-                                                            @foreach($relationshipOptions as $relationshipOption)
-                                                                <option value="{{ $relationshipOption->id }}">{{ $relationshipOption->name }}</option>
+                                                                    <div class="prodconcomitant" id="product-concomitant{{$product_related['id']}}"><span onclick="$('#product-concomitant{{$product_related['id']}}').remove();" class="table-remove glyphicon glyphicon-remove" style="float: left; margin-top: 8px"></span> <img src='/storage/{{get_download_image_cache($product_related['mainimage'],50,50)}}'> {{$product_related['name']}}
+                                                                    <input type="hidden" name="{{ $row->field }}[{{$k}}][]" value="{{$product_related['id']}}" />
+                                                                </div>
+                                                                @php $c++; @endphp
                                                             @endforeach
-                                                        </select>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <span class="table-remove glyphicon glyphicon-remove"></span>
+                                                         @endif
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </table>
-                                    </div>
-                                    <script type="text/javascript">
-                                        var $TABLECON = $('#tableconcomitant');
-                                        var $rowcon = {{ $c }} ;
-                                        var $fieldnamecon = 'concomitant'//'{{ $row->field }}';
-                                        // $('select.hiddenatr').select2({
-                                        //    width: "100%"
-                                        // });
-                                        $(document).ready(function() {
+                                        <script type="text/javascript">
 
+                                            $(document).ready(function() {
 
-                                            $('.table-add-concomitant').click(function () {
-                                                var $clone = $TABLECON.find('tr.hide').clone(true).removeClass('hide table-line').addClass('addconcom'+$rowcon);
-                                                console.log($clone);
-                                                $clone.find('select.select_new_row_concomitant').attr("name",$fieldnamecon+'['+$rowcon+']');
-                                                $TABLECON.find('table').append($clone);
-                                                $('tr.addconcom'+$rowcon+' select.select_new_row_concomitant').select2({
-                                                    width: "100%"
+                                                $('input[name=\'product-concomitant\']').autocomplete({
+                                                    'source': function (request, response) {
+                                                        $.ajax({
+                                                            url: "{{ route('autocomplete.fetchadm') }}",
+                                                            dataType: 'json',
+                                                            method: "POST",
+                                                            data: {query: request, _token: $('input[name="_token"]').val()},
+                                                            success: function (json) {
+                                                                response($.map(json, function (item) {
+                                                                    return {
+                                                                        label: item['name'],
+                                                                        value: item['id'],
+                                                                        thumb: item['th']
+                                                                    }
+                                                                }));
+                                                            }
+                                                        });
+                                                    },
+                                                    'select': function (item) {
+
+                                                        $('input[name=\'product-concomitant\']').val('');
+
+                                                        $('#product-concomitant' + item['value']).remove();
+
+                                                        $('#product-concomitant').append('<div class="prodconcomitant" id="product-concomitant' + item['value'] + '"><span onclick="$(\'#product-concomitant' + item['value'] + '\').remove();" class="table-remove glyphicon glyphicon-remove" style="float: left; margin-top: 8px"></span> <img src=' + item['thumb'] + '>' + item['label'] + '<input type="hidden" name="concomitant[]" value="' + item['value'] + '" /></div>');
+                                                    }
                                                 });
-                                                $rowcon++;
                                             });
 
-                                            $('.table-remove').click(function () {
-                                                $(this).parents('tr').detach();
-                                            });
-
-                                            $('.table-up').click(function () {
-                                                var $row = $(this).parents('tr');
-                                                if ($row.index() === 1) return; // Don't go above the header
-                                                $row.prev().before($row.get(0));
-                                            });
-
-                                            $('.table-down').click(function () {
-                                                var $row = $(this).parents('tr');
-                                                $row.next().after($row.get(0));
-                                            });
-                                        });
-
-                                    </script>
+                                        </script>
+                                    </div>
                                     @endif
                                 </div>
 
                             </div>
                             <div id="tab6" class="tab-pane fade">
-                                <div class="panel panel-default col-lg-12">
+                                <div class="panel panel-bordered col-lg-12">
 
-                                    @if (isset($dataTypeRows[27])) {{-- similar --}}
+                                    @if (isset($dataTypeRows[28])) {{-- similar --}}
                                     @php
-
-                                        $row = $dataTypeRows[27];
+                                        $row = $dataTypeRows[28];
 
                                         $options = json_decode($row->details);
                                         $display_options = isset($options->display) ? $options->display : NULL;
@@ -713,253 +720,275 @@
                                             $selected_values = array();
                                         }
 
-                                        //$relationshipOptions = app('App\Product')->all();
+                                        $relationshipOptions = app('App\Product')->whereIn('id',$selected_values)->get(['id','name','mainimage'])->toArray();
                                         $relationshipData = (isset($data)) ? $data : $dataTypeContent;
                                         //$selected_values = isset($relationshipData) ? $relationshipData->belongsToMany($options->model, $options->pivot_table)->withPivot('value')->get() : array();
-                                       // dd($dataTypeContent->belongsToMany($options->model, $options->pivot_table)->get());
                                     @endphp
 
                                     <div id="tablesimilar" class="table-editable">
-                                        <span class="table-add-similar glyphicon glyphicon-plus"></span>
                                         <table class="table">
                                             <tr>
-                                                <th>Товар</th>
-                                                <th></th>
+                                                <th>Похожие товары</th>
                                             </tr>
-                                            @php $s = 0; @endphp
-                                            @if (isset($selected_values))
-                                                @foreach($selected_values as $k => $key)
-                                                    <tr>
-                                                        <td contenteditable="true">
-                                                            @if(class_exists('App\Product'))
+                                            <tr>
+                                                <td style="position: relative">
+                                                    <div>
+                                                        <input type="text" name="product-similar" value="" placeholder="похожие" id="input-similar" class="form-control" />
+                                                        <div id="product-similar" class="well well-sm" style="overflow: auto;">
+                                                            @php $c = 0; @endphp
+                                                            @if (isset($relationshipOptions))
+                                                                @foreach ($relationshipOptions as $k =>$product_related)
 
-                                                                <select class="form-control select2 selectsimilar-{{$r}}" name="{{ $row->field }}[{{$k}}]">
-
-                                                                    @foreach($relationshipOptions as $relationshipOption)
-                                                                        <option value="{{ $relationshipOption->id }}" @if($relationshipOption->id == $key){{ 'selected="selected"' }}@endif>{{ $relationshipOption->name }}</option>
-                                                                    @endforeach
-
-                                                                </select>
+                                                                    <div class="prodconcomitant" id="product-concomitant{{$product_related['id']}}"><span onclick="$('#product-concomitant{{$product_related['id']}}').remove();" class="table-remove glyphicon glyphicon-remove" style="float: left; margin-top: 8px"></span> <img src='/storage/{{get_download_image_cache($product_related['mainimage'],50,50)}}'> {{$product_related['name']}}
+                                                                        <input type="hidden" name="{{ $row->field }}[{{$k}}][]" value="{{$product_related['id']}}" />
+                                                                    </div>
+                                                                    @php $c++; @endphp
+                                                                @endforeach
                                                             @endif
-                                                        </td>
-                                                        <td>
-                                                            <span class="table-remove glyphicon glyphicon-remove"></span>
-                                                        </td>
-                                                    </tr>
-                                                @php $s++; @endphp
-                                            @endforeach
-                                        @endif
-                                        <!-- This is our clonable table line -->
-                                            <tr class="hide">
-                                                <td contenteditable="true">
-                                                    @if(class_exists('App\Product'))
-                                                        <select class="form-control hiddenatr select_new_row_similar">
-                                                            @foreach($relationshipOptions as $relationshipOption)
-                                                                <option value="{{ $relationshipOption->id }}">{{ $relationshipOption->name }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <span class="table-remove glyphicon glyphicon-remove"></span>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </table>
-                                    </div>
-                                    <script type="text/javascript">
-                                        var $TABLESIM = $('#tablesimilar');
-                                        var $rowsim = {{ $c }} ;
-                                        var $fieldnamesim = 'similar'//'{{ $row->field }}';
-                                        // $('select.hiddenatr').select2({
-                                        //    width: "100%"
-                                        // });
-                                        $(document).ready(function() {
+                                        <script type="text/javascript">
 
+                                            $(document).ready(function() {
 
-                                            $('.table-add-similar').click(function () {
-                                                var $clone = $TABLESIM.find('tr.hide').clone(true).removeClass('hide table-line').addClass('addsim'+$rowsim);
-                                                //console.log($clone);
-                                                $clone.find('select.select_new_row_similar').attr("name",$fieldnamesim+'['+$rowsim+']');
-                                                $TABLESIM.find('table').append($clone);
-                                                $('tr.addsim'+$rowsim+' select.select_new_row_similar').select2({
-                                                    width: "100%"
+                                                $('input[name=\'product-similar\']').autocomplete({
+                                                    'source': function (request, response) {
+                                                        $.ajax({
+                                                            url: "{{ route('autocomplete.fetchadm') }}",
+                                                            dataType: 'json',
+                                                            method: "POST",
+                                                            data: {query: request, _token: $('input[name="_token"]').val()},
+                                                            success: function (json) {
+                                                                response($.map(json, function (item) {
+                                                                    return {
+                                                                        label: item['name'],
+                                                                        value: item['id'],
+                                                                        thumb: item['th']
+                                                                    }
+                                                                }));
+                                                            }
+                                                        });
+                                                    },
+                                                    'select': function (item) {
+                                                        $('input[name=\'product-similar\']').val('');
+                                                        $('#product-similar' + item['value']).remove();
+                                                        $('#product-similar').append('<div class="prodconcomitant" id="product-similar' + item['value'] + '"><span onclick="$(\'#product-similar' + item['value'] + '\').remove();" class="table-remove glyphicon glyphicon-remove" style="float: left; margin-top: 8px"></span> <img src=' + item['thumb'] + '>' + item['label'] + '<input type="hidden" name="similar[]" value="' + item['value'] + '" /></div>');
+                                                    }
                                                 });
-                                                $rowsim++;
                                             });
 
-                                            $('.table-remove').click(function () {
-                                                $(this).parents('tr').detach();
-                                            });
-
-                                            $('.table-up').click(function () {
-                                                var $row = $(this).parents('tr');
-                                                if ($row.index() === 1) return; // Don't go above the header
-                                                $row.prev().before($row.get(0));
-                                            });
-
-                                            $('.table-down').click(function () {
-                                                var $row = $(this).parents('tr');
-                                                $row.next().after($row.get(0));
-                                            });
-                                        });
-
-                                    </script>
+                                        </script>
+                                    </div>
                                     @endif
                                 </div>
                         </div>
-                        @if($dataTypeContent->exists)
-                        <div id="tab7" class="tab-pane fade">
-                    <div class="col-lg-6">
-                        <div class="panel panel-bordered" style="padding-bottom:5px;">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <td colspan="3">
-                                            <h4>История публикаций</h4>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th><b>Дата</b></th>
-                                        <th><b>Пользователь</b></th>
-                                        <th><b>Примечание</b></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{$edit_info->publication_updated_at}}</td>
-                                        <td>{{$edit_info->publication_user}}</td>
-                                        <td>{{$edit_info->publication_action}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="panel panel-bordered" style="padding-bottom:5px;">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <td colspan="2">
-                                            <h4>История правок</h4>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th><b>Дата</b></th>
-                                        <th><b>Пользователь</b></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{$edit_info->editing_updated_at}}</td>
-                                        <td>{{$edit_info->editing_user}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="panel panel-bordered" style="padding-bottom:5px;">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <td colspan="2">
-                                            <h4>История описания</h4>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th><b>Дата</b></th>
-                                        <th><b>Пользователь</b></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{$edit_info->description_updated_at}}</td>
-                                        <td>{{$edit_info->description_user}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="panel panel-bordered" style="padding-bottom:5px;">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <td colspan="3">
-                                            <h4>История статуса</h4>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th><b>Пользователь</b></th>
-                                        <th><b>Установлен статус</b></th>
-                                        <th><b>Дата</b></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{$edit_info->status_user}}</td>
-                                        <td>{{$edit_info->status}}</td>
-                                        <td>{{$edit_info->status_updated_at}}</td>
-                                    </tr>
-                                    @if(isset($edit_info->status_to_change))
-                                        <tr>
-                                            <td colspan='2'> Статус будет изменен на "В Наличии"</td>
-                                            <td>{{$edit_info->status_to_change}}</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                            </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="tab8" class="tab-pane fade">
-                    <div class="col-lg-12">
-                        <div class="panel panel-bordered" style="padding-bottom:5px;">
-                            <div class="panel-body">
-                            @foreach($dataTypeRows as $row)
-                                @if($row->field == 'meta_title' ||
-                                    $row->field == 'meta_heading' ||
-                                    $row->field == 'meta_description' ||
-                                    $row->field == 'meta_keywords')
-                                
-                                <!-- GET THE DISPLAY OPTIONS -->
-                                @php
-                                    $options = json_decode($row->details);
-                                    $display_options = isset($options->display) ? $options->display : NULL;
-                                @endphp
-                                @if ($options && isset($options->legend) && isset($options->legend->text))
-                                    <legend class="text-{{$options->legend->align or 'center'}}" style="background-color: {{$options->legend->bgcolor or '#f0f0f0'}};padding: 5px;">{{$options->legend->text}}</legend>
-                                @endif
-                                @if ($options && isset($options->formfields_custom))
-                                    @include('voyager::formfields.custom.' . $options->formfields_custom)
-                                @else
-                                    <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width or 12 }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
-                                        {{ $row->slugify }}
-                                        <label for="name">{{ $row->display_name }}</label>
-                                        @include('voyager::multilingual.input-hidden-bread-edit-add')
-                                        @if($row->type == 'relationship')
-                                            @include('voyager::formfields.relationship')
-                                        @else
-                                            {!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}
-                                        @endif
-
-                                        @foreach (app('voyager')->afterFormFields($row, $dataType, $dataTypeContent) as $after)
-                                            {!! $after->handle($row, $dataType, $dataTypeContent) !!}
-                                        @endforeach
+                            <div id="tab7" class="tab-pane fade">
+                                @if($dataTypeContent->exists && isset($edit_info))
+                                    <div class="col-lg-6">
+                                    <div class="panel panel-bordered" style="padding-bottom:5px;">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <h4>История публикаций</h4>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th><b>Дата</b></th>
+                                                    <th><b>Пользователь</b></th>
+                                                    <th><b>Примечание</b></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{$edit_info->publication_updated_at}}</td>
+                                                    <td>{{$edit_info->publication_user}}</td>
+                                                    <td>{{$edit_info->publication_action}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="panel panel-bordered" style="padding-bottom:5px;">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <h4>История правок</h4>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th><b>Дата</b></th>
+                                                    <th><b>Пользователь</b></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{$edit_info->editing_updated_at}}</td>
+                                                    <td>{{$edit_info->editing_user}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="panel panel-bordered" style="padding-bottom:5px;">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <h4>История описания</h4>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th><b>Дата</b></th>
+                                                    <th><b>Пользователь</b></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{$edit_info->description_updated_at}}</td>
+                                                    <td>{{$edit_info->description_user}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="panel panel-bordered" style="padding-bottom:5px;">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <h4>История статуса</h4>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th><b>Пользователь</b></th>
+                                                    <th><b>Установлен статус</b></th>
+                                                    <th><b>Дата</b></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{$edit_info->status_user}}</td>
+                                                    <td>{{$edit_info->status}}</td>
+                                                    <td>{{$edit_info->status_updated_at}}</td>
+                                                </tr>
+                                                @if(isset($edit_info->status_to_change))
+                                                    <tr>
+                                                        <td colspan='2'> Статус будет изменен на "В Наличии"</td>
+                                                        <td>{{$edit_info->status_to_change}}</td>
+                                                    </tr>
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                        </div>
                                     </div>
                                 @endif
-                                @endif
-                            @endforeach
+                            </div>
+                            <div id="tab8" class="tab-pane fade">
+                            <div class="col-lg-12">
+                                <div class="panel panel-bordered" style="padding-bottom:5px;">
+                                    <div class="panel-body">
+                                    @foreach($dataTypeRows as $row)
+                                        @if($row->field == 'meta_title' ||
+                                            $row->field == 'meta_heading' ||
+                                            $row->field == 'meta_description' ||
+                                            $row->field == 'meta_keywords')
+
+                                        <!-- GET THE DISPLAY OPTIONS -->
+                                        @php
+                                            $options = json_decode($row->details);
+                                            $display_options = isset($options->display) ? $options->display : NULL;
+                                        @endphp
+                                        @if ($options && isset($options->legend) && isset($options->legend->text))
+                                            <legend class="text-{{$options->legend->align or 'center'}}" style="background-color: {{$options->legend->bgcolor or '#f0f0f0'}};padding: 5px;">{{$options->legend->text}}</legend>
+                                        @endif
+                                        @if ($options && isset($options->formfields_custom))
+                                            @include('voyager::formfields.custom.' . $options->formfields_custom)
+                                        @else
+                                            <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width or 12 }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
+                                                {{ $row->slugify }}
+                                                <label for="name">{{ $row->display_name }}</label>
+                                                @include('voyager::multilingual.input-hidden-bread-edit-add')
+                                                @if($row->type == 'relationship')
+                                                    @include('voyager::formfields.relationship')
+                                                @else
+                                                    {!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}
+                                                @endif
+
+                                                @foreach (app('voyager')->afterFormFields($row, $dataType, $dataTypeContent) as $after)
+                                                    {!! $after->handle($row, $dataType, $dataTypeContent) !!}
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                        @endif
+                                    @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            <div id="tab9" class="tab-pane fade">
+                                <div class="col-lg-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <h4>Цена</h4>
+                                            <table class="table table-hover">
+                                                <tbody>
+                                                @foreach($dataTypeRows as $row)
+                                                    <tr>
+                                                    @if($row->field == 'box' ||
+                                                        $row->field == 'storage' ||
+                                                        $row->field == 'tel1' ||
+                                                        $row->field == 'tel2' ||
+                                                        $row->field == 'name_contact' ||
+                                                        $row->field == 'mailbox' ||
+                                                        $row->field == 'link_to_provider' ||
+                                                        $row->field == 'link_to_ishop' ||
+                                                        $row->field == 'note_product')
+                                                        <!-- GET THE DISPLAY OPTIONS -->
+                                                            @php
+                                                                $options = json_decode($row->details);
+                                                                $display_options = isset($options->display) ? $options->display : NULL;
+                                                            @endphp
+                                                            @if ($options && isset($options->legend) && isset($options->legend->text))
+                                                                <legend class="text-{{$options->legend->align or 'center'}}" style="background-color: {{$options->legend->bgcolor or '#f0f0f0'}};padding: 5px;">{{$options->legend->text}}</legend>
+                                                            @endif
+                                                            @if ($options && isset($options->formfields_custom))
+                                                                @include('voyager::formfields.custom.' . $options->formfields_custom)
+                                                            @else
+                                                                {{ $row->slugify }}
+                                                                <td><label for="name">{{ $row->display_name }}</label></td>
+
+                                                                @include('voyager::multilingual.input-hidden-bread-edit-add')
+                                                                @if($row->type == 'relationship')
+                                                                    <td>@include('voyager::formfields.relationship')</td>
+                                                                @else
+                                                                    <td>{!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}</td>
+                                                                @endif
+                                                                @foreach (app('voyager')->afterFormFields($row, $dataType, $dataTypeContent) as $after)
+                                                                    <td>{!! $after->handle($row, $dataType, $dataTypeContent) !!}</td>
+                                                                @endforeach
+                                                            @endif
+                                                        @endif
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                @endif
-                </div>
-
             </div>
         </div>
-    </div>
     </div>
 </form>
     <div class="modal fade modal-danger" id="confirm_delete_modal">
@@ -991,7 +1020,7 @@
 @section('javascript')
     <script>
         //adding characteristics row
-        
+
         $('#addRow').click(function(){
             var count = $('#count_row').val();
             var html_string = '<tr class="chosen_char" id_row="'+count+'"><td><select class="form-control chosen_select" name="select_characteristic[]" id_row="'+count+'"><option value="">None</option><?php foreach($characteristics as $item): ?><option value="<?php echo $item->id ?>"><?php echo $item->name ?></option><?php endforeach; ?></select></td><td name="characteristic_options" id="option_'+count+'"></td><td><button type="button" class="btn btn-danger" id="dltRow"><span class="glyphicon glyphicon-remove"></span></button></td></tr>';
@@ -1006,6 +1035,9 @@
         
         $(document).on('change', ".chosen_select", function() {
             var id_row = $(this).attr('id_row');
+
+
+            var maincategory = {{$dataTypeContent->maincategory}};
             if($(this).val() != '') {
                 var data = $(this).val(); 
                 $.ajax({
@@ -1014,7 +1046,7 @@
                     },
                     url:'{{ route("char_opt") }}',
                     method:"POST",
-                    data: {data: data},  
+                    data: {data: data, maincategory:maincategory},
                     success: function (data) {
                         $('#option_' + id_row).empty().append(data);
                     }
@@ -1193,6 +1225,139 @@
          var button_id = $(this).attr("id");
          $("#row"+button_id+"").remove();
          });*/
+
+
+
+
+            // Autocomplete */
+            (function($) {
+                $.fn.autocomplete = function(option) {
+                    return this.each(function() {
+                        this.timer = null;
+                        this.items = new Array();
+
+                        $.extend(this, option);
+
+                        $(this).attr('autocomplete', 'off');
+
+                        // Focus
+                        $(this).on('focus', function() {
+                            this.request();
+                        });
+
+                        // Blur
+                        $(this).on('blur', function() {
+                            setTimeout(function(object) {
+                                object.hide();
+                            }, 200, this);
+                        });
+
+                        // Keydown
+                        $(this).on('keydown', function(event) {
+                            switch(event.keyCode) {
+                                case 27: // escape
+                                    this.hide();
+                                    break;
+                                default:
+                                    this.request();
+                                    break;
+                            }
+                        });
+
+                        // Click
+                        this.click = function(event) {
+                            event.preventDefault();
+
+                            value = $(event.target).parent().attr('data-value');
+
+                            if (value && this.items[value]) {
+                                this.select(this.items[value]);
+                            }
+                        }
+
+                        // Show
+                        this.show = function() {
+                            var pos = $(this).position();
+                            $(this).siblings('ul.dropdown-menu').css({
+                                top: pos.top + $(this).outerHeight(),
+                                left: pos.left
+                            });
+
+                            $(this).siblings('ul.dropdown-menu').show();
+                        }
+
+                        // Hide
+                        this.hide = function() {
+                            $(this).siblings('ul.dropdown-menu').hide();
+                        }
+
+                        // Request
+                        this.request = function() {
+                            clearTimeout(this.timer);
+
+                            this.timer = setTimeout(function(object) {
+                                object.source($(object).val(), $.proxy(object.response, object));
+                            }, 200, this);
+                        }
+
+                        // Response
+                        this.response = function(json) {
+                            html = '';
+
+                            if (json.length) {
+
+                                for (i = 0; i < json.length; i++) {
+                                    this.items[json[i]['value']] = json[i];
+                                }
+
+                                for (i = 0; i < json.length; i++) {
+                                    if (!json[i]['category']) {
+                                        html += '<li data-value="' + json[i]['value'] + '"><a href="#"><img width="50" height="50" class="sherif-product_content_img" src="' + json[i]["thumb"] +'" alt="">' + json[i]['label'] + '</a></li>';
+                                    }
+                                }
+
+                                // Get all the ones with a categories
+                                var category = new Array();
+
+                                for (i = 0; i < json.length; i++) {
+                                    if (json[i]['category']) {
+                                        if (!category[json[i]['category']]) {
+                                            category[json[i]['category']] = new Array();
+                                            category[json[i]['category']]['name'] = json[i]['category'];
+                                            category[json[i]['category']]['item'] = new Array();
+                                        }
+
+                                        category[json[i]['category']]['item'].push(json[i]);
+                                    }
+                                }
+
+                                for (i in category) {
+                                    html += '<li class="dropdown-header">' + category[i]['name'] + '</li>';
+
+                                    for (j = 0; j < category[i]['item'].length; j++) {
+                                        html += '<li data-value="' + category[i]['item'][j]['value'] + '"><a href="#">&nbsp;&nbsp;&nbsp;' + category[i]['item'][j]['label'] + '</a></li>';
+                                    }
+                                }
+                            }
+
+                            if (html) {
+                                this.show();
+                            } else {
+                                this.hide();
+                            }
+
+                            $(this).siblings('ul.dropdown-menu').html(html);
+                        }
+
+                        $(this).after('<ul class="dropdown-menu"></ul>');
+                        $(this).siblings('ul.dropdown-menu').delegate('a', 'click', $.proxy(this.click, this));
+
+                    });
+                }
+            })(window.jQuery);
+
+
+
     </script>
 
    <!--  <script src="{{asset('assets/libs/Autocmplete/jquery-ui.js')}}"></script> -->
@@ -1227,5 +1392,5 @@
         }); -->
 
     
-    </script>
+    <!--</script>-->
 @stop

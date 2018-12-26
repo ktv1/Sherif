@@ -54,6 +54,20 @@ class CreateProductsTable extends Migration {
 			$table->string('meta_keywords')->nullable();
 			$table->integer('in_stock')->nullable();
 		});
+
+		Schema::table('products',function ($table){
+            $table->date('label_end_date')->nullable()->default(null);
+            $table->integer('season')->nullable()->default(null);
+            $table->integer('hits')->nullable()->default(null);
+            $table->string('tel1', 50)->nullable()->default(null);
+            $table->string('tel2', 50)->nullable()->default(null);
+            $table->string('name_contact', 50)->nullable()->default(null);
+            $table->string('mailbox', 50)->nullable()->default(null);
+            $table->string('link_to_provider')->nullable()->default(null);
+            $table->string('link_to_ishop')->nullable()->default(null);
+            $table->string('note_product')->nullable()->default(null);
+            $table->nullableTimestamps();
+        });
 	}
 
 
@@ -65,6 +79,20 @@ class CreateProductsTable extends Migration {
 	public function down()
 	{
 		Schema::drop('products');
+
+
+        Schema::table('products', function($table) {
+            $table->dropColumn('label_end_date');
+            $table->dropColumn('season');
+            $table->dropColumn('hits');
+            $table->dropColumn('tel1');
+            $table->dropColumn('tel2');
+            $table->dropColumn('name_contact');
+            $table->dropColumn('mailbox');
+            $table->dropColumn('link_to_provider');
+            $table->dropColumn('link_to_ishop');
+            $table->dropColumn('note_product');
+        });
 	}
 
 }

@@ -31,11 +31,9 @@
 						$model = app($options->model);
 						$query = $model::all();
 					@endphp
-					
-					@if($row->field == 'product_belongsto_product_label_relationship')
-						@if($row->required === 0)
-							<option value="">{{__('voyager::generic.none')}}</option>
-						@endif
+
+					@if($row->required === 0)
+						<option value="">{{__('voyager::generic.none')}}</option>
 					@endif
 					
 					@foreach($query as $relationshipData)
@@ -148,13 +146,12 @@
 			@else
 				<select
 					class="form-control @if(isset($options->taggable) && $options->taggable == 'on') select2-taggable @else select2 @endif" 
-					name="{{ $relationshipField }}[]" multiple required
+					name="{{ $relationshipField }}[]" multiple
 					@if(isset($options->taggable) && $options->taggable == 'on')
 						data-route="{{ route('voyager.'.str_slug($options->table).'.store') }}"
 						data-label="{{$options->label}}"
 						data-error-message="{{__('voyager::bread.error_tagging')}}"
 					@endif
-					
 				>
 					
 			            @php 
@@ -162,49 +159,16 @@
 			                $relationshipOptions = app($options->model)->all();
 						@endphp
 						
-						<!--@if($row->required === 0)
+						@if($row->required === 0)
 							<option value="">{{__('voyager::generic.none')}}</option>
-						@endif-->
-						@if($relationshipField == 'product_belongstomany_subcategory_relationship')
-							@if(isset($categories))
-								@foreach($categories as $category)
-									<optgroup label="{{$category->name}}">
-										@foreach($relationshipOptions as $relationshipOption)
-											@if($relationshipOption->category == $category->id)
-												<option value="{{ $relationshipOption->{$options->key} }}" @if(in_array($relationshipOption->{$options->key}, $selected_values)){{ 'selected="selected"' }}@endif>{{ $relationshipOption->{$options->label} }}</option>
-											@endif
-										@endforeach
-									</optcategory>
-								@endforeach
-							@else
-								@foreach($relationshipOptions as $relationshipOption)
-									<option value="{{ $relationshipOption->{$options->key} }}" @if(in_array($relationshipOption->{$options->key}, $selected_values)){{ 'selected="selected"' }}@endif>{{ $relationshipOption->{$options->label} }}</option>
-								@endforeach
-							@endif
-						@elseif($relationshipField == 'product_belongstomany_subcategory_relationship_1')
-							@if(isset($categories))
-								@foreach($categories as $category)
-									<optgroup label="{{$category->name}}">
-										@foreach($relationshipOptions as $relationshipOption)
-											@if($relationshipOption->category == $category->id)
-												<option value="{{ $relationshipOption->{$options->key} }}" @if(in_array($relationshipOption->{$options->key}, $selected_values)){{ 'selected="selected"' }}@endif>{{ $relationshipOption->{$options->label} }}</option>
-											@endif
-										@endforeach
-									</optcategory>
-								@endforeach
-							@else
-								@foreach($relationshipOptions as $relationshipOption)
-									<option value="{{ $relationshipOption->{$options->key} }}" @if(in_array($relationshipOption->{$options->key}, $selected_values)){{ 'selected="selected"' }}@endif>{{ $relationshipOption->{$options->label} }}</option>
-								@endforeach
-							@endif
-						@else
-							@foreach($relationshipOptions as $relationshipOption)
-									<option value="{{ $relationshipOption->{$options->key} }}" @if(in_array($relationshipOption->{$options->key}, $selected_values)){{ 'selected="selected"' }}@endif>{{ $relationshipOption->{$options->label} }}</option>
-								
-							@endforeach
 						@endif
-			            
+
+			            @foreach($relationshipOptions as $relationshipOption)
+			                <option value="{{ $relationshipOption->{$options->key} }}" @if(in_array($relationshipOption->{$options->key}, $selected_values)){{ 'selected="selected"' }}@endif>{{ $relationshipOption->{$options->label} }}</option>
+			            @endforeach
+
 				</select>
+
 			@endif
 
 		@endif
@@ -214,5 +178,5 @@
 		cannot make relationship because {{ $options->model }} does not exist.
 
 	@endif
-	
+
 @endif

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Voyager;
 
+use App\Characteristic;
 use App\Currency;//for convertion
 use App\Models\Attribute;
 use App\Product;//for convertion
@@ -9,6 +10,8 @@ use App\Product;//for convertion
 use App\Category;
 use App\ProductCategoriesPivot;
 
+use App\ProductCharacteristicPivot;
+use App\ProductEditInfo;
 use App\ProductWholesale;
 
 use Illuminate\Support\Collection;
@@ -21,6 +24,7 @@ use TCG\Voyager\Events\BreadDataUpdated;
 use TCG\Voyager\Events\BreadImagesDeleted;
 use TCG\Voyager\Database\Schema\SchemaManager;
 use TCG\Voyager\Http\Controllers\VoyagerBaseController;
+//use App\CharacteristicOption as CO;
 
 class ProductsController extends VoyagerBaseController
 {
@@ -244,17 +248,41 @@ class ProductsController extends VoyagerBaseController
         /*All editing info*/
         $edit_info = DB::table('product_edit_info')->where('product_id', $id)->first();
 
-        
-        $characteristics = DB::table('characteristics')->get()->toArray();
+        if($dataTypeContent->maincategory) {
+            $characteristics_id = DB::table('characteristics')
+                ->whereRaw('FIND_IN_SET('. $dataTypeContent->maincategory . ',characteristics.categories)')
+                ->pluck('id')
+                ->toArray();
+        } else {
+            $characteristics_id = DB::table('characteristics')->pluck('id')->toArray();
+        }
+
+        //$characteristics = DB::table('characteristics')->get()->toArray();
+
 
         $characteristics_list = DB::table('products_characteristics_pivot')->where('product_id', $id)->pluck('characteristic_id')->toArray();//list of all characteristics of the product
+        //dd($characteristics_list);
+        $req_char = DB::table('characteristics')->where('group_id', 11)->pluck('id')->toArray();
+        foreach ($req_char as $rc) {
+            if (!in_array($rc,$characteristics_list)) {
+                array_push($characteristics_list, $rc);
+            }
+            if(!in_array($rc,$characteristics_id)) {
+                array_push($characteristics_id, $rc);
+            }
+        }
+
         $characteristics_list = array_unique($characteristics_list, SORT_NUMERIC );//list of characteristics of the product without duplicating
-        
+        $characteristics_id = array_unique($characteristics_id, SORT_NUMERIC );
         $characteristics_list_objects = [];
+        $characteristics = [];
+
         foreach( $characteristics_list as $item) {
             $characteristics_list_objects[] = DB::table('characteristics')->where('id', $item)->first();//list of objects characteristics of the product without duplicating
         }
-
+        foreach( $characteristics_id as $item) {
+            $characteristics[] = DB::table('characteristics')->where('id', $item)->first();//list of objects characteristics of the product without duplicating
+        }
         return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'))->with('categories', $categories)->with('wholesales', $wholesale)->with('edit_info', $edit_info)->with('categories_list', $categories_list)->with('characteristics', $characteristics)->with('characteristics_list_objects', $characteristics_list_objects);
     }
 
@@ -325,32 +353,67 @@ class ProductsController extends VoyagerBaseController
             }
 
             $user_name = \Auth::user()->name;
-            
+
             if($request->publication !== $last_value) {
                 if($request->publication == 'on') {
-                    DB::table('product_edit_info')->where('product_id', $id)
-                        ->update(['publication_updated_at' => date("Y-m-d H:i:s"), 'publication_user' => $user_name, 'publication_action' => 'Опубликовано']);
+                    ProductEditInfo::firstOrNew(['product_id' => $id])
+                        ->fill([
+                            'publication_updated_at' => date("Y-m-d H:i:s"),
+                            'publication_user' => $user_name,
+                            'publication_action' => 'Опубликовано'
+                        ])->save();
+                   //DB::table('product_edit_info')->where('product_id', $id)
+                    //    ->update(['publication_updated_at' => date("Y-m-d H:i:s"), 'publication_user' => $user_name, 'publication_action' => 'Опубликовано']);
                 } else {
-                    DB::table('product_edit_info')->where('product_id', $id)
-                        ->update(['publication_updated_at' => date("Y-m-d H:i:s"), 'publication_user' => $user_name, 'publication_action' => 'Снято с публикации']);
+                    ProductEditInfo::firstOrNew(['product_id' => $id])
+                        ->fill([
+                            'publication_updated_at' => date("Y-m-d H:i:s"),
+                            'publication_user' => $user_name,
+                            'publication_action' => 'Снято с публикации'
+                        ])->save();
+                    //DB::table('product_edit_info')->where('product_id', $id)
+                     //   ->update(['publication_updated_at' => date("Y-m-d H:i:s"), 'publication_user' => $user_name, 'publication_action' => 'Снято с публикации']);
                 }
             }
 
             /* Editing history */
-            DB::table('product_edit_info')->where('product_id', $id)->update(['editing_updated_at' => date("Y-m-d H:i:s"), 'editing_user' => $user_name]);
-
+            //DB::table('product_edit_info')->where('product_id', $id)->update(['editing_updated_at' => date("Y-m-d H:i:s"), 'editing_user' => $user_name]);
+            ProductEditInfo::firstOrNew(['product_id' => $id])
+                ->fill([
+                    'editing_updated_at' => date("Y-m-d H:i:s"),
+                    'editing_user' => $user_name
+                ])->save();
             /* Description editor */
             $last_description = Product::find($id)->description;
             if($request->description != $last_description) {
-                DB::table('product_edit_info')->where('product_id', $id)->update(['description_updated_at' => date("Y-m-d H:i:s"), 'description_user' => $user_name]);
+                ProductEditInfo::firstOrNew(['product_id' => $id])
+                    ->fill([
+                        'description_updated_at' => date("Y-m-d H:i:s"),
+                        'description_user' => $user_name,
+                    ])->save();
+                //DB::table('product_edit_info')->where('product_id', $id)->update(['description_updated_at' => date("Y-m-d H:i:s"), 'description_user' => $user_name]);
             }
 
             /* Status date and info */
-            DB::table('product_edit_info')->where('product_id', $data->id)->update(['status_updated_at' => date("Y-m-d H:i:s"), 'status_user' => $user_name, 'status' => DB::table('product_statuses')->where('id', $request->status)->first()->name]);
+            //DB::table('product_edit_info')->where('product_id', $data->id)->update(['status_updated_at' => date("Y-m-d H:i:s"), 'status_user' => $user_name, 'status' => DB::table('product_statuses')->where('id', $request->status)->first()->name]);
+            ProductEditInfo::firstOrNew(['product_id' => $id])
+                ->fill([
+                    'status_updated_at' => date("Y-m-d H:i:s"),
+                    'status_user' => $user_name,
+                    'status' => DB::table('product_statuses')->where('id', $request->status)->first()->name
+                ])->save();
             if($request->status == '3') {
-                DB::table('product_edit_info')->where('product_id', $data->id)->update(['status_to_change' => date("Y-m-d H:i:s", strtotime("+10 day", strtotime("now")))]);
+                ProductEditInfo::firstOrNew(['product_id' => $id])
+                    ->fill([
+                        'status_to_change' => date("Y-m-d H:i:s", strtotime("+10 day", strtotime("now")))
+                    ])->save();
+                //DB::table('product_edit_info')->where('product_id', $data->id)->update(['status_to_change' => date("Y-m-d H:i:s", strtotime("+10 day", strtotime("now")))]);
             } else {
-                DB::table('product_edit_info')->where('product_id', $data->id)->update(['status_to_change' => null]);
+                ProductEditInfo::firstOrNew(['product_id' => $id])
+                    ->fill([
+                        'status_to_change' => null
+                    ])->save();
+                //DB::table('product_edit_info')->where('product_id', $data->id)->update(['status_to_change' => null]);
             }
         }
 
@@ -370,7 +433,6 @@ class ProductsController extends VoyagerBaseController
                 }
             }
         }*/
-        
         /// addimage
         if ($request->addimage) {
             $strimage = array();
@@ -428,6 +490,7 @@ class ProductsController extends VoyagerBaseController
         if ($val->fails()) {
             return response()->json(['errors' => $val->messages()]);
         }
+
         if (!$request->ajax()) {
             
             /*Characteristics adding*/
@@ -436,12 +499,52 @@ class ProductsController extends VoyagerBaseController
             } 
             if(isset($request->characteristics_options)) {
                 if(is_array($request->characteristics_options)) {
-                    foreach($request->characteristics_options as $option) {
-                        DB::table('products_characteristics_pivot')->insert([['product_id' => $id, 'characteristic_id' => DB::table('characteristic_options')->where('id', $option)->first()->id_characteristic, 'option_id' => $option]]);
-                        
+                    foreach($request->characteristics_options as $char_id => $option_cr) {
+                        //dd($request->characteristics_options);
+                        if($option_cr) {
+                            $type_cr = 1;
+                            if(count(Characteristic::where('id',$char_id)->first())>0) {
+                                $type_cr = Characteristic::where('id', $char_id)->first()->type;
+                            }
+                            if(is_array($option_cr)) {
+                                foreach ($option_cr as $option) {
+                                    if ($type_cr == 0) {
+                                        //dd($option_cr);
+                                        if ($option) {
+                                            DB::table('products_characteristics_pivot')->insert([
+                                                [
+                                                    'product_id' => $id,
+                                                    'characteristic_id' => $char_id,
+                                                    'option_id' => $option
+                                                ]
+                                            ]);
+                                        }
+                                    } else {
+                                        if ($option) {
+                                            DB::table('products_characteristics_pivot')->insert([
+                                                [
+                                                    'product_id' => $id,
+                                                    'characteristic_id' => $char_id,
+                                                    'option_id' => $option
+                                                ]
+                                            ]);
+                                        }
+                                    }
+
+                                }
+                            } /*else {
+                                //$co = CharacteristicOption::where('id', $option_cr)->first();
+                                //$opt_val = ($type_cr === 0) ? $char_id : $option_cr;
+                                DB::table('products_characteristics_pivot')->insert([
+                                    [
+                                        'product_id' => $id,
+                                        'characteristic_id' => $char_id,
+                                        'option_id' => $option_cr
+                                    ]
+                                ]);
+                            }*/
+                        }
                     }
-                } else {
-                    DB::table('products_characteristics_pivot')->insert([['product_id' => $id, 'characteristic_id' => DB::table('characteristic_options')->where('id', $request->characteristics_options)->first()->id_characteristic, 'option_id' => $request->characteristics_options]]);
                 }
             }
             

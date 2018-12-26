@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="{{ config('app.locale') }}" @if (config('voyager.multilingual.rtl')) dir="rtl" @endif>
 <head>
     <title>@yield('page_title', setting('admin.title') . " - " . setting('admin.description'))</title>
@@ -39,18 +38,17 @@
             color:{{ config('voyager.primary_color','#22A7F0') }};
         }
     </style>
-
     @if(!empty(config('voyager.additional_css')))<!-- Additional CSS -->
         @foreach(config('voyager.additional_css') as $css)<link rel="stylesheet" type="text/css" href="{{ asset($css) }}">@endforeach
     @endif
 
+
     @yield('head')
-    <script type="text/javascript" src="{{ voyager_asset('js/app.js') }}"></script>
-    <script type="text/javascript" src="{{asset('/assets/libs/bootstrap-file-input/js/fileinput.min.js')}}"></script>
 </head>
 
 <body class="voyager @if(isset($dataType) && isset($dataType->slug)){{ $dataType->slug }}@endif">
-
+@yield('top-js')
+@yield('top-css')
 <div id="voyager-loader">
     <?php $admin_loader_img = Voyager::setting('admin.loader', ''); ?>
     @if($admin_loader_img == '')
@@ -114,7 +112,7 @@ if (starts_with(Auth::user()->avatar, 'http://') || starts_with(Auth::user()->av
 <!-- Javascript Libs -->
 
 
-
+<script type="text/javascript" src="{{ voyager_asset('js/app.js') }}"></script>
 
 
 <script>
@@ -143,6 +141,6 @@ if (starts_with(Auth::user()->avatar, 'http://') || starts_with(Auth::user()->av
 @if(!empty(config('voyager.additional_js')))<!-- Additional Javascript -->
     @foreach(config('voyager.additional_js') as $js)<script type="text/javascript" src="{{ asset($js) }}"></script>@endforeach
 @endif
-<script type="text/javascript" src="{{asset('/assets/libs/bootstrap-file-input/js/fileinput.min.js')}}"></script>
+
 </body>
 </html>
