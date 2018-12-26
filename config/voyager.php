@@ -207,11 +207,12 @@ return [
 
     // Here you can specify additional assets you would like to be included in the master.blade
     'additional_css' => [
-        'css/voyager/blacklist/style.css',
+        //'css/custom.css',
     ],
 
     'additional_js' => [
         //'js/custom.js',
+        'js/voyager/product-reviews/script.js',
         'js/voyager/blacklist/script.js',
     ],
 
