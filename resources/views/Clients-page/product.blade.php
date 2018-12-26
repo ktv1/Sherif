@@ -34,12 +34,12 @@
 @endsection
 
 @section("main_column")
-	 <div class="sherif_center_column">
-        @include("layouts.chat")
+    <div class="sherif_center_column">
+        {{--@include("layouts.chat")--}}
         
         <!-- Product page -->
         <div class="sherif_home_main-product">
-            <div class="sherif_home_main-product-navigation">
+                <div class="sherif_home_main-product-navigation">
                 <a class="goods_main" href="">Главная</a>
                 <p><span>/</span></p>
                 <a class="goods_main" href="">Одежда туристическая</a>
@@ -281,9 +281,11 @@
                             <div id="video_review" class="tabe-pane"></div>
                             <div id="reviews" class="tabe-pane">
                                 {!! $product->reviews !!}
+                                @include('Clients-page.partials.review')
                             </div>
                         </div>
                     </div>
+                </div>
             </div>
 	   </div>
 
@@ -292,4 +294,9 @@
 @section('bottom_scripts')
     <script src="{{asset('/assets/libs/zoom/jquery.zoom.min.js')}}"></script>
     <script src="{{asset('/assets/libs/slick/slick.min.js')}}"></script>
+        </div>
+     </div>
+@endsection
+@section('compiled_js')
+    {"src" : "{{asset('assets/js/Clients-scripts/reviews.js')}}", "async" : false},
 @endsection

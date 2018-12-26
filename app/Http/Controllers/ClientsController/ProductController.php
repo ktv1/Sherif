@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Product;
 use App\ProductLabel;
 use App\ProductStatus as PS;
+use App\ProductReview as PR;
 
 use App\Category;
 use App\ProductCategoriesPivot as PCP;
@@ -77,6 +78,11 @@ class ProductController extends Controller
          $productCharacteristic = Product::i()->getProductCharacteristics($product->id);
          $ipsession->save();
 
+         $reviews = PR::where([
+             ['pid', $product->id],
+             ['status', 'approved']
+         ])->with('reviewer')->paginate();
+
         return $this->viewMaker('Clients-page.product')->with([
         	'CurrentCategory' => $CurrentCategory,
             'CurrentSubCategory' => $CurrentSubCategory,
@@ -84,7 +90,8 @@ class ProductController extends Controller
             'productCharacteristic' => $productCharacteristic,
             'status' => PS::where('id', $product->status)->first(),
             'left_side_bar' => $this->left_sidebar("None"),
-            'header' => $this->header()
+            'header' => $this->header(),
+            'reviews' => $reviews
         ]);
     }
 
@@ -135,5 +142,32 @@ class ProductController extends Controller
     	}*/
     }
 
+    public function addReview(Request $request)
+    {
+        $model = new PR();
 
+        if(auth()->check()) {
+            if (isset(auth()->user()->id) && $request->header('Accepted-Autofill') != auth()->user()->id) {
+                return response()->json(['error' => 'Bad request'], 400);
+            }
+
+            $model->uid   = auth()->user()->id;
+            $model->name  = auth()->user()->name;
+            $model->email = auth()->user()->email;
+        } else {
+            $model->name  = $request->get('name');
+            $model->email = $request->get('email') ?? null;
+        }
+
+        $model->pid     = $request->get('pid');
+        $model->review  = $request->get('review');
+
+        try{
+            list($message, $code) = $model->save() ? ['Запись добавлена', 200] : ['Ошибка добавления', 400];
+        } catch(\Exception $e) {
+            list($message, $code) = [$e->getMessage(), 400];
+        }
+
+        return response()->json($message, $code);
+    }
 }

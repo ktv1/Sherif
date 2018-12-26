@@ -4,15 +4,17 @@
     background-color: #fff;
 }
 .sherif_main-box_cabinet .nav-tabs > li >a{
-    font-family: "OpenSansBold";
-    font-size: 19px;
+    font-family: "OpenSansBold", serif;
+    font-size: 15px;
     padding: 10px 35px;
 }
-.sherif_main-box_cabinet .nav-tabs > li.active > a, .sherif_main-box_cabinet .nav-tabs > li.active > a:focus, .sherif_main-box_cabinet .nav-tabs > li.active > a:hover{
+.sherif_main-box_cabinet .nav-tabs > li.active > a,
+.sherif_main-box_cabinet .nav-tabs > li.active > a:focus,
+.sherif_main-box_cabinet .nav-tabs > li.active > a:hover {
     background-color: #fff;
 }
 .sherif_main-box_cabinet .nav-tabs > li{
-    margin-bottom: -3px;
+    margin-bottom: -1px;
 }
 
 .sherif_main-box_cabinet{
@@ -42,7 +44,7 @@
     box-sizing: border-box;
 }
 .cabinet_profile_user_img{
-    width: 250px;
+    width: 175px;
     height: auto;
     border-radius: 50%;
     margin-bottom: 30px;
@@ -60,11 +62,11 @@
 }
 /*-----social*/
 .social-cabinet{
-    margin: 10px 0;
+    margin: 0 0 0 15px;
 }
 .social-cabinet img{
-    width: 53px;
-    height: 53px;
+    width: 32px;
+    height: 32px;
     margin-right: 30px;
     filter: opacity(40%);
 }
@@ -72,7 +74,8 @@
     filter: opacity(100%);
 }
 .cabinet_profile_info_data{
-
+    font-size: 15px;
+    width: 100%;
 }
 .cabinet_profile_info_data_val{
     color: #e00000;
@@ -102,6 +105,29 @@
     text-transform: uppercase;
     font-family: "OpenSansBold";
     border-radius: 3px;
+}
+.cabinet_profile_btn button{
+    margin-right: 15px;
+}
+.sherif_main-box_cabinet_profile h4 {
+    border-top: 1px dashed;
+    border-bottom: 1px dashed;
+    border-left: 1px dashed;
+    border-radius: 25px 0 0 25px;
+    display: flex;
+    color: #2e6da4;
+    padding: 5px 15px 5px;
+    width: 100%;
+    background: #f6fbff;
+}
+.sherif_main-box_cabinet_profile h4 span {
+    margin-left: 10px;
+    padding-top: 10px;
+}
+.cabinet_profile_info_data p,
+.cabinet_profile_info_data .form-group {
+    margin-left: 20px;
+    font-weight: normal;
 }
 .cabinet_profile_info_data_change-password{
     display: flex;

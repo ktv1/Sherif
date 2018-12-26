@@ -33,14 +33,14 @@
 
     <div class="sherif_center_column">
         <!-- include home_messages -->
-    @include("layouts.partials.home_messages")
+        {{--@include("layouts.partials.home_messages")--}}
 
-    <!--SHERIF CABINET-->
+        <!--SHERIF CABINET-->
         <input id="user_id" type="hidden" value="{{$user->id}}">
 
         <ul class="sherif-breadcrumb">
             <li><a href="index.html">Главная</a></li>
-            <li><span>Вы здесь <i class="fas fa-arrow-right"></i></span>Кабинет покупателя</li>
+            <li><span style="margin-right: 5px">Вы здесь <i class="fas fa-arrow-right"></i></span>Кабинет покупателя</li>
         </ul>
 
         <div class="sherif_main-box_cabinet">
@@ -58,40 +58,126 @@
                     <div class="tab-pane active fade in" id="tab-1">
                         <div class="sherif_main-box_cabinet_profile">
                             <div class="cabinet_profile_user">
-                                <img id="span_img" class="cabinet_profile_user_img" src="" alt="{{$user->name}} {{$user->lastname}}">
+                                <img id="span_img"
+                                     class="cabinet_profile_user_img"
+                                     src="{{!empty($user->avatar) ?
+                                            asset('/storage/cache/175x175_' . $user->avatar) :
+                                            asset('/assets/img/pic/cabinet/user.png')
+                                          }}"
+                                     alt="{{$user->name}} {{$user->lastname}}"
+                                >
                                 <span id="span_name" class="cabinet_profile_user_data">{{$user->name}} {{$user->lastname}}</span>
-                                <span id="span_phone"  class="cabinet_profile_user_data">Тел: {{$user->phone}}</span>
-                                <span class="cabinet_profile_user_data">email: {{$user->email}}</span>
+
+                                <div class="cabinet_profile_info_data">
+                                    <span class="col-sm-6 text-right">Телефон:</span>
+                                    <span class="text-primary">{{$user->phone}}</span>
+                                </div>
+                                <div class="cabinet_profile_info_data">
+                                    <span class="col-sm-6 text-right">E-Mail:</span>
+                                    <span class="text-primary">{{$user->email}}</span>
+                                </div>
+                                {{--<span id="span_phone"  class="cabinet_profile_user_data">Тел: {{$user->phone}}</span>--}}
+                                {{--<span class="cabinet_profile_user_data">email: {{$user->email}}</span>--}}
                             </div>
                             <div class="cabinet_profile_info">
-                                Подтвердить аккаунт через соцсети:
+                                {{--Social networks--}}
+                                <h4>
+                                    <i class="fas fa-users fa-w-20 fa-2x"></i>
+                                    <span>Подтвердить аккаунт через соцсети</span>
+                                </h4>
                                 <div class="social-cabinet flex-row">
                                     <a href="#"><img src="{{asset('/assets/img/footer/icons/fb.png')}}" alt=""></a>
                                     <a href="#"><img src="{{asset('/assets/img/footer/icons/you-tube.png')}}" alt=""></a>
                                     <a href="#"><img src="{{asset('/assets/img/footer/icons/inst.png')}}" alt=""></a>
                                 </div>
+
                                 <div class="cabinet_profile_info_data">
-                                    <p>Пол: <span id="span_sex" class="cabinet_profile_info_data_val">{!! !empty($user->userpersonal->sex) ? $user->userpersonal->sex : 'не указано' !!}</span><a href="#" data-toggle="modal" data-target="#user-modal"><i class="fas fa-pencil-alt"></i></a></p>
-                                    <p>Дата рождения: <span id="span_datebirth" class="cabinet_profile_info_data_birth">{!! !empty($user->userpersonal->datebirth) ? $user->userpersonal->datebirth : 'не указано' !!}</span></p>
-                                    <p>Адресc:</p>
-                                    <p class="cabinet_profile_info_data_adress">Область: <span id="span_obl" class="cabinet_profile_info_data_val">{!! !empty($user->userpersonal->obl) ? $user->userpersonal->obl : 'не указано' !!}</span></p>
-                                    <p class="cabinet_profile_info_data_adress">Город: <span id="span_city" class="cabinet_profile_info_data_val">{!! !empty($user->userpersonal->city) ? $user->userpersonal->city : 'не указано' !!}</span></p>
-                                    <p class="cabinet_profile_info_data_adress">Улица/бульвар/проулок: <span id="span_street" class="cabinet_profile_info_data_val">{!! !empty($user->userpersonal->street) ? $user->userpersonal->street : 'не указано' !!}</span></p>
-                                    <p class="cabinet_profile_info_data_adress">Дом: <span id="span_house" class="cabinet_profile_info_data_val">{!! !empty($user->userpersonal->house) ? $user->userpersonal->house : 'не указано' !!}</span></p>
-                                    <p class="cabinet_profile_info_data_adress">Квартира: <span id="span_apartment" class="cabinet_profile_info_data_val">{!! !empty($user->userpersonal->apartment) ? $user->userpersonal->apartment  : 'не указано' !!}</span></p><p class="cabinet_profile_info_data_adress">Допольнительная информация:</p>
-                                    <div class="cabinet_profile_btn">
-                                        <a href="#">СОХРАНИТЬ</a>
-                                        <a href="#">ОТМЕНИТЬ</a>
+                                    {{--User Profile--}}
+                                    <h4>
+                                        <i class="fas fa-user-circle fa-w-20 fa-2x"></i>
+                                        <span>Персональная информация</span>
+                                    </h4>
+
+                                    <div class="row">
+                                        <div class="col-sm-3 text-right">Пол:</div>
+                                        <div class="col-sm-4 text-primary">
+                                            {{!isset($user->userpersonal->sex) ? 'Не указан' : $user->userpersonal->sex == 'M' ? 'Мужчина' : 'Женщина'}}
+                                        </div>
                                     </div>
-                                    <div class="cabinet_profile_info_data_change-password">
-                                        <p>Изменить пароль:</p>
-                                        <form id="changepassword" class="cabinet_profile_info_data_change-password" action="">
-                                            <input name="old_password" type="password" placeholder="Старый пароль">
-                                            <input name="new_password" type="password" placeholder="Новый пароль">
-                                            <input name="new_password_2" type="password" placeholder="Подтвердить новый пароль">
+                                    <div class="row">
+                                        <div class="col-sm-3 text-right">Дата рождения:</div>
+                                        <div class="col-sm-4 text-primary">
+                                            {{!empty($user->userpersonal->datebirth) ? $user->userpersonal->datebirth : 'Не указано'}}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">&nbsp;</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-3 text-right">Область:</div>
+                                        <div class="col-sm-4 text-primary">
+                                            {{!empty($user->userpersonal->obl) ? $user->userpersonal->obl : 'Не указано'}}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-3 text-right">Город:</div>
+                                        <div class="col-sm-4 text-primary">
+                                            {{!empty($user->userpersonal->city) ? $user->userpersonal->city : 'Не указано'}}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-3 text-right">Улица:</div>
+                                        <div class="col-sm-4 text-primary">
+                                            {{!empty($user->userpersonal->street) ? $user->userpersonal->street : 'Не указано'}}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-3 text-right">Дом:</div>
+                                        <div class="col-sm-4 text-primary">
+                                            {{!empty($user->userpersonal->house) ? $user->userpersonal->house : 'Не указано'}}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-3 text-right">Квартира:</div>
+                                        <div class="col-sm-4 text-primary">
+                                            {{!empty($user->userpersonal->apartment) ? $user->userpersonal->apartment  : 'Не указано'}}
+                                        </div>
+                                    </div>
+
+                                    <div class="cabinet_profile_btn">
+                                        <button data-toggle="modal" data-target="#user-modal" class="btn btn-success">
+                                            <i class="fas fa-pencil-alt"></i> Редактировать
+                                        </button>
+                                    </div>
+
+                                    {{--Change password--}}
+                                    <h4>
+                                        <i class="fas fa-unlock-alt fa-w-20 fa-2x"></i>
+                                        <span>Изменить пароль</span>
+                                    </h4>
+                                    <div class="cabinet_profile_info_data">
+                                        <form id="changepassword" class="form-horizontal">
+                                            <div class="form-group">
+                                                <label for="old_password" class="control-label col-sm-4 text-right">Текущий пароль</label>
+                                                <input class="col-sm-4" name="old_password" type="password" id="old_password">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="new_password" class="control-label col-sm-4 text-right">Новый пароль</label>
+                                                <input class="col-sm-4" name="new_password" type="password" id="new_password">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="new_password_2" class="control-label col-sm-4 text-right">Повторить новый пароль</label>
+                                                <input class="col-sm-4" name="new_password_2" type="password" id="new_password_2">
+                                            </div>
+                                            {{--<input name="new_password" type="password" placeholder="Новый пароль">--}}
+                                            {{--<input name="new_password_2" type="password" placeholder="Подтвердить новый пароль">--}}
                                             <div class="cabinet_profile_btn">
-                                                <a id="savepasswordbtn" type="submit" href="#">СОХРАНИТЬ</a>
-                                                <a href="#">ОТМЕНИТЬ</a>
+                                                <button type="submit" class="btn btn-success" id="savepasswordbtn">
+                                                    <i class="fas fa-save"></i> Сохранить
+                                                </button>
+                                                <button type="reset" class="btn btn-danger">
+                                                    <i class="fas fa-times-circle"></i> Очистить
+                                                </button>
                                             </div>
                                         </form>
                                     </div>
@@ -483,7 +569,7 @@
                         CONTENT
                     </div>
                     <div class="tab-pane fade in" id="tab-7">
-                        CONTENT
+                        @include('frontend.account.partials.reviews')
                     </div>
                 </div>
             </div>
@@ -494,7 +580,7 @@
         @slot('name', 'user-modal')
             @slot('title', 'Редактирование персональных данных')
                 <div class="form-group col-sm-12">
-                    <label for="inputImg">Miniature</label>
+                    <label for="inputImg">Аватар</label>
                     @if(!empty($user) && !empty($user->avatar))
                         <br />
                         <img src="" alt="">
@@ -535,7 +621,7 @@
                 <div class="form-group col-sm-6">
                     <label for="user-datebirth">Дата рождения</label>
                     <div class="input-group date" id="input-datebirth">
-                        <input id="user-datebirth" class="form-control" data-format="dd/MM/yyyy hh:mm:ss" name="datebirth" type="text" value="{{$user->userpersonal->datebirth or old('datebirth')}}">
+                        <input id="user-datebirth" class="form-control" data-format="dd/MM/yyyy" name="datebirth" type="text" value="{{$user->userpersonal->datebirth or old('datebirth')}}">
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -565,8 +651,8 @@
                 </div>
 
                 @slot('buttons')
-                    <button type="submit" class="btn btn-success" id="save">Save user</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success" id="save">Сохранить</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
                 @endslot
 
         @endcomponent

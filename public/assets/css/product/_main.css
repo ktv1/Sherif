@@ -255,6 +255,7 @@ body textarea:required:valid {
 				display: flex;
 				flex-direction: row;
 				margin-left: -5px;
+                margin-bottom: 25px;
 			}
 				.sherif_home_main-product-navigation a {
 					color: #213951;
@@ -588,25 +589,26 @@ body textarea:required:valid {
 									.sherif_home_main-product-good_block-info-description-pick_up_goods-product-time_remain-number h2 {
 										font-weight: 600;
 									}
-			.sherif_home_main-product-tabs {
-
+			.sherif_home_main-product-tabs a{
+                color: #213951!important;
 			}
 				.sherif_home_main-product-tabs .nav {
-					display: flex;
+					margin-top: 20px;
+                    display: flex;
 				    justify-content: center;
 				    border-bottom: 1px solid #213951;
 				}
 					.sherif_home_main-product-tabs .nav .active a {
 						background-color: #fff!important;
-					    border: 1.5px solid #213951!important;
-					    font-weight: 700;
-					    font-size: 18px;
+					    /*border: 1.5px solid #213951!important;*/
+					    /*font-weight: 700;*/
+					    /*font-size: 18px;*/
 					    color: #213951!important;
 					    border-bottom: 1px solid #fff!important;
 					}
 				.sherif_home_main-product-tabs .nav-tabs>li>a {
-					    font-weight: 700;
-					    font-size: 18px;
+					    /*font-weight: 700;*/
+					    /*font-size: 18px;*/
 					    color: #213951!important;
 				}
 			   
@@ -620,7 +622,7 @@ body textarea:required:valid {
 					    border-bottom: 1px dotted #C2C2C2; 
 					    position: relative;
 					    padding: 0;
-					    margin-bottom:5px; /
+					    margin-bottom:5px;
 					    }
 					    
 					ul.tab-content-characteristics li span {
@@ -711,12 +713,12 @@ body textarea:required:valid {
 
 						}
 						.button_top {
-							background-image: url(img/icons/button_direction_top.png);
+							background-image: url(../../img/icons/button_direction_top.png);
 							background-repeat: no-repeat;
 							background-position: center;
 						}
 						.button_bot {
-							background-image: url(img/icons/button_direction_bot.png);
+							background-image: url(../../img/icons/button_direction_bot.png);
 							background-repeat: no-repeat;
 							background-position: center;
 						}
@@ -1105,6 +1107,7 @@ body textarea:required:valid {
 										width: 100%;
 										border: solid 1px #213951;
 										border-radius: 7px;
+										margin: 5px 0;
 										//margin: 5px 0 content;
 										padding: 3px 15px;
 										display: flex;
@@ -1257,6 +1260,7 @@ body textarea:required:valid {
 						width: 35%;
 	   					margin-right: 13%;
 						margin-bottom: 20px;
+                        white-space: nowrap;
 					}
 						
 						.sherif_home_footer_content_nav_scheldue td{
@@ -1386,7 +1390,8 @@ body textarea:required:valid {
 	            padding: 10px 35px;
 					}
 			.tab-content{
-				background-color: #f2f2f2;
+				background-color: #fff;
+                margin-top: 20px;
 			}
 				.video-blog_review{
 					display: flex;
@@ -1738,4 +1743,20 @@ body {
     -ms-transform: rotate(180deg);
     -webkit-transform: rotate(180deg);
     transform: rotate(180deg);
+}
+
+/* Product review */
+#review_sent {
+    margin-top: 25px;
+}
+.review {
+    padding-left: 80px;
+}
+.review-header {
+    font-size: 18px;
+    padding-bottom: 40px;
+}
+.review-content {
+    border-bottom: 1px dashed #e3e3e3;
+    padding-bottom: 20px;
 }

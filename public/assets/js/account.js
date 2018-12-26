@@ -43,7 +43,6 @@
                         $('#span_sex').html(json.name + ' ' + json.lastname);
                         if (json.avatar_th) {
                             $('#span_img').attr('src',json.avatar_th);
-                            console.log(json.avatar_th)
                         }
 
                         $('#span_phone').html(json.phone);

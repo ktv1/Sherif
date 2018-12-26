@@ -51,7 +51,7 @@ Route::get('/income', 'ClientsController\IndexController@getIncome')->name('inco
 // Route::get('/article/{slug}', 'ClientsController\IndexController@getArticle')->name('article');
 Route::get('/stock', 'ClientsController\IndexController@getStock')->name('stock');
 
-
+Route::post('/review/add', 'ClientsController\ProductController@addReview');
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
@@ -117,7 +117,12 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::post('/autocomplete/fetchadm', 'AutocompleteController@fetchadm')->name('autocomplete.fetchadm');
 
-   
+    /* Reviews */
+    Route::get('/reviews', 'Voyager\ProductReviewsController@index')->name('voyager.product-reviews.index');
+    Route::get('/reviews/moderate/{id}', 'Voyager\ProductReviewsController@moderate')->name('voyager.product-reviews.moderate');
+    Route::post('/reviews/update/{id}', 'Voyager\ProductReviewsController@update');
+    /* Reviews end*/
+
 });
 
 Auth::routes();
