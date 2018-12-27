@@ -12,7 +12,7 @@
             <div class="sherif_home_header-navigation_arrange-mobile">
                 <a href="#"><i class="fas fa-bars"></i></a>
                 <a href="#"><img src="{{asset('/assets/img/icons/Kievstar.png')}}" alt="">  <span>+38 (097) 123 45 67</span></a>
-                <a href="#"><i class="fas fa-phone-volume"></i>  <span>Заказать звонок</span></a>
+                <a href=""><i class="fas fa-phone-volume"></i>  <span>Заказать звонок</span></a>
                 <a href="#"><i class="fas fa-envelope"></i>  <span>Написать нам</span></a>
                 <div class="sherif_home_header-navigation-lang_arrange">
                     <div class="sherif_home_header-navigation-lang">
@@ -113,6 +113,15 @@
                                 <h4 class="price"><span id="final_basket">{{$data['curr_price']}}</span> <span class="currency"> грн</span></h4>
                                 <a href="#Basket"  class="sherif_issue_purchase" data-toggle="modal">ОФОРМИТЬ</a>
                             </div>
+                            <div id="basket_id" style="display: none; position: absolute; width: 190px; height: 100px; background: white; margin-top: 70px;">
+                                @if(count(Gloudemans\Shoppingcart\Facades\Cart::content()) == 0)
+                                    Корзина Пуста
+                                @else
+                                    @foreach(Gloudemans\Shoppingcart\Facades\Cart::content() as $product)
+                                        {{$product->name}}
+                                    @endforeach
+                                @endif
+                            </div>
                         </div>
                         <div class="sherif_home_header-content_buyer-compare">
                             <div class="sherif_home_header-content_buyer-compare_icon">
@@ -125,10 +134,10 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
+
     <!-- Small Mobile -->
     <div class="sherif_home_header-content-mobile smaller">
         <form class="sherif_home_header-toolbar_searcher_block" action="" method="">
@@ -197,6 +206,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
+
     $(document).ready(function(){
         $('#product_name').keyup(function(){
             var query = $(this).val();
@@ -214,10 +224,56 @@
                 });
             }
         });
+
+        /*$('.sherif_home_header-content_buyer-basket_icon').mouseenter(function(){
+            $(this).append($('#basket_id'));
+            $('#basket_id').show(400);
+        });
+        $('.nav li').mouseleave(function(){
+
+            $('.sherif_home_header-content_buyer-basket_icon').css('display','none');
+        });*/
+
+
+        /*$("a.btn-in-basket").on('click', function(e) {
+            e.preventDefault();
+
+            var product_id = $(this).attr('id_product');
+
+            jQuery.ajax({
+                url: "search123",
+                method: 'get',
+                data: {
+                    id: product_id
+                },
+            });
+        });*/
+
+        /*$(".sherif_home_header-content_buyer-basket_icon").hover(function(){
+            $("#lk_form").slideToggle("300");
+        });*/
+        /*$('.sherif_home_header-content_buyer-basket_icon').hover(
+                function(){
+                    $('.sherif_home_header-content-work_time').css('display','block');
+                },
+                function(){
+                    $('.sherif_home_header-content-work_time').css('background-color','n');
+                }
+        );*/
+
+
         $(document).on('click', 'li', function(){
             $('#product_name').val($(this).text());
             $('#productList').fadeOut();
         });
+
+        $('.sherif_home_header-content_buyer-basket_icon').on('mouseenter', function(){
+            $(this).siblings('#basket_id').fadeIn();
+        });
+        $('.sherif_home_header-content_buyer-basket_icon').on('mouseleave', function(){
+            $('#basket_id').fadeOut();
+        });
+
         $(document).mouseup(function (e){ // событие клика по веб-документу
             var div = $("#productList"); // тут указываем ID элемента
             if (!div.is(e.target) // если клик был не по нашему блоку

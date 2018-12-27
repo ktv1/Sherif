@@ -127,8 +127,8 @@
                                     <div class="sherif_home_main-product-good_block-info-description-in_basket-counter">
                                         <input type="text" id="product_amount_{{$product->id}}" class="product_amount_input" value="1" id_product="{{$product->id}}">
                                         <div class="sherif_home_main-product-good_block-info-description-in_basket-counter-button product_amount">
-                                            <button class="basket_counter_button product_togglers" togglers="up" id_product="{{$product->id}}" ><i class="fas fa-caret-up"></i></button>
-                                            <button class="basket_counter_button product_togglers" togglers="down" id_product="{{$product->id}}"><i class="fas fa-caret-down"></i></button>
+                                            <button class="basket_counter_button product_togglers" togglers="up"><i class="fas fa-caret-up"></i></button>
+                                            <button class="basket_counter_button product_togglers" togglers="down"><i class="fas fa-caret-down"></i></button>
                                         </div>
                                     </div>
                             </div>

@@ -8,10 +8,9 @@ use App\Http\Controllers\Controller;
 use App\Product;
 use App\ProductLabel;
 use App\ProductStatus as PS;
-
+use Gloudemans\Shoppingcart\Facades\Cart;
 use App\Category;
 use App\ProductCategoriesPivot as PCP;
-
 use Illuminate\Support\Facades\Cache;
 
 class ProductController extends Controller
@@ -30,6 +29,38 @@ class ProductController extends Controller
             'header' => $this->header()
         ]);
     }
+
+
+	public function addCartProduct($id)
+	{
+		$model = Product::find($id);
+		Cart::add( $id,  $model->name, 1, $model->price_final, ['image' => $model->mainimage]);
+		//return response()->json(['model'=> back()->getTargetUrl()]);
+		return redirect()->back();
+	}
+
+	public function removeCartProduct($id)
+	{
+		Cart::remove($id);
+		//return response()->json(['id'=>$id]);
+		return redirect()->back();
+	}
+
+	public function upCartProduct($id, $qty)
+	{
+		$qty++;
+		Cart::update($id, $qty);
+		//return response()->json(['id'=>$id]);
+		return redirect()->back();
+	}
+
+	public function downCartProduct($id, $qty)
+	{
+		$qty--;
+		Cart::update($id, $qty);
+		//return response()->json(['id'=>$id]);
+		return redirect()->back();
+	}
 
 
     public function getProductNoURL($id){
@@ -71,6 +102,4 @@ class ProductController extends Controller
 	    	}
     	}*/
     }
-
-
 }

@@ -54,8 +54,9 @@ class CreateProductsTable extends Migration {
 			$table->string('meta_heading')->nullable();
 			$table->string('meta_keywords')->nullable();
 			$table->integer('in_stock')->nullable();
-			DB::statement('ALTER TABLE products ADD FULLTEXT full(name, description)');
 		});
+
+		DB::statement('ALTER TABLE products ADD FULLTEXT full(name, description)');
 	}
 
 
