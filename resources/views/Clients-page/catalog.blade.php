@@ -55,76 +55,16 @@
                         <div class="sherif_home_main-box_section_itm">
                             <a href="{{route('subCatalog', ['slug'=>$CurrentCategory->slug, 'subslug'=>$subcatalog->slug])}}">
                                 <img class="sherif-section_itm-img" src="{{asset('storage/'. $subcatalog->image)}}" alt="">
+
                                 <p class="section-title">
-                                    <span class="category-link">{{$subcatalog->name}}<span class="section-number"> (7)</span></span>
+                                    <span class="category-link">{{$subcatalog->name}}<span class="section-number"> ({{$subcatalog->product_count}})</span></span>
                                 </p>
                             </a>
                         </div>
                         @endforeach
-                        <!-- <div class="sherif_home_main-box_section_itm">
-                            <a href="#">
-                                <img class="sherif-section_itm-img" src="{{asset('/assets/img/section/section2.png')}}" alt="">
-                                <p class="section-title">
-                                    <span class="category-link">Балаклавы<span class="section-number"> (12)</span></span>
-                                </p>
-                            </a>
-                        </div>
-                        <div class="sherif_home_main-box_section_itm">
-                            <a href="#">
-                                <img class="sherif-section_itm-img" src="{{asset('/assets/img/section/section3.png')}}" alt="">
-                                <p class="section-title">
-                                    <span class="category-link" class="category-link">Берцы и другая военная обувь<span class="section-number"> (45)</span></span>
-                                </p>
-                            </a>
-                        </div>
-                        <div class="sherif_home_main-box_section_itm">
-                            <a href="#">
-                                <img class="sherif-section_itm-img" src="{{asset('/assets/img/section/section4.png')}}" alt="">
-                                <p class="section-title">
-                                    <span class="category-link">Бронежилеты<span class="section-number"> (45)</span></span>
-                                </p>
-                            </a>
-                        </div>
-                        <div class="sherif_home_main-box_section_itm">
-                            <a href="#">
-                                <img class="sherif-section_itm-img" src="{{asset('/assets/img/section/section5.png')}}" alt="">
-                                <p class="section-title">
-                                    <span class="category-link">Бронепластины, кевлар, бронесумки<span class="section-number"> (45)</span></span>
-                                </p>
-                            </a>
-                        </div>
-                        <div class="sherif_home_main-box_section_itm">
-                            <a href="#">
-                                <img class="sherif-section_itm-img" src="{{asset('/assets/img/section/section6.png')}}" alt="">
-                                <p class="section-title">
-                                    <span class="category-link">Военная форма и камуфляж<span class="section-number"> (45)</span></span>
-                                </p>
-                            </a>
-                        </div>
-                        <div class="sherif_home_main-box_section_itm">
-                            <a href="#">
-                                <img class="sherif-section_itm-img" src="{{asset('/assets/img/section/section7.png')}}" alt="">
-                                <p class="section-title">
-                                    <span class="category-link">Фурнитура форменная<span class="section-number"> (45)</span></span>
-                                </p>
-                            </a>
-                        </div> -->
-                        <!-- <div class="sherif_home_main-box_section_itm">
-                            <a href="#">
-                                <img class="sherif-section_itm-img" src="{{asset('/assets/img/section/section8.png')}}" alt="">
-                                <p class="section-title">
-                                    <span class="category-link">Гидраторы и питьевые системы<span class="section-number"> (45)</span></span>
-                                </p>
-                            </a>
-                        </div>
-                        <div class="sherif_home_main-box_section_itm">
-                            <a href="#">
-                                <img class="sherif-section_itm-img" src="{{asset('/assets/img/section/section9.png')}}" alt="">
-                                <p class="section-title">
-                                    <span class="category-link">Головные уборы<span class="section-number"> (45)</span></span>
-                                </p>
-                            </a>
-                        </div> -->
+
+
+
                     </div>
                     <nav class="">
                             <ul class="pagination-sherif">

@@ -44,22 +44,35 @@
                     <div class="panel">
                         <div class="panel-heading">
                             <h4 class="panel-title">
-                                <a href="{{route('catalog', ['slug'=>$gc->slug])}}">{{$gc->name}}</a>
+                                <a href="{{route('slug', ['slug'=>$gc->slug])}}">{{$gc->name}}</a>
                                 <a href="#catalog_{{$gc->slug}}" data-parent="#accordion" data-toggle="collapse"><span></span><i class="fas fa-sort-down"></i></a>
-                                <span class="sherif_sidebar_catalog-content_amount">(50)</span>
+                                <span class="sherif_sidebar_catalog-content_amount">({{$gc->product_count}})</span>
                             </h4>
                         </div>
                         <div id="catalog_{{$gc->slug}}" class="panel-collapse collapse {{$toggle}}">
                             <div class="panel-body">
                                 <ul>
                                     @foreach($Sub_category as $sc)
-                                        @if($gc->id == $sc->parent_id)
+                                        @if(($gc->id == $sc->parent_id))
                                             <li><div class="link_box">
-                                            <a href="{{route('subCatalog', ['slug'=>$gc->slug, 'subslug'=>$sc->slug])}}" id="edit_profile_user">{{$sc->name}}</a>
+                                            <a href="{{route('slug', ['slug'=>$gc->slug . '/' . $sc->slug])}}"
+                                               id="edit_profile_user">{{$sc->name}}</a>
                                             <span class="sherif_sidebar_catalog-content_panel_amount">
-                                                (29)
+                                                ({{$sc->product_count}})
                                             </span>
                                              </div></li>
+                                            @php
+                                                $childcat = \App\Category::where('parent_id',$sc->id)->get();
+                                            @endphp
+                                            @if($childcat)
+                                                @if(Request::segment(1) == $sc->slug)
+                                                    <ul>
+                                                    @foreach($childcat as $ssc)
+                                                        <li a href="{{route('slug',[$gc->slug . '/' . $ssc->slug])}}">{{$ssc->name}}</li>
+                                                    @endforeach
+                                                    </ul>
+                                                @endif
+                                            @endif
                                         @endif
                                     @endforeach
                                 </ul>

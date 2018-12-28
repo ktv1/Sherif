@@ -1760,3 +1760,14 @@ body {
     border-bottom: 1px dashed #e3e3e3;
     padding-bottom: 20px;
 }
+
+.sherif_home_main-product-tabs-tab-content  .tabe-pane {
+    display: none;
+}
+
+.sherif_home_main-product-tabs-tab-content  .tabe-pane.active {
+    display: block;
+}
+.sherif_home_main-product-tabs-tab-content {
+    padding: 25px 15px;
+}

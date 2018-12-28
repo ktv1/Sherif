@@ -1,12 +1,11 @@
 <div class="container-fluid">
-
-    @if(!isset($reviews))
+    @if(!isset($product->reviews))
         <div class="col-sm-12 text-center review-content">
             <h4>Отзывов для этого товара еще нет</h4>
         </div>
     @else
         <div class="col-sm-offset-1 col-sm-9 review-content">
-        @foreach($reviews as $review)
+        @foreach($product->reviews as $review)
             <article class="row">
                 <div class="col-md-2 col-sm-2 hidden-xs">
                     <figure class="thumbnail">

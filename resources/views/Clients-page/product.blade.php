@@ -75,8 +75,9 @@
                         $images = json_decode($product->addimage);
                     @endphp
                     <div class="slider-nav">
+                        <div class="slider-nav__item"><img src="/storage/{{get_download_image_cache($product->mainimage,80,80)}}" alt="Фото {{1}}"></div>
                         @foreach($images as $key => $image)
-                            <div class="slider-nav__item"><img src="/storage/{{get_download_image_cache($image,80,80)}}" alt="Фото {{$key}}"></div>
+                            <div class="slider-nav__item"><img src="/storage/{{get_download_image_cache($image,80,80)}}" alt="Фото {{$key+1}}"></div>
                         @endforeach
                     </div>
                 @endif
@@ -161,7 +162,7 @@
                                         <p>Страна произзводства:</p>
                                     </div>
                                     <div class="sherif_home_main-product-good_block-info-description-abotu_manufactor-right">
-                                        <p>{{$product->vendor->name}}</p>
+                                        <p>{{isset($product->vendor) ? $product->vendor->name : ''}}</p>
                                         <p>Украина</p>
                                     </div>
                                 </div>
@@ -223,6 +224,9 @@
                             <li>
                                 <a data-toggle="tab" href="#reviews">Отзывы</a>
                             </li>
+                            @if (($isadm != 0))
+                                <li><a data-toggle="tab" href="#serviceinfo">Служебная информация</a></li>
+                            @endif
                         </ul>
                         <!-- characteristics tab content -->
                         <div class="sherif_home_main-product-tabs-tab-content ">
@@ -235,43 +239,18 @@
                                         <ul class="tab-content-characteristics">
 
                                             @foreach($productCharacteristic as $key => $charact)
-                                                @if (($isadm === 0) && ($charact['gr_id'] === 11))
-                                                    @php continue @endphp
-                                                @endif
-                                                @if (($isadm != 0) && ($charact['gr_id'] === 11))
-
-                                                    <li>
-                                                        <span style="color: red;">*</span><span class="text">{!!$charact['char_name'] !!}</span>
-                                                    </li>
-                                                @else
-
-                                                    <li>
-                                                        <span class="text">{!!$charact['char_name'] !!}</span>
-                                                    </li>
-                                                @endif
+                                                <li>
+                                                    <span class="text">{!!$charact['char_name'] !!}</span>
+                                                </li>
                                             @endforeach
-                                                @if (($isadm != 0))
-                                                    <p><span  style="color: red; font-size: 10px;">* Только для служебных айпи!!!</span></p>
-                                                @endif
                                         </ul>
                                     </div>
                                     <div class="sherif_home_main-product-tabs-tab-content-right">
                                         <ul class="tab-content-characteristics-right">
                                             @foreach($productCharacteristic as $key => $charact)
-                                                @if (($isadm === 0) && ($charact['gr_id'] === 11))
-                                                    @php continue @endphp
-                                                @endif
-                                                    @if (($isadm != 0) && ($charact['gr_id'] === 11))
-
-                                                        <li>
-                                                            <span style="color: red;">*</span><span class="text">{!!$charact['char_value'] !!}</span>
-                                                        </li>
-                                                    @else
-
-                                                        <li>
-                                                            <span class="text">{!!$charact['char_value'] !!}</span>
-                                                        </li>
-                                                    @endif
+                                                <li>
+                                                    <span class="text">{!!$charact['char_value'] !!}</span>
+                                                </li>
                                             @endforeach
 
                                         </ul>
@@ -280,14 +259,50 @@
                             </div>
                             <div id="video_review" class="tabe-pane"></div>
                             <div id="reviews" class="tabe-pane">
-                                {!! $product->reviews !!}
                                 @include('Clients-page.partials.review')
                             </div>
+                            @if (($isadm != 0))
+                                <div id="serviceinfo" class="tabe-pane">
+                                    <div class="sherif_home_main-product-tabs-tab-content-block">
+                                        <div class="sherif_home_main-product-tabs-tab-content-left">
+                                            <ul class="tab-content-characteristics">
+                                                <li><span class="text">№ ящика</span></li>
+                                                <li><span class="text">№ склада</span></li>
+                                                <li><span class="text">Наименование поставщика</span></li>
+                                                <li><span class="text">Телефон 1</span></li>
+                                                <li><span class="text">Телефон 2</span></li>
+                                                <li><span class="text">Имя контактного лица</span></li>
+                                                <li><span class="text">Почтовый ящик</span></li>
+                                                <li><span class="text">Ссылка на страницу</span></li>
+                                                <li><span class="text">Ссылка на страницу в i-shop</span></li>
+                                                <li><span class="text">Примечания о товаре</span></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sherif_home_main-product-tabs-tab-content-right">
+                                            <ul class="tab-content-characteristics-right">
+                                                <li><span class="text">{{$product->storage}}</span></li>
+                                                <li><span class="text">{{$product->box}}</span></li>
+                                                <li><span class="text">{{collect($product->belongsToMany('App\Provider', 'product_provider_pivot','product_id')->pluck('name')->all())->implode(', ')}}</span></li>
+                                                <li><span class="text">{{$product->tel1}}</span></li>
+                                                <li><span class="text">{{$product->tel2}}</span></li>
+                                                <li><span class="text">{{$product->name_contact}}</span></li>
+                                                <li><span class="text">{{$product->mailbox}}</span></li>
+                                                <li><span class="text">{{$product->link_to_provider}}</span></li>
+                                                <li><span class="text">{{$product->link_to_ishop}}</span></li>
+                                                <li><span class="text">{{$product->note_product}}</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </div>
+
+                @include('Clients-page.partials.recommended')
+                @include('Clients-page.partials.similiar')
                 </div>
-            </div>
-	   </div>
+
+    </div>
 
 
 @endsection

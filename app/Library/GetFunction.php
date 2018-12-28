@@ -86,7 +86,7 @@ class GetFunction
 
     public static function create_download_image_url_cache($filepath, $w, $h) {
         //dd($filepath);
-
+        $filepath =  ('placeholder.png');
         $old_image = $filepath;
         $extension = pathinfo($filepath, PATHINFO_EXTENSION);
         $new_image = 'cache' .'/' . mb_substr(($old_image), 0, mb_strrpos(($old_image), '.')) . '-' . $w . 'x' . $h . '.' . $extension;
@@ -97,19 +97,44 @@ class GetFunction
 
 
             $url = 'http://sherif.ua/components/com_jshopping/files/img_products/' . $filepath;
-            $orig_image = get_file_path($filepath);
+
+            $orig_image = get_file_path($filepath);//<================= change
+
             $img = $new_image;
 
-            file_put_contents($orig_image, GetFunction::file_get_contents_curl($url));
-            //$filepath = get_file_path($filepath);
-            if (!is_file($orig_image)) {
-              return ('/storage/placeholder.png');
+            try {
+                //file_put_contents($orig_image, GetFunction::file_get_contents_curl($url));//<================= change
+            } catch (\Exception $e) {
+                return get_file_path('placeholder.png');
             }
-            //dd($orig_image);
-            list($width_orig, $height_orig) = getimagesize($orig_image);
+            if (!is_file($orig_image)) {
+              return get_file_path('placeholder.png');
+            }
+            //
+            try{
+                list($width_orig, $height_orig) = getimagesize($orig_image);
+            } catch (\Exception $e) {
+                return get_file_path('placeholder.png');
+            }
             if ($width_orig != $w || $height_orig != $h) {
-                $image = Image::make($orig_image)
-                    ->resize(
+                try{
+                    $img = Image::make($orig_image);
+                }catch (\Exception $e) {
+                    return get_file_path('placeholder.png');
+                }
+
+
+                if ($img->width() > $w) {
+                    $img->resize($w, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+                }
+                if ($img->height() > $h) {
+                    $img->resize(null, $h, function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+                }
+                    /*->resize(
                         $w,
                         $h,
                         function (Constraint $constraint) {
@@ -117,9 +142,10 @@ class GetFunction
                             $constraint->upsize();
                         }
                     )
-                    ->encode($extension, 95);
+                    ->encode($extension, 95);*/
+                $img->encode($extension,95)->resizeCanvas($w, $h, 'center', false, '#ffffff');
                 //->save(platformSlashes(public_path($new_image)));
-                Storage::disk(config('voyager.storage.disk'))->put($new_image, (string)$image, 'public');
+                Storage::disk(config('voyager.storage.disk'))->put($new_image, (string)$img, 'public');
 
                 return $new_image;
             } else {

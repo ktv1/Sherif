@@ -15,6 +15,7 @@
         @can('delete',app($dataType->model_name))
             @include('voyager::partials.bulk-delete')
         @endcan
+        <a href="{{route('updateProductCount')}}" class="btn btn-success btn-update"><i class="voyager-plus"></i> <span>Обновить количество товаров</span> </a>
         @can('edit',app($dataType->model_name))
         @if(isset($dataType->order_column) && isset($dataType->order_display_column))
             <a href="{{ route('voyager.'.$dataType->slug.'.order') }}" class="btn btn-primary">
@@ -23,6 +24,8 @@
         @endif
         @endcan
         @include('voyager::multilingual.language-selector')
+
+
     </div>
 @stop
 
@@ -66,6 +69,7 @@
                                             </th>
                                         @endcan
                                         <th>Название</th>
+                                            <th>Количество товаров</th>
                                         <th class="actions text-right">Действие<!--{{ __('voyager::generic.actions') }}--></th>
                                     </tr>
                                 </thead>
@@ -77,7 +81,14 @@
                                                 <input type="checkbox" name="row_id" id="checkbox_{{ $data->getKey() }}" value="{{ $data->getKey() }}">
                                             </td>
                                         @endcan
-                                            <td class='some' id='{{$data->id}}' style="cursor: pointer;">{{$data->name}}</td>
+                                            <td class='some' id='{{$data->id}}' style="cursor: pointer;">
+                                                {{$data->name}}
+
+                                            </td>
+                                            <td>
+                                                <span style="">{{$data->product_count}}</span>
+                                            </td>
+
                                             <td class="no-sort no-click" id="bread-actions" style="display: flex; flex-direction: row-reverse;">
                                                 @foreach(Voyager::actions() as $action)
                                                     @include('voyager::bread.partials.actions', ['action' => $action])

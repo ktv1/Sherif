@@ -36,25 +36,28 @@
         <!--SHERIF catalog-->
         <div class="sherif-catalog">
             <ul class="sherif-breadcrumb">
+
                 <li><a href="{{route('index')}}">Главная</a></li>
-                <li><a href="#">{{$CurrentCategory->name}}</a></li>
-                <li><span>Вы здесь <i class="fas fa-arrow-right"></i></span>{{$CurrentSubCategory->name}}</li>
+                @if($CurrentSubCategory)
+                    <li><a href="{{route('slug',['slug' => $CurrentSubCategory->slug])}}">{{$CurrentSubCategory->name}}</a></li>
+                @endif
+                <li><span>Вы здесь <i class="fas fa-arrow-right"></i></span>{{$CurrentCategory->name}}</li>
             </ul>
 
             <!-- subcategories -->
             <div class="sherif_home_main-box_section">
                 @foreach($datacategories as $subcatalog)
                     <div class="sherif_home_main-box_section_itm">
-                        <a href="{{route('subCatalog', ['slug'=>$CurrentCategory->slug, 'subslug'=>$subcatalog->slug])}}">
+                        <a href="{{route('slug', ['slug'=>$CurrentCategory->slug . '/' . $subcatalog->slug])}}">
                             <img class="sherif-section_itm-img" src="{{asset('storage/'. $subcatalog->image)}}" alt="">
+                                <!--<img class="sherif-section_itm-img" src="/storage/{{get_download_image_cache($subcatalog->image,140,200)}}" alt="">-->
                             <p class="section-title">
-                                <span class="category-link">{{$subcatalog->name}}<span class="section-number"> (7)</span></span>
+                                <span class="category-link">{{$subcatalog->name}}<span class="section-number"> ({{$subcatalog->product_count}})</span></span>
                             </p>
                         </a>
                     </div>
                 @endforeach
             </div>
-
 
 
             <div class="sherif_row-btn tab">
@@ -401,7 +404,6 @@
             </div>
                         
                 <div class="sherif_catalog_content">
-
                     @foreach($data as $product)
                         <div class="sherif-product">
                             <div class="sherif-product_content">
@@ -414,9 +416,9 @@
                                         $img_cropped = explode('.', $product->mainimage)
                                     ?>
                                         <img class="sherif-product_content_img" src="/storage/{{get_download_image_cache($product->mainimage,140,200)}}" alt="">
-                                    <!--<img class="sherif-product_content_img" src="{{asset('storage/'. $img_cropped[0] . '-cropped.' . $img_cropped[1])}}" alt="">-->
+                                    <!--<img class="sherif-product_content_img" src="{{--asset('storage/'. $img_cropped[0] . '-cropped.' . $img_cropped[1])--}}" alt="">-->
                                 </div>
-                                <a href="{{route('product', ['slug'=>$CurrentCategory->slug, 'subslug'=>$CurrentSubCategory->slug, 'product'=>$product->slug])}}" class="sherif-product_content_link">{{$product->name}}</a><br />
+                                <a href="{{route('slug', [/*'slug'=>$CurrentCategory->slug, 'subslug'=>$CurrentSubCategory->slug, */'slug'=>$product->slug])}}" class="sherif-product_content_link">{{$product->name}}</a><br />
 
                                 <!-- <span class="sherif-product_content_prev-price">Цена: <span class="price">870.00 грн</span></span><br /> -->
                                 <span class="sherif-product_content_current-price">Цена: <span class="price">{{$product->price_final}} грн</span></span><br />
@@ -439,20 +441,8 @@
                             @if($productCharacteristic)
                                 <div class="hiden">
                                     @foreach($productCharacteristic as $value)
-                                        @if (($isadm === 0) && ($value['gr_id'] === 11))
-                                            @php continue @endphp
-                                        @endif
-                                        @if (($isadm != 0) && ($value['gr_id'] === 11))
-                                            <p><span style="color: red;">*</span>{{$value['char_name']}}: <span>{{$value['char_value']}}</span></p>
-                                        @else
                                             <p>{{$value['char_name']}}: <span>{{$value['char_value']}}</span></p>
-
-                                        @endif
-
                                     @endforeach
-                                        @if (($isadm != 0)))
-                                            <p><span  style="color: red; font-size: 8px;">* Только для служебных айпи!!!</span></p>
-                                        @endif
                                 </div>
                             @endif
                         </div>

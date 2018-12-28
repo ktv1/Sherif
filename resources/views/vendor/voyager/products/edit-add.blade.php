@@ -1358,7 +1358,55 @@
                 }
             })(window.jQuery);
 
+        ///////////////// final_price
+        // keyup
+        $('[name="UAH"]').on('keyup', function(event) {
 
+            var currency_val = $(this).val();
+            var currency_final = $('[name="currency_final"] option:selected').val();
+            var profitability = $('input[name="profitability"]').val();
+            $.ajax({
+                dataType: 'json',
+                url:'{{ route("updateFinalPrice") }}',
+                method:"POST",
+                data: {currency_val: currency_val, currency_final:currency_final, profitability:profitability, _token: $('input[name="_token"]').val()},
+                success: function (data) {
+                    $('input[name="price_final"]').val(data.price_final);
+                }
+            });
+        });
+        /*$('[name="USD"]').on('keyup', function(event) {
+
+            var currency_val = $(this).val();
+            var currency_final = $('[name="currency_final"] option:selected').val();
+            var profitability = $('input[name="profitability"]').val();
+            $.ajax({
+                dataType: 'json',
+                url:'{{ route("updateFinalPrice") }}',
+                method:"POST",
+                data: {currency_val: currency_val, currency_final:currency_final, profitability:profitability, _token: $('input[name="_token"]').val()},
+                success: function (data) {
+                    $('input[name="price_final"]').val(data.price_final);
+                }
+            });
+        });*/
+
+        $('select[name="currency_final"]').on('change',function(){
+            var name_curr = $('select[name="currency_final"] option:selected').text();
+            var currency_val = $('input[name="'+ name_curr +'"]').val();
+            console.log(currency_val);
+            var currency_final = $('[name="currency_final"] option:selected').val();
+            var profitability = $('input[name="profitability"]').val();
+            $.ajax({
+                dataType: 'json',
+                url:'{{ route("updateFinalPrice") }}',
+                method:"POST",
+                data: {currency_val: currency_val, currency_final:currency_final, profitability:profitability, _token: $('input[name="_token"]').val()},
+                success: function (data) {
+                    $('input[name="price_final"]').val(data.price_final);
+                }
+            });
+        });
 
     </script>
 

@@ -66,7 +66,7 @@
                                 {{$item['email']}}
                             </td>
                             <td class="text-inline">
-                                <a href="{{url($item['product']['URL'])}}" target="_blank">{{$item['product']['name']}}</a>
+                                <a href="{{route('productNoURL',[$item['product']['id']])}}" target="_blank">{{$item['product']['name']}}</a>
                             </td>
                             <td>
                                 {{str_limit($item['review'], $limit = 100, $end = '...')}}

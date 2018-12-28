@@ -59,9 +59,14 @@ Route::group(['prefix' => 'admin'], function () {
 
     // Update currency rate
     Route::get('/currency_update', 'Voyager\CurrenciesController@currencyUpdate');
+
+    //update product final_price
+    Route::post('/updateFinalPrice','Voyager\ProductsController@updateFinalPrice')->name('updateFinalPrice');;
     // Update prices
     Route::get('/prices_update', 'Voyager\CurrenciesController@pricesUpdate');
 
+    /// update product count in categories
+    Route::get('/updateProductCount', 'Voyager\CategoriesController@updateProductsCount')->name('updateProductCount');
     //expand categories as tree
     Route::post('treeajax', 'Voyager\CategoriesController@showsecond');
 
@@ -135,11 +140,11 @@ Route::post('/account/saveuserpassword','Account\AccountController@storePassword
 Route::get('search/autocomplete', 'SearchController@autocomplete');
 
 
-
+Route::get('/{slug}','ClientsController\CatalogController@getSlugCPU')->where('slug', '([A-z\d-\/_.]+)?')->name('slug');
 // Ecommerce Routes
-Route::get('/{slug}', 'ClientsController\CatalogController@getSlug')->name('catalog');
+/*Route::get('/{slug}', 'ClientsController\CatalogController@getSlug')->name('catalog');
 Route::get('/{slug}/{subslug}', 'ClientsController\CatalogController@getSlug')->name('subCatalog');
-Route::get('/{slug}/{subslug}/{product}', 'ClientsController\CatalogController@getSlug')->name('product');;
+Route::get('/{slug}/{subslug}/{product}', 'ClientsController\CatalogController@getSlug')->name('product');;*/
 
 
 

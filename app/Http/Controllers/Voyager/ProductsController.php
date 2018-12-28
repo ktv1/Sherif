@@ -262,7 +262,7 @@ class ProductsController extends VoyagerBaseController
 
         $characteristics_list = DB::table('products_characteristics_pivot')->where('product_id', $id)->pluck('characteristic_id')->toArray();//list of all characteristics of the product
         //dd($characteristics_list);
-        $req_char = DB::table('characteristics')->where('group_id', 11)->pluck('id')->toArray();
+        /*$req_char = DB::table('characteristics')->where('group_id', 11)->pluck('id')->toArray();
         foreach ($req_char as $rc) {
             if (!in_array($rc,$characteristics_list)) {
                 array_push($characteristics_list, $rc);
@@ -270,7 +270,7 @@ class ProductsController extends VoyagerBaseController
             if(!in_array($rc,$characteristics_id)) {
                 array_push($characteristics_id, $rc);
             }
-        }
+        }*/
 
         $characteristics_list = array_unique($characteristics_list, SORT_NUMERIC );//list of characteristics of the product without duplicating
         $characteristics_id = array_unique($characteristics_id, SORT_NUMERIC );
@@ -1030,6 +1030,25 @@ class ProductsController extends VoyagerBaseController
             $i = $model->findOrFail($item->id);
             $i->$column = ($key + 1);
             $i->save();
+        }
+    }
+
+    public function updateFinalPrice(Request $request)
+    {
+        if ($request->get('currency_val')) {
+            $currency_final = $request->get('currency_final');
+            $currency_val = $request->get('currency_val');
+            $profitability = $request->get('profitability');
+
+            $currency = Currency::where('id', '=', $currency_final)->first(); //retrieve currency object
+
+            /*products prices*/
+            $price_final = ($currency_val * ($profitability / 100)) * $currency->rate;
+
+            return response()->json(
+                ['price_final' => roundFinalPrice($price_final),
+                'message' => 'Цена оновлена'],200
+            );
         }
     }
 }

@@ -90,10 +90,9 @@ class Product extends Model
                 $pc[$value->characteristic_id] = $value;
             }
         }
-
         $str = array();
         foreach ($pc as $key => $item) {
-            if (count($item) === 1) {
+            if (!is_array($item)) {
                 $str[$key]['char_name'] = $item->name;
                 $st = '';
                 if ($item->type === 1) {
@@ -105,17 +104,21 @@ class Product extends Model
                 }
                 $str[$key]['char_value'] = $st;
                 $str[$key]['gr_id'] = $item->group_id;
-            } elseif (count($item) > 1) {
+            } elseif (is_array($item) && (count($item) > 1)) {
 
                 $st = '';
                 $productCharacteristicsManyOPt = ProductCharacteristicPivot
                     ::join('characteristic_options as co','co.id','products_characteristics_pivot.option_id')
                     ->join('characteristics as c','c.id','products_characteristics_pivot.characteristic_id')
+                    ->selectRAW('c.name, GROUP_CONCAT(co.value, \' \')')
                     ->where([
                         'product_id' => $product_id,
                         'characteristic_id' => $key
-                    ])->get();
+                    ])
+
+                    ->get();
                 $numItems  = count($productCharacteristicsManyOPt);
+                //dd($productCharacteristicsManyOPt);
                 $i = 1;
                 foreach ($productCharacteristicsManyOPt as $k => $value){
 
@@ -157,11 +160,12 @@ class Product extends Model
 
     public function reviews()
     {
-        return $this->hasMany('App\ProductReview');
+        return $this->hasMany('App\ProductReview','pid');
     }
 
     public function vendor()
     {
         return $this->belongsTo('App\Vendor','manufacturer');
     }
+
 }

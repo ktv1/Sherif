@@ -19,9 +19,100 @@ use Illuminate\Support\Facades\Cache;
 use App\Category;
 use App\Product;
 use Illuminate\Support\Facades\DB;
+use Response;
 
 class CatalogController extends Controller
 {
+
+    public function getSlugCPU($slug)
+    {
+
+        $parts = explode('/',$slug);
+
+        $endslug = end($parts);
+
+        array_pop($parts);
+
+        // catalog
+
+        $cat = Category::where('slug',$endslug)->first();
+
+        if ($cat) {
+            $categorypath = Product::i()->GetCategoriesPath($cat->parent_id);
+            if (count($parts) == count($categorypath)) {
+                $i = 0;
+                foreach ($categorypath as $k => $path) {
+                    if($path !== $parts[$i])
+                    {
+                        return abort('404');
+                    }
+                    $i++;
+                }
+            }
+            $firstslug = collect($parts)->first();
+            return $this->responseCategory($cat->id,$firstslug,$endslug);
+        }
+
+        $product = Product::where('slug',$endslug)->first();
+        if($product)
+        {
+            return ProductController::i()->getProduct('','',$slug);
+        }
+
+    }
+
+    public function responseCategory($cat_id,$firstslug ='',$endslug)
+    {
+        $firstCategory = Category::where('slug',$firstslug)->first();
+        $currentCategory = Category::where('id',$cat_id)->first();
+        $childcategories = Category::where('parent_id',$cat_id)->get();
+        $products = CategoryPivot::join('products as p','p.id','product_categories_pivot.product_id')
+            ->where('category_id',$cat_id);
+
+        if((Request()->get('sortby') == 'name') && (Request()->get('orderby') == 'ASC')) {
+            $productsCategory = $products->orderBy('name', 'ASC');
+        } elseif((Request()->get('sortby') == 'name') && (Request()->get('orderby') == 'DESC')) {
+            $productsCategory = $products->orderBy('name', 'DESC');
+        }elseif((Request()->get('sortby') == 'name') && (Request()->get('orderby') == null)) {
+            $productsCategory = $products->orderBy('name', 'ASC');
+            //////////////////////
+        } elseif((Request()->get('sortby') == 'default') && (Request()->get('orderby') == 'ASC')) {
+            $productsCategory = $products->orderBy('ordering', 'ASC');
+        } elseif((Request()->get('sortby') == 'default') && (Request()->get('orderby') == 'DESC')) {
+            $productsCategory = $products->orderBy('ordering', 'DESC');
+        } elseif((Request()->get('sortby') == 'default') && (Request()->get('orderby') == null)) {
+            $productsCategory = $products->orderBy('ordering', 'ASC');
+            ///////////////
+        } elseif ((Request()->get('sortby') == 'price') && (Request()->get('orderby') == null)){
+            $productsCategory = $products->orderBy('price_final', 'ASC');
+        } elseif((Request()->get('sortby') == 'price') && (Request()->get('orderby') == 'ASC')) {
+            $productsCategory = $products->orderBy('price_final', 'DESC');
+        } elseif((Request()->get('sortby') == 'price') && (Request()->get('orderby') == 'DESC')) {
+            $productsCategory = $products->orderBy('price_final', 'DESC');
+        };
+        $productsCategory = $products->get();
+
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $col = new Collection($productsCategory);
+        $perPage = 15;
+        $currentPageSearchResults = $col->slice(($currentPage - 1) * $perPage, $perPage)->all();
+
+        $posts_object = new LengthAwarePaginator($currentPageSearchResults, count($col), $perPage);
+
+
+        $posts_object->setPath(route('slug', [$endslug]));
+        return $this->viewMaker('Clients-page.subcatalog')->with([
+            'header' => $this->header(),
+            'left_side_bar' => $this->left_sidebar($firstslug),
+            'data' => $posts_object,
+            'datacategories' => $childcategories,
+            'CurrentCategory' => $currentCategory,
+            'CurrentSubCategory' => $firstCategory,
+        ]);
+
+
+    }
+
 
     public function getSlug($slug,$subslug = null, $product = null)
     {

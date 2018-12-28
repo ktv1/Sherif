@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Voyager;
 use App\Product;
 use App\Category;
 
+use App\ProductCategoriesPivot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use TCG\Voyager\Database\Schema\SchemaManager;
@@ -626,6 +627,7 @@ class CategoriesController extends VoyagerBaseController
                 <input type="checkbox" name="row_id" id="checkbox_'.$next_category->getKey().'" value="'.$next_category->getKey().'">
             </td>
             <td class="some" id="'.$next_category->id.'" style="cursor: pointer;">'.str_repeat($tabs, $next_category->depth).''.$next_category->name.'</td>
+            <td><span style="">' . $next_category->product_count. '</span></td>
             <td class="no-sort no-click" id="bread-actions" style="display: flex; flex-direction: row-reverse;">';
             foreach(Voyager::actions() as $action) {
                 $action = new $action($dataType, $next_category);
@@ -641,5 +643,75 @@ class CategoriesController extends VoyagerBaseController
     
         echo $output;
 
+    }
+
+    public function updateProductsCount()
+    {
+        $cat = Category::all();
+        $categories = $this->GetCategoriesPath($cat,0);
+        return redirect()->route("voyager.categories.index")
+            ->with([
+                'message'    => 'Количество товаров в категориях успешно обновлено',
+                'alert-type' => 'success',
+            ]);
+
+    }
+
+    public function GetCategoriesPath($categories,$parent_id = 0,$cp = 0){
+        $output = array();
+
+        foreach ($categories as $result) {
+            if($parent_id == $result->parent_id) {
+                $pc = $this->GetCategoriesPath($categories,$result->id);
+                /*if(!empty($pc)) {
+
+                    $output[$result->id]['child'] = $pc;
+                    $output[$result->id]['name'] = $result->name;
+                    $output[$result->id]['prcount'] = $cp;
+                    $output[$result->id]['catcount'] = $this->getTotalProducts($result->id)->first()->total;
+                } else {
+                    $output[$result->id]['name'] = $result->name;
+                    $output[$result->id]['child'] = [];
+                    $output[$result->id]['prcount'] = ProductCategoriesPivot::where('category_id',$result->id)->count();
+
+                    $output[$result->id]['catcount'] = $this->getTotalProducts($result->id)->first()->total;
+
+                }*/
+                Category::where('id',$result->id)->update([
+                    'product_count' => $this->getTotalProducts($result->id)->first()->total
+                ]);
+            }
+        }
+
+        return $output;
+    }
+
+
+    private function getChildCategory($id)
+    {
+        return Category::where('parent_id', $id)->get();
+    }
+    private function getTotalProducts($cat_id)
+    {
+        $result = Product::active()
+            ->leftjoin('product_categories_pivot as pcp','pcp.product_id','products.id')
+            ->selectRaw('COUNT(DISTINCT products.id) AS total')
+            ->where('pcp.category_id',$cat_id);
+        $category_child = $this->getChildCategory($cat_id);
+        $catarray = [];
+
+        foreach ($category_child as $cat) {
+            $catarray[] = $cat->id;
+        }
+        if (count($catarray)>0)
+        {
+            $result->OrwhereIn('pcp.category_id', $catarray);
+        }
+        return $result;
+
+    }
+    private function getParentCategory($parent_id)
+    {
+        return Category::where('id', $parent_id)->get();
     }
 }

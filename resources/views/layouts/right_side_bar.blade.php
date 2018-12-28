@@ -50,9 +50,9 @@
                                         @php
                                             $categorypath = \App\Product::i()->GetCategoriesPath($product->categories[0]->id);
                                         @endphp
-                                        <h5><a href="{{route('product', ['slug'=>array_pop($categorypath), 'subslug'=>array_shift($categorypath), 'product' => $product->slug])}}">{{$product->name}}</a></h5>
+                                      <h5><a href="{{--route('product', ['slug'=>array_pop($categorypath), 'subslug'=>array_shift($categorypath), 'product' => $product->slug])--}}">{{$product->name}}</a></h5>
                                     @else
-                                        <h5><a href="{{route('productNoURL',['slug'=>$product->id])}}">{{$product->name}}</a></h5>
+                                        <h5><a href="{{--route('productNoURL',['slug'=>$product->id])--}}">{{$product->name}}</a></h5>
                                     @endif
                                         <p>Артикул: {{$product->code}}</p>
                                 </div>
