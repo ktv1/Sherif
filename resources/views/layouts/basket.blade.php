@@ -94,6 +94,10 @@
             <thead>
             <tr>
                 <th>Название</th>
+                @if(Auth()->user()->role_id == '1')
+                    <th>№ ящика</th>
+                    <th>№ склада</th>
+                @endif
                 <th>Кол-во</th>
                 <th>Цена</th>
                 <th>Всего</th>
@@ -102,20 +106,23 @@
 
             <tbody>
 
-            <?php use Gloudemans\Shoppingcart\Facades\Cart;?>
-            <?php foreach(Cart::content() as $row) :?>
+            @foreach(Gloudemans\Shoppingcart\Facades\Cart::content() as $row)
 
             <tr>
                 <td>
-                    <p><strong><?php echo $row->name; ?></strong></p>
-                    <p><?php echo ($row->options->has('size') ? $row->options->size : ''); ?></p>
+                    <p><strong>{{$row->name}}</strong></p>
                 </td>
-                <td><?php echo $row->qty; ?></td>
-                <td><?php echo $row->price; ?> грн.</td>
-                <td><?php echo $row->total; ?> грн.</td>
+                @if(Auth()->user()->role_id == '1')
+                    <td>{{$row->box}}</td>
+                    <td>{{$row->storage}}</td>
+                @endif
+
+                <td>{{$row->qty}}</td>
+                <td>{{$row->price}} грн.</td>
+                <td>{{$row->total}} грн.</td>
             </tr>
 
-            <?php endforeach;?>
+            @endforeach
 
             </tbody>
 

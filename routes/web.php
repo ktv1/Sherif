@@ -12,6 +12,17 @@
 */
 
 
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/clear', function() {
+    Artisan::call('cache:clear');
+    Artisan::call('config:cache');
+    Artisan::call('view:clear');
+    Artisan::call('route:clear');
+    Artisan::call('backup:clean');
+    return "Кэш очищен.";
+});
+
 //Cart
 Route::get('/add-cart-product/{id}', 'ClientsController\ProductController@addCartProduct')->name('cart');
 Route::get('/remove-cart-product/{rowId}', 'ClientsController\ProductController@removeCartProduct')->name('cart.remove');

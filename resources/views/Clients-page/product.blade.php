@@ -407,7 +407,7 @@
                                                 <span class="page">218 х 172 х 100 мм</span>
                                             </li>
                                             <li>
-                                                <span class="page">1.2 кг/span>
+                                                <span class="page">1.2 кг/span></span>
                                             </li>
                                             <li>
                                                 <span class="page">Черный</span>

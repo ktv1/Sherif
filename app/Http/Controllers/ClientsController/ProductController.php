@@ -34,7 +34,12 @@ class ProductController extends Controller
 	public function addCartProduct($id)
 	{
 		$model = Product::find($id);
-		Cart::add( $id,  $model->name, 1, $model->price_final, ['image' => $model->mainimage]);
+		Cart::add( $id,  $model->name, 1, $model->price_final, [
+			'image' => $model->mainimage,
+			'box' => $model->box, //номер ящика
+			'storage' => $model->storage, //номер склада
+			'category' => $model->maincategory,
+		]);
 		//return response()->json(['model'=> back()->getTargetUrl()]);
 		return redirect()->back();
 	}

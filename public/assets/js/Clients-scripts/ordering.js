@@ -18,7 +18,7 @@ $(document).ready(function(){
 	            }
 	        });
         }else{
-        	alert("Корзина Пуста!")
+        	alert("Корзина Пуста!123")
         }
 		return false;
 	});
