@@ -16,16 +16,30 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
+use LisDev\Delivery\NovaPoshtaApi2;
 
 
 class OrderingController extends Controller
 {
     public function getOrdering(Request $request){
 
+		$np = new NovaPoshtaApi2('4eb7454f3709369224efc62cee2e6b9b');
+		$array_cities = $np->getCities()['data'];
+		$array_regions = $np->getAreas()['data'];
+		$cities = array();
+		$regions = array();
+		foreach ($array_cities as $row)
+			array_push($cities, $row['Description']);
+
+		foreach ($array_regions as $row)
+			array_push($regions, $row['Description']);
+
     	$array = $this->getSession();
 
     	return $this->viewMaker('Clients-page.ordering')->with([
             'left_side_bar' => $this->left_sidebar("None"),
+			'cities' =>	$cities,
+			'regions' => $regions,
             'header' => $this->header(),
             'data' => $this->returnData(['data' => $array['data'], 'type' => $array['type']]),
         ]);

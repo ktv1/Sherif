@@ -66,14 +66,10 @@
                         <input type="email" id="sherif_email" name="email"><br>
                         <p><b>Адрес</b></p>
                         <label for="sherif_region"><em>*</em>Регион</label>
-                        <select id="sherif_region" name="region" required="">
-                            <option value="novayapochta" value="0">-- Выберите --</option>
-                            <option value="novayapochta" value="1">--  --</option>
-                        </select><br>
+                        {{Form::select('region', $regions)}}
+                        <br>
                         <label for="sherif_town" ><em>*</em>Населенный пункт</label>
-                        <select id="sherif_town" name="town" required="">
-                            <option value="novayapochta">-- Не выбран регион --</option>
-                        </select><br>
+                        {{Form::select('town', $cities)}}<br>
                         <label for="sherif_places_mail" required=""><em>*</em>Отделение новой почты</label>
                         <select id="sherif_places_mail" name="mail_place" required="">
                             <option value="novayapochta">-- Не выбран регион --</option>
