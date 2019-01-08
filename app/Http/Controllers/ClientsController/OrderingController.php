@@ -29,10 +29,16 @@ class OrderingController extends Controller
 		$cities = array();
 		$regions = array();
 		foreach ($array_cities as $row)
+		{
+			//$arr = (array)[$row['Ref'] => $row['Description']];
 			array_push($cities, $row['Description']);
+		}
 
 		foreach ($array_regions as $row)
+		{
+			//$arr = (array)[$row['Ref'] => $row['Description']];
 			array_push($regions, $row['Description']);
+		}
 
     	$array = $this->getSession();
 
@@ -40,10 +46,50 @@ class OrderingController extends Controller
             'left_side_bar' => $this->left_sidebar("None"),
 			'cities' =>	$cities,
 			'regions' => $regions,
+			'departments' => array(),
             'header' => $this->header(),
             'data' => $this->returnData(['data' => $array['data'], 'type' => $array['type']]),
         ]);
     }
+
+	public function getCities(Request $request){
+
+		$np = new NovaPoshtaApi2('4eb7454f3709369224efc62cee2e6b9b');
+		$array_cities = $np->getCities()['data'];
+		$cities = array();
+
+		foreach ($array_cities as $row)
+		{
+			$arr = [$row['Ref'] => $row['Description']];
+			array_push($cities, $arr);
+		}
+
+		return response()->json(array('cities'=> $cities), 200);
+
+	}
+
+	public function getDepartments(Request $request){
+
+		$np = new NovaPoshtaApi2('4eb7454f3709369224efc62cee2e6b9b');
+		$array_cities = $np->getCities()['data'];
+		$array_ref_city = array();
+		foreach ($array_cities as $row)
+			array_push($array_ref_city, $row['Ref']);
+		$array_departments = $np->getWarehouses($array_ref_city[(int)$request['id']])['data'];
+
+
+		/*if ($request['id'])
+		{
+			foreach ($array_departments as $row)
+			{
+				//$arr = [$row['Ref'] => $row['Description']];
+				array_push($departments, $row['Description']);
+			}
+		}*/
+
+		return response()->json(array('departments'=> $array_departments, 200));
+
+	}
 
     public function orderBuy(Request $request){
 

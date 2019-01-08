@@ -94,7 +94,7 @@
             <thead>
             <tr>
                 <th>Название</th>
-                @if(Auth()->user()->role_id == '1')
+                @if(Auth::check() && Auth()->user()->role_id == '1')
                     <th>№ ящика</th>
                     <th>№ склада</th>
                 @endif
@@ -112,7 +112,7 @@
                 <td>
                     <p><strong>{{$row->name}}</strong></p>
                 </td>
-                @if(Auth()->user()->role_id == '1')
+                @if(Auth::check() && Auth()->user()->role_id == '1')
                     <td>{{$row->box}}</td>
                     <td>{{$row->storage}}</td>
                 @endif

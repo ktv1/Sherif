@@ -58,7 +58,11 @@ Route::delete('basket/delete/{id}', 'ClientsController\BasketController@deleteIt
 
 /*Ordering*/
 Route::get('/ordering', 'ClientsController\OrderingController@getOrdering')->name('ordering');
+
 Route::post('/ordering/buy', 'ClientsController\OrderingController@orderBuy');
+
+Route::get('/ordering/cities', 'ClientsController\OrderingController@getCities');
+Route::get('/ordering/departments', 'ClientsController\OrderingController@getDepartments');
 
 Route::get('/contacts', 'ClientsController\IndexController@getContacts')->name('contacts');
 Route::get('/blog', 'ClientsController\IndexController@getBlog')->name('blog');
