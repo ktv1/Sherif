@@ -33,6 +33,7 @@
 @section("main_column")
     <div class="sherif_center_column">
     @include("layouts.chat")
+    @include("layouts.quick_order")
     <!--SHERIF catalog-->
         <div class="sherif-catalog">
             <ul class="sherif-breadcrumb">
@@ -389,7 +390,7 @@
                             <span class="sherif-product_content_current-price">Цена: <span class="price">{{$product->price_final}} грн</span></span><br />
                         </div>
                         <div class="sherif-product-buttons notoneclick">
-                            <a class="sherif-btn btn-sherif-product btn-in-basket" product-id="{{$product->id}}"><span></span><i class="fas fa-shopping-cart"></i><strong>В корзину</strong></a>
+                            <a class="sherif-btn btn-sherif-product btn-in-basket" id_product="{{$product->id}}" href="{{route('cart', ['id'=>$product->id])}}"><span></span><i class="fas fa-shopping-cart"></i><strong>В корзину</strong></a>
                             <div class="sherif_row">
                                 <a href="#" class="btn-sherif-product"><span></span><i class="fas fa-balance-scale fa-lg"></i><strong></strong></a>
                                 <a href="#" class="btn-sherif-product"><span></span><i class="fas fa-heart fa-lg"></i><strong></strong></a>
@@ -397,7 +398,7 @@
                             </div>
                         </div>
                         <div class="sherif-product-buttons">
-                            <a href="#" class="sherif-product-buttons_click-btn"><span></span><i class="far fa-hand-point-up fa-2x"></i><strong>купить в один клик</strong></a>
+                            <a href="#quick_order" id_product="{{$product->id}}" data-target="#quick_order" data-toggle="modal" class="sherif-product-buttons_click-btn"><span></span><i class="far fa-hand-point-up fa-2x"></i><strong>купить в один клик</strong></a>
                         </div>
                         <div class="hiden">
                             <p>Максимальная кратность: <span>8-10 х</span></p>
@@ -1476,3 +1477,35 @@
         </div>
     </div>
 @endsection
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+
+        //$("#sherif_telephon").mask("+380(99) 99-99-999");
+
+        $("#quickOrder").submit(function(){
+            var th = $(this);
+            var product_id = $(this).attr('id_product');
+                $.ajax({
+                    url: 'ordering/buy',
+                    data: {th:th.serialize, product_id:product_id},
+                    type: 'post',
+                    headers: { 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content') },
+                    success: function( data, textStatus, jQxhr ){
+                        console.log(data);
+                        alert("Заказ выполнен! Ваш заказ обслуживает менеджер " + data['name']
+                                + ' ' + data['phone1'] + ' ' + data['phone2']);
+                    },
+                    error: function(data){
+                        $('html').append( data.responseText );
+                    }
+                });
+            }else{
+                alert("Корзина Пуста!")
+            }
+            return false;
+        });
+    });
+</script>

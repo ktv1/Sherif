@@ -17,11 +17,33 @@
 //Route::get('/setProviders', 'ClientsController\CatalogController@setProviders')->name('setProviders');
 /* end import */
 
-Route::get('/search', 'SearchController@search')->name('search');
+use Illuminate\Support\Facades\Artisan;
 
+Route::get('/clear', function() {
+    Artisan::call('cache:clear');
+    Artisan::call('config:cache');
+    Artisan::call('view:clear');
+    Artisan::call('route:clear');
+    Artisan::call('backup:clean');
+    return "Кэш очищен.";
+});
+
+//Cart
+Route::get('/add-cart-product/{id}', 'ClientsController\ProductController@addCartProduct')->name('cart');
+Route::get('/remove-cart-product/{rowId}', 'ClientsController\ProductController@removeCartProduct')->name('cart.remove');
+Route::get('/up-cart-product/{rowId}/{qty}', 'ClientsController\ProductController@upCartProduct')->name('cart.up');
+Route::get('/down-cart-product/{rowId}/{qty}', 'ClientsController\ProductController@downCartProduct')->name('cart.down');
+
+//Order+Call
+Route::post('/quick_order', 'OrderingController@quickOrder')->name('quick_order');
+Route::post('/quick_call', 'OrderingController@quickCall')->name('quick_call');
+
+//Search
+Route::get('/search', 'SearchController@search')->name('search');
 Route::get('/autocomplete', 'AutocompleteController@index');
 Route::post('/autocomplete/fetch', 'AutocompleteController@fetch')->name('autocomplete.fetch');
 
+/*Main*/
 Route::get('/', 'ClientsController\IndexController@getIndex')->name('index');
 
 /*Catalog Routes*/
@@ -55,7 +77,6 @@ Route::post('/review/add', 'ClientsController\ProductController@addReview');
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
-
 
     // Update currency rate
     Route::get('/currency_update', 'Voyager\CurrenciesController@currencyUpdate');

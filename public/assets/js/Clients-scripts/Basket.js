@@ -1,8 +1,8 @@
-$(document).ready(function(){
+/*$(document).ready(function(){
 	var domain_url = $('link[rel="canonical"]').attr("href");
  	var url = "/basket/";
 
- 	/*basket togglers*/
+ 	//basket togglers
 
 	$('html').on('click', '.product_togglers', function(){
 		var product_id = $(this).attr('id_product'),
@@ -71,7 +71,7 @@ $(document).ready(function(){
 
 	
 
-	/*Amount togglers*/
+	//Amount togglers
 
 	$('.product_amount').on('click', '.product_togglers', function(){
 		var product_id = $(this).attr('id_product'),
@@ -235,6 +235,6 @@ $(document).ready(function(){
     });
 
 	
-});
+});*/
 
 

@@ -92,7 +92,6 @@
                         @endforeach
                     @endif
                 </div>
-
                 <div class="sherif_home_main-product-good_block-info">
                     <div class="sherif_home_main-product-good_block-info-description">
                         <div class="sherif_home_main-product-good_block-info-description-size_block">
@@ -212,7 +211,7 @@
                     </div>
                     <div class="sherif_home_main-product-tabs"> 
                         <ul class="nav nav-tabs">
-                            <li>
+                            <li> 
                                 <a data-toggle="tab" href="#description">Описание</a>
                             </li>
                             <li class="active">
@@ -315,3 +314,4 @@
 @section('compiled_js')
     {"src" : "{{asset('assets/js/Clients-scripts/reviews.js')}}", "async" : false},
 @endsection
+		

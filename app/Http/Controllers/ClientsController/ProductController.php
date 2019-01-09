@@ -12,6 +12,7 @@ use App\ProductLabel;
 use App\ProductStatus as PS;
 use App\ProductReview as PR;
 
+use Gloudemans\Shoppingcart\Facades\Cart;
 use App\Category;
 use App\ProductCategoriesPivot as PCP;
 
@@ -96,6 +97,43 @@ class ProductController extends Controller
     }
 
 
+	public function addCartProduct($id)
+	{
+		$model = Product::find($id);
+		Cart::add( $id,  $model->name, 1, $model->price_final, [
+			'image' => $model->mainimage,
+			'box' => $model->box, //номер ящика
+			'storage' => $model->storage, //номер склада
+			'category' => $model->maincategory,
+		]);
+		//return response()->json(['model'=> back()->getTargetUrl()]);
+		return redirect()->back();
+	}
+
+	public function removeCartProduct($id)
+	{
+		Cart::remove($id);
+		//return response()->json(['id'=>$id]);
+		return redirect()->back();
+	}
+
+	public function upCartProduct($id, $qty)
+	{
+		$qty++;
+		Cart::update($id, $qty);
+		//return response()->json(['id'=>$id]);
+		return redirect()->back();
+	}
+
+	public function downCartProduct($id, $qty)
+	{
+		$qty--;
+		Cart::update($id, $qty);
+		//return response()->json(['id'=>$id]);
+		return redirect()->back();
+	}
+
+
     public function getProductNoURL($id){
     	$product = Product::where('products.id', $id)
             ->with('reviews')
@@ -119,7 +157,7 @@ class ProductController extends Controller
     	}else{
     		$subcategory_id = PCP::where('product_id', $id)->first();
     		if(!empty($subcategory_id)){
-	    		$subcategory = Category::where('id', $subcategory_id->category_id)->first();
+	    		$subcategory = Category::where('id', $subcategory_id)->first();
 	    		if(!empty($subcategory)){
 	    			if($subcategory->parent_id != null || $subcategory->parent_id != 0){
 	    				$category = Category::where('id', $subcategory->parent_id)->first();

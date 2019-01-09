@@ -163,6 +163,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         'Illuminate\Html\HtmlServiceProvider',
+        Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
 
 
 
@@ -239,7 +240,7 @@ return [
         'Image'     => Intervention\Image\Facades\Image::class,
         'Form' => 'Illuminate\Html\FormFacade',
         'Html '=> 'Illuminate\Html\HtmlFacade',
-        //'SphinxSearch' => Scalia\SphinxSearch\SphinxSearchFacade::class,
+        'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class,
 
     ],
 
