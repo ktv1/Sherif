@@ -30,7 +30,7 @@
 @endsection
 
 @section('left_sidebar')
-    {!!$left_side_bar!!}
+    @include('layouts.left_side_bar')
 @endsection
 
 @section("main_column")
@@ -39,12 +39,27 @@
         
         <!-- Product page -->
         <div class="sherif_home_main-product">
+            @php
+                $product_category = ($product->maincategory != 0) ? \App\Category::where('id',$product->maincategory)->first() : \App\Category::where('id',$product->categories()->first()->id)->first();
+                $path = explode('_', $product_category->path);
+                $ularr = [];
+                foreach ($path as $item) {
+                    if($item != 0) {
+                        $ularr[] = array(
+                        'slug' => \App\Category::where('id',$item)->first()->slug,
+                        'name' => \App\Category::where('id',$item)->first()->name,
+                        );
+                    }
+                 }
+            @endphp
                 <div class="sherif_home_main-product-navigation">
                 <a class="goods_main" href="">Главная</a>
                 <p><span>/</span></p>
-                <a class="goods_main" href="">Одежда туристическая</a>
+                    @foreach($ularr as $path)
+                        <a class="goods_main" href="{{route('slug',['slug'=>$path['slug']])}}">{{$path['name']}}</a>
+                    @endforeach
                 <p><span>/</span>  Вы здесь <i class="fas fa-arrow-right"></i></p>
-                <a href="">Куртка зимняя охотника Twill</a>
+                <a href="{{route('slug',['slug'=>$product_category->slug])}}">{{$product_category->name}}</a>
             </div>
             <div class="sherif_home_main-product-title">
                 <h3>{{$product->name}}</h3>
@@ -140,7 +155,7 @@
                         </div>
                             <div class="sherif_home_main-product-good_block-info-description-in_basket">
                                 <div class="sherif_home_main-product-good_block-info-description-in_basket-button">
-                                    <a class="btn-sherif product_in_basket" id_product="{{$product->id}}"><span></span><i class="fas fa-shopping-cart"></i>
+                                    <a class="btn-sherif product_in_basket" id_product="{{$product->id}}" href="{{route('cart', ['id'=>$product->id])}}"><span></span><i class="fas fa-shopping-cart"></i>
                                         <strong>В корзину</strong></a>
                                     </div>
                                     <div class="sherif_home_main-product-good_block-info-description-in_basket-counter">

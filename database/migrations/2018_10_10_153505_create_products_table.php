@@ -26,7 +26,7 @@ class CreateProductsTable extends Migration {
 			$table->integer('profitability')->nullable();
 			$table->string('color', 191)->nullable();
 			$table->string('manufacturer', 191)->nullable();
-			$table->timestamps();
+			//$table->timestamps();
 			$table->string('URL', 191)->nullable();
 			$table->text('description', 65535)->nullable();
 			$table->integer('publication')->nullable();
@@ -81,9 +81,6 @@ class CreateProductsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('products');
-
-
         Schema::table('products', function($table) {
             $table->dropColumn('label_end_date');
             $table->dropColumn('season');
@@ -96,6 +93,7 @@ class CreateProductsTable extends Migration {
             $table->dropColumn('link_to_ishop');
             $table->dropColumn('note_product');
         });
+        Schema::drop('products');
 	}
 
 }

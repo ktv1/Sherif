@@ -34,50 +34,76 @@
                 </div>
             </div> -->
             @foreach($Global_category as $gc)
-                @if($status != "None" && $status == $gc->slug)
-                    <?php  $toggle = "in" ?>
+                @if (isset($CurrentCategory))
+                    @php
+                        $path = explode('_',$CurrentCategory->path);
+                        if (count($path) > 0) {
+                            if (($path[0] == 0)) {
+                                $path_id = $CurrentCategory->id;
+                            } else {
+                                $path_id = $path[0];
+                            }
+                        }
+                    @endphp
+                    @if($status != "None" && $gc->id == $path_id)
+                        <?php  $toggle = "in" ?>
+                    @else
+                        <?php  $toggle = "out" ?>
+                    @endif
                 @else
-                    <?php  $toggle = "out" ?>
+                    <?php $toggle = "out" ?>
+                    <?php $CurrentCategory = new \StdClass(); $CurrentCategory->id = 0; $CurrentCategory->path = ''; ?>
                 @endif
-                
                 <div id="accordion" class="panel-group">
                     <div class="panel">
                         <div class="panel-heading">
                             <h4 class="panel-title">
-                                <a href="{{route('slug', ['slug'=>$gc->slug])}}">{{$gc->name}}</a>
+                                <a href="{{route('slug', ['slug'=>$gc->slug])}}" style="{{($CurrentCategory->id == $gc->id) ? 'font-weight: 600;' : ''}}">{{$gc->name}}</a>
                                 <a href="#catalog_{{$gc->slug}}" data-parent="#accordion" data-toggle="collapse"><span></span><i class="fas fa-sort-down"></i></a>
                                 <span class="sherif_sidebar_catalog-content_amount">({{$gc->product_count}})</span>
                             </h4>
                         </div>
+                        @if($gc->child)
                         <div id="catalog_{{$gc->slug}}" class="panel-collapse collapse {{$toggle}}">
                             <div class="panel-body">
                                 <ul>
-                                    @foreach($Sub_category as $sc)
-                                        @if(($gc->id == $sc->parent_id))
-                                            <li><div class="link_box">
-                                            <a href="{{route('slug', ['slug'=>$gc->slug . '/' . $sc->slug])}}"
-                                               id="edit_profile_user">{{$sc->name}}</a>
-                                            <span class="sherif_sidebar_catalog-content_panel_amount">
-                                                ({{$sc->product_count}})
-                                            </span>
-                                             </div></li>
-                                            @php
-                                                $childcat = \App\Category::where('parent_id',$sc->id)->get();
-                                            @endphp
-                                            @if($childcat)
-                                                @if(Request::segment(1) == $sc->slug)
-                                                    <ul>
-                                                    @foreach($childcat as $ssc)
-                                                        <li a href="{{route('slug',[$gc->slug . '/' . $ssc->slug])}}">{{$ssc->name}}</li>
-                                                    @endforeach
-                                                    </ul>
+                                        @foreach($gc->child as $sc)
+                                            {{--@if(($gc->id == $sc->parent_id))--}}
+                                                <li><div class="link_box">
+                                                <a href="{{route('slug', ['slug'=>$gc->slug . '/' . $sc->slug])}}"
+                                                   style="{{($CurrentCategory->id == $sc->id) ? 'font-weight: 600;' : ''}}"
+                                                   id="edit_profile_user">{{$sc->name}}</a>
+                                                <span class="sherif_sidebar_catalog-content_panel_amount">
+                                                    ({{$sc->product_count}})
+                                                </span>
+                                                 </div></li>
+                                                @php
+                                                    if(isset($path[1])){
+                                                        $p1 = $path[1];
+                                                    }else{
+                                                        $p1 = 0;
+                                                    }
+                                                @endphp
+                                                @if ($p1==$sc->id)
+                                                    @php
+                                                        $childcat = \App\Category::where('parent_id',$sc->id)->get();
+
+                                                    @endphp
+                                                    @if($childcat)
+                                                        <ul>
+                                                        @foreach($childcat as $ssc)
+                                                                <li><a href="{{route('slug',[$gc->slug . '/' . $ssc->slug])}}">{{$ssc->name}}</a></li>
+                                                        @endforeach
+                                                        </ul>
+                                                    @endif
                                                 @endif
-                                            @endif
-                                        @endif
-                                    @endforeach
+                                            {{--@endif--}}
+                                        @endforeach
+
                                 </ul>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
             @endforeach

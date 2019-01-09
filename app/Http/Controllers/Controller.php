@@ -101,7 +101,7 @@ class Controller extends BaseController
             }
         }
         return $left_side_bar = view('layouts.left_side_bar')->with([
-            'Global_category' => $Global_category,
+            //'Global_category' => $Global_category,
             'Sub_category' => $Sub_category,
             'status' => $status
         ])->render();

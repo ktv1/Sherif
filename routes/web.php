@@ -43,6 +43,9 @@ Route::get('/search', 'SearchController@search')->name('search');
 Route::get('/autocomplete', 'AutocompleteController@index');
 Route::post('/autocomplete/fetch', 'AutocompleteController@fetch')->name('autocomplete.fetch');
 
+
+//Search
+Route::get('/{slug}/ajaxfilter', 'ClientsController\Filter@ajaxfilter')->where('slug', '([A-z\d-\/_.]+)?')->name('ajaxfilter');
 /*Main*/
 Route::get('/', 'ClientsController\IndexController@getIndex')->name('index');
 

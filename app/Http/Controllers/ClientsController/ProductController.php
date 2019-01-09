@@ -38,7 +38,12 @@ class ProductController extends Controller
    		$CurrentSubCategory = Category::where('slug', $subslug)->first();
    		//dd(request()->session());
    		$product = Product::where('slug', $product)
-            ->with(['reviews','vendor'])->first();
+            ->with(['reviews','vendor','categories'])->first();
+        if($product->maincategory == 0) {
+            $CurrentCategory = $product->categories()->first();
+        } else {
+            $CurrentCategory = Category::where(id,$product->maincategory)->first();
+        }
          if (($subslug != null) && (!$CurrentSubCategory)) {
              return $this->viewMaker('errors.404')->with(['header' => $this->header(), 'left_side_bar' =>$this->left_sidebar($slug)]);
          }
@@ -83,14 +88,13 @@ class ProductController extends Controller
              ['pid', $product->id],
              ['status', 'approved']
          ])->with('reviewer')->paginate();
-
         return $this->viewMaker('Clients-page.product')->with([
         	'CurrentCategory' => $CurrentCategory,
             'CurrentSubCategory' => $CurrentSubCategory,
             'product' => $product,
             'productCharacteristic' => $productCharacteristic,
             'status' => PS::where('id', $product->status)->first(),
-            'left_side_bar' => $this->left_sidebar("None"),
+            //'left_side_bar' => $this->left_sidebar("None"),
             'header' => $this->header(),
             'reviews' => $reviews
         ]);

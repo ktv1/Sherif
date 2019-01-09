@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Category;
 use App\Product;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Response;
 
 class CatalogController extends Controller
@@ -63,8 +64,13 @@ class CatalogController extends Controller
 
     public function responseCategory($cat_id,$firstslug ='',$endslug)
     {
+        if (Storage::disk(config('voyager.storage.disk'))->exists('categories')) {
+            $filecategory = json_decode(Storage::disk(config('voyager.storage.disk'))->get('categories'));
+            $currentCategory = $filecategory->$cat_id;
+        } else {
+            $currentCategory = Category::where('id',$cat_id)->first();
+        }
         $firstCategory = Category::where('slug',$firstslug)->first();
-        $currentCategory = Category::where('id',$cat_id)->first();
         $childcategories = Category::where('parent_id',$cat_id)->get();
         $products = CategoryPivot::join('products as p','p.id','product_categories_pivot.product_id')
             ->where('category_id',$cat_id);
@@ -101,13 +107,16 @@ class CatalogController extends Controller
 
 
         $posts_object->setPath(route('slug', [$endslug]));
+        $first_id = isset($firstCategory) ? $firstCategory->id : $currentCategory->id;
         return $this->viewMaker('Clients-page.subcatalog')->with([
             'header' => $this->header(),
-            'left_side_bar' => $this->left_sidebar($firstslug),
+            //'left_side_bar' => $this->left_sidebar($firstslug),
             'data' => $posts_object,
+            'status' => $first_id,
             'datacategories' => $childcategories,
             'CurrentCategory' => $currentCategory,
-            'CurrentSubCategory' => $firstCategory,
+            //'CurrentSubCategory' => $firstCategory,
+            'filters' => objectToArray($currentCategory->characteristics)
         ]);
 
 
@@ -175,13 +184,13 @@ class CatalogController extends Controller
       // Cache::put('name', $CurrentSubCategory, 1);
         //dd($CurrentSubCategory);
         $product_prices = [];
-   		foreach (CategoryPivot::all() as $value) {
+   		/*foreach (CategoryPivot::all() as $value) {
    			if($value->category_id == $CurrentSubCategory->id){
    				$product = Product::find($value->product_id);//()->withPivot(['option_id'])->get();
    				$product_prices[$product->id] = $product->price_final;
                 array_push($Products, $product);
    			}
-   		}
+   		}*/
         $productsCategory = CategoryPivot::join('products as p','p.id','product_categories_pivot.product_id')
                             ->where('category_id',$CurrentSubCategory->id);//->get();
 

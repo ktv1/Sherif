@@ -94,9 +94,12 @@
             <thead>
             <tr>
                 <th>Название</th>
-                @if(Auth()->user()->role_id == '1')
-                    <th>№ ящика</th>
-                    <th>№ склада</th>
+                {{\Illuminate\Support\Facades\Auth::user()}}
+                @if(\Illuminate\Support\Facades\Auth::user())
+                    @if(Auth()->user()->role_id == '1')
+                        <th>№ ящика</th>
+                        <th>№ склада</th>
+                    @endif
                 @endif
                 <th>Кол-во</th>
                 <th>Цена</th>

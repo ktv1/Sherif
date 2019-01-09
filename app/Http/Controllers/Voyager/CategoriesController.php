@@ -6,8 +6,10 @@ use App\Product;
 use App\Category;
 
 use App\ProductCategoriesPivot;
+use Faker\Test\Provider\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use TCG\Voyager\Database\Schema\SchemaManager;
 use TCG\Voyager\Events\BreadDataAdded;
 use TCG\Voyager\Events\BreadDataDeleted;
@@ -18,6 +20,8 @@ use TCG\Voyager\Http\Controllers\VoyagerBaseController;
 
 class CategoriesController extends VoyagerBaseController
 {
+    private $categoriespath;
+
     //***************************************
     //               ____
     //              |  _ \
@@ -648,7 +652,20 @@ class CategoriesController extends VoyagerBaseController
     public function updateProductsCount()
     {
         $cat = Category::all();
+
+        $result = [];
+        foreach ($cat as $item) {
+            $result[$item->id] = $item;
+        }
+
+        Storage::disk(config('voyager.storage.disk'))->delete('categories');
+        Storage::disk(config('voyager.storage.disk'))->delete('categoriespath');
+        $this->categoriespath = Category::i()->BuildThree($cat, 0);// Category::all();
+        Storage::disk(config('voyager.storage.disk'))->put('categories', (collect($result)->toJson()));
+        Storage::disk(config('voyager.storage.disk'))->put('categoriespath', json_encode($this->categoriespath));
+        $this->categoriespath = objectToArray($this->categoriespath);
         $categories = $this->GetCategoriesPath($cat,0);
+
         return redirect()->route("voyager.categories.index")
             ->with([
                 'message'    => 'Количество товаров в категориях успешно обновлено',
@@ -659,7 +676,6 @@ class CategoriesController extends VoyagerBaseController
 
     public function GetCategoriesPath($categories,$parent_id = 0,$cp = 0){
         $output = array();
-
         foreach ($categories as $result) {
             if($parent_id == $result->parent_id) {
                 $pc = $this->GetCategoriesPath($categories,$result->id);
@@ -677,8 +693,11 @@ class CategoriesController extends VoyagerBaseController
                     $output[$result->id]['catcount'] = $this->getTotalProducts($result->id)->first()->total;
 
                 }*/
+                $out = array();
+                path_to_element($this->categoriespath,$result->id,$out);
                 Category::where('id',$result->id)->update([
-                    'product_count' => $this->getTotalProducts($result->id)->first()->total
+                    'product_count' => $this->getTotalProducts($result->id)->first()->total,
+                    'path' => (count($out) > 0) ? collect($out)->implode('_') : '0',
                 ]);
             }
         }

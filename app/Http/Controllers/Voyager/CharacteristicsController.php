@@ -89,7 +89,6 @@ class CharacteristicsController extends VoyagerBaseController
             $view = "voyager::$slug.index";
         }
 
-
         return Voyager::view($view, compact(
             'dataType',
             'dataTypeContent',

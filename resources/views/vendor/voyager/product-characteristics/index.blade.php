@@ -190,10 +190,13 @@
                                                                             $value = explode(']', $value[1]);
                                                                             $value = $value[0];
                                                                             $value = $categories->where('id', $value)->first();
-                                                                            $value = $value->name;
+                                                                            $value = isset($value->name) ? $value->name : '';
                                                                         }else{
                                                                             $value = $categories->where('id', $value)->first();
-                                                                            $value = "--" .  $value->name;
+                                                                            if($value){
+                                                                                $value = $value->name;
+                                                                            }
+                                                                            ///$value = "--" .  isset($value->name) ? $value->name : '';
                                                                         }
                                                                     ?>
                                                                     <option disabled>{{ $value }}</option>  
@@ -201,7 +204,6 @@
                                                             </select>
                                                         @endif
 
-                                                    
                                                         
                                                     @else
                                                         @if($count == 3)

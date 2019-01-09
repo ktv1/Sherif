@@ -47,10 +47,7 @@
                             <div class="sherif_home_main-right_bar-viewed-trade_item-description">
                                 <div class="sherif_home_main-right_bar-viewed-trade_item-description-top">
                                     @if(($product->categories))
-                                        @php
-                                            $categorypath = \App\Product::i()->GetCategoriesPath($product->categories[0]->id);
-                                        @endphp
-                                      <h5><a href="{{--route('product', ['slug'=>array_pop($categorypath), 'subslug'=>array_shift($categorypath), 'product' => $product->slug])--}}">{{$product->name}}</a></h5>
+                                      <h5><a href="{{route('slug', ['slug'=>$product->slug])}}">{{$product->name}}</a></h5>
                                     @else
                                         <h5><a href="{{--route('productNoURL',['slug'=>$product->id])--}}">{{$product->name}}</a></h5>
                                     @endif
@@ -69,6 +66,8 @@
                 <button class="sherif_home_main-right_bar-viewed-button button_bot"></button>
             </div>
             @endif
+
+            @include('layouts.partials.filter')
             <!-- Pick up goods -->
             <div class="sherif_home_main-box-right_bar-pick_up">
                 <a href="" style="background-image: url({{asset('/assets/img/pic/pick_up.jpg')}});" class="sherif_home_main-box-right_bar-pick_up-pic">
