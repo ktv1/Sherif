@@ -395,7 +395,7 @@
                                 <span class="sherif-product_content_current-price">Цена: <span class="price">{{$product->price_final}} грн</span></span><br />
                             </div>
                             <div class="sherif-product-buttons notoneclick">
-                                <a class="sherif-btn btn-sherif-product btn-in-basket" product-id="{{$product->id}}"><span></span><i class="fas fa-shopping-cart"></i><strong>В корзину</strong></a>
+                                <a class="sherif-btn btn-sherif-product btn-in-basket" id_product="{{$product->id}}" href="{{route('cart', ['id'=>$product->id])}}"><span></span><i class="fas fa-shopping-cart"></i><strong>В корзину</strong></a>
                                 <div class="sherif_row">
                                     <a href="#" class="btn-sherif-product"><span></span><i class="fas fa-balance-scale fa-lg"></i><strong></strong></a>
                                     <a href="#" class="btn-sherif-product"><span></span><i class="fas fa-heart fa-lg"></i><strong></strong></a>

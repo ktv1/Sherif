@@ -65,8 +65,6 @@
                         <label for="sherif_email"><b>E-mail</b></label>
                         <input type="email" id="sherif_email" name="email"><br>
                         <p><b>Адрес</b></p>
-                        <label for="regions"><em>*</em>Регион</label>
-                        {{Form::select('region', $regions, null, ['id' => 'regions', 'placeholder' => 'Зробіть вибір...'])}}<br>
                         <label for="towns" ><em>*</em>Населенный пункт</label>
                         {{Form::select('town', $cities, null, ['id' => 'towns', 'placeholder' => 'Зробіть вибір...'])}}<br>
                         <label for="sherif_places_mail" required=""><em>*</em>Отделение новой почты</label>
@@ -256,11 +254,12 @@
 @endsection
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js" type="text/javascript"></script>
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function($){
 
-        //$("#sherif_telephon").mask("+380(99) 99-99-999");
+        $("#sherif_telephon").mask("+380(99) 99-99-999");
 
         $(".submit_order").submit(function(){
             var th = $(this);
