@@ -92,9 +92,6 @@ class BasketController extends Controller
 		
 	}
 
-	
-
-
 	public function deleteItemBasket(Request $request, $id){
 		$ip_user = request()->ip();
 		$is_auth = Auth::user();

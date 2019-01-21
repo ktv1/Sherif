@@ -65,14 +65,13 @@
                         <label for="sherif_email"><b>E-mail</b></label>
                         <input type="email" id="sherif_email" name="email"><br>
                         <p><b>Адрес</b></p>
-                        <label for="sherif_region"><em>*</em>Регион</label>
-                        {{Form::select('region', $regions)}}
-                        <br>
-                        <label for="sherif_town" ><em>*</em>Населенный пункт</label>
-                        {{Form::select('town', $cities)}}<br>
+                        <label for="regions"><em>*</em>Регион</label>
+                        {{Form::select('region', $regions, null, ['id' => 'regions', 'placeholder' => 'Зробіть вибір...'])}}<br>
+                        <label for="towns" ><em>*</em>Населенный пункт</label>
+                        {{Form::select('town', $cities, null, ['id' => 'towns', 'placeholder' => 'Зробіть вибір...'])}}<br>
                         <label for="sherif_places_mail" required=""><em>*</em>Отделение новой почты</label>
                         <select id="sherif_places_mail" name="mail_place" required="">
-                            <option value="novayapochta">-- Не выбран регион --</option>
+
                         </select><br>
                         <label for="sherif_comments">Комментарий к заказу</label>
                         <textarea id="sherif_comments" name="comments"></textarea>
@@ -285,5 +284,40 @@
             }
             return false;
         });
+
+        /*$("#regions").change(function(){ //подписываемся на событие
+            //var country = $("#country").val();
+            //следующая строка эквивалентна предыдущей, так как this в обработчике указывает на HTML элемент
+            var region = $(this).val();
+            $.ajax({
+                type: 'get',
+                url: 'ordering/cities',
+                data: { id : region,  id_city : towns },
+                success: function(data) {
+                    console.log(data.cities);
+                }
+            });
+        });*/
+
+        $("#towns").change(function(){ //подписываемся на событие
+            var towns = $("#towns").val();
+            //следующая строка эквивалентна предыдущей, так как this в обработчике указывает на HTML элемент
+            //var towns = $("#towns option:selected").text();
+            $.ajax({
+                type: 'get',
+                url: 'ordering/departments',
+                data: { id : towns },
+                success: function(data) {
+                    $('#sherif_places_mail').find('option').remove();
+                    data.departments.forEach(function(item, i, arr)
+                    {
+                        $("#sherif_places_mail").append('<option value="'+ i +'">'+ item["Description"] +'</option>');
+                        //console.log(data.departments[i]['Description']);
+                    });
+                    //console.log(data.departments);
+                }
+            });
+        });
+
     });
 </script>
